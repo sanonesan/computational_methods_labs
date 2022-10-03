@@ -18,8 +18,8 @@ int main(int args, char** argv){
 	//string path = "C:\\Code\\labs_comput\\lab_1\\input.txt";
 	//string path_dis = "C:\\Code\\labs_comput\\lab_1\\input_disturbed.txt";
 
-	string path = "C:\\Code\\labs_comput\\lab_1\\P_DATA6.txt";
-	string path_dis = "C:\\Code\\labs_comput\\lab_1\\P_DATA6_D.txt";
+	string path = "/home/san/Code/labs_comput/lab_1/test_files/DATA6.TXT";
+	string path_dis = "/home/san/Code/labs_comput/lab_1/test_files/P_DATA6_D.TXT";
 
 	double** A = readMatrixFromFile(path, n); //Matrix A|b of sys Ax=b
 	
@@ -86,16 +86,16 @@ int main(int args, char** argv){
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";
 
-	cout << "\n\n×èñëåííîå ðåøåíèå: \n";
+	cout << "\n\nÐ§Ð¸ÑÐ»ÐµÐ½Ð½Ð¾Ðµ Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ: \n";
 	print_Vector(x, n);
-	cout << "\n Íåâÿçêà: \n";
+	cout << "\n ÐÐµÐ²ÑÐ·ÐºÐ°: \n";
 
 	double dis_1, dis_inf; 
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "Òî÷íîå çíà÷åíèå ÷èñëà îáóñëîâëåííîñòè: \n";
+	cout << "Ð¢Ð¾Ñ‡Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ñ‡Ð¸ÑÐ»Ð° Ð¾Ð±ÑƒÑÐ»Ð¾Ð²Ð»ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸: \n";
 
 	double cond1 = 0.0, condinf = 0.0;
 	cond_matrix(A, cond1, n, 1);
@@ -108,7 +108,7 @@ int main(int args, char** argv){
 
 	cout << "  norm_1: " << cond1 << "\n" << "norm_inf: " << condinf << "\n";
 	
-	cout << "\n\nÐåøåíèå ñèñòåìû ñ âîçìóùåííîé ïðàâîé ÷àñòüþ: \n";
+	cout << "\n\nÐ ÐµÑˆÐµÐ½Ð¸Ðµ ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹ Ñ Ð²Ð¾Ð·Ð¼ÑƒÑ‰ÐµÐ½Ð½Ð¾Ð¹ Ð¿Ñ€Ð°Ð²Ð¾Ð¹ Ñ‡Ð°ÑÑ‚ÑŒÑŽ: \n";
 
 
 
@@ -168,14 +168,14 @@ int main(int args, char** argv){
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";
 
-	cout << "\n\n×èñëåííîå ðåøåíèå: \n";
+	cout << "\n\nÐ§Ð¸ÑÐ»ÐµÐ½Ð½Ð¾Ðµ Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ: \n";
 	print_Vector(x, n);
-	cout << "\n Íåâÿçêà: \n";
+	cout << "\n ÐÐµÐ²ÑÐ·ÐºÐ°: \n";
 	
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "Òî÷íîå çíà÷åíèå ÷èñëà îáóñëîâëåííîñòè: \n";
+	cout << "Ð¢Ð¾Ñ‡Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ñ‡Ð¸ÑÐ»Ð° Ð¾Ð±ÑƒÑÐ»Ð¾Ð²Ð»ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸: \n";
 	
 	cond_matrix(A, cond1, n, 1);
 	cond_matrix(A, condinf, n, 0);
@@ -188,7 +188,7 @@ int main(int args, char** argv){
 	vector_valuation(x_save, x, delta_x, n, 1);
 	vector_valuation_Sys(A_save, A, delta_b, n, 1);
 
-	cout << "Îöåíêà ÷èñëà îáóñëîâëåííîñòè: \n";
+	cout << "Ð¢Ð¾Ñ‡Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ñ‡Ð¸ÑÐ»Ð° Ð¾Ð±ÑƒÑÐ»Ð¾Ð²Ð»ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸: \n";
 	cout << "  norm_1: delta_x / delta_b = " << delta_x << " / " << delta_b  << " = " << delta_x / delta_b << endl;
 
 	vector_valuation(x_save, x, delta_x, n, 0);

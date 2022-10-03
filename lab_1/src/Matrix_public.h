@@ -1,6 +1,8 @@
 #pragma once
 #define eps 1e-16
 #include <string>
+#include <cstddef>
+
 using namespace std;
 
 double** readMatrixFromFile(string path, size_t& n);
