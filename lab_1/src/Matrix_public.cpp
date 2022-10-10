@@ -6,7 +6,8 @@
 #include <iomanip>
 #include <string>
 #include <cmath>
-
+#include "time.h"
+#include "stdlib.h"
 
 using namespace std;
 
@@ -124,7 +125,7 @@ int matrix_mult(double** &A, double** &B, double**& T, size_t n)
 		{
 			T[i][j] = 0.0;
 
-			for (int k = 0; k < n; ++k)
+			for (size_t k = 0; k < n; ++k)
 				T[i][j] += A[i][k] * B[j][k];
 
 			if (fabs(T[i][j]) < eps) {
@@ -146,10 +147,7 @@ int matrix_mult(double** &A, double** &B, double**& T, size_t n)
 	return 0;
 }
 
-int matrix_vector_mult(double** A, double* B, double*& T, size_t n)
-{
-
-	double temp = 0.0;
+int matrix_vector_mult(double** A, double* B, double*& T, size_t n){
 
 
 	for (size_t i = 0; i < n; ++i) {
@@ -463,3 +461,76 @@ int vector_valuation_Sys(double**& X, double**& _X, double& res, size_t& n, int 
 	return 0;
 }
 
+int vozm(double**& A, double*& x_save, double & max1, double & max_inf, size_t& n) {
+	
+
+	double pl = 0.01;
+	max1 = 0.0;
+	max_inf = 0.0;
+
+	double temp1 = 0.0, temp_inf = 0.0;
+
+
+	double** A_save = new double* [n];
+	for (size_t j = 0; j < n; ++j)
+		A_save[j] = new double[n + 1];
+
+	double delta_x = 0.0, delta_b = 0.0;
+
+	double* x = new double [n];
+
+	cout << "1\n";
+	for (size_t l = 0; l < 10; ++l) {
+
+		srand(time(NULL));
+
+		copy_Sys_A_to_B(A, A_save, n);
+
+		double delta_b =0.0;
+		//cout << "2\n";
+		for (size_t i = 0; i < n; ++i) {
+			//cout << i <<"aafdfdfaa\n";
+			delta_b = pl * pow(10 + l, rand() % -1 + 1);
+			A_save[i][n] += delta_b;
+
+		}
+		//cout << "3-1\n";
+		method_gauss(A_save, n, x);
+		//cout << "3-2\n";
+
+		vector_valuation(x_save, x, delta_x, n, 1);
+		vector_valuation_Sys(A_save, A, delta_b, n, 1);
+		//cout << "4\n";
+		temp1 = delta_x / delta_b;
+
+		//cout << temp1 << "  1  " << max1 << "\n";
+
+		if (fabs(temp1 - max1) > eps) {		
+			
+			if (temp1 > max1) {
+				max1 = temp1;
+			}
+		}
+		//cout << "5\n";
+		vector_valuation(x_save, x, delta_x, n, 0);
+		vector_valuation_Sys(A_save, A, delta_b, n, 0);
+		//cout << "6\n";
+
+		temp_inf = delta_x / delta_b;
+
+		//cout << temp_inf << "  inf  " << max_inf << "\n";
+		//cout << "7\n";
+		if (fabs(temp_inf - max_inf) > eps) {
+			
+			if (temp_inf > max_inf) {
+				max_inf = temp_inf;
+			}
+
+		}
+		
+
+	}
+
+	return 0;
+
+}

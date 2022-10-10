@@ -4,6 +4,7 @@
 #include "method_gauss.h"
 #include "QR_method.h"
 #include <clocale>
+#include <cmath>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ int main(int args, char** argv){
 	//string path = "C:\\Code\\labs_comput\\lab_1\\input.txt";
 	//string path_dis = "C:\\Code\\labs_comput\\lab_1\\input_disturbed.txt";
 
-	string path = "/home/san/Code/labs_comput/lab_1/test_files/DATA6.TXT";
+	string path = "/home/san/Code/labs_comput/lab_1/test_files/P_DATA6.TXT";
 	string path_dis = "/home/san/Code/labs_comput/lab_1/test_files/P_DATA6_D.TXT";
 
 	double** A = readMatrixFromFile(path, n); //Matrix A|b of sys Ax=b
@@ -86,16 +87,16 @@ int main(int args, char** argv){
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";
 
-	cout << "\n\nЧисленное решение: \n";
+	cout << "\n\n��������� �������: \n";
 	print_Vector(x, n);
-	cout << "\n Невязка: \n";
+	cout << "\n �������: \n";
 
 	double dis_1, dis_inf; 
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "Точное значение числа обусловленности: \n";
+	cout << "������ �������� ����� ���������������: \n";
 
 	double cond1 = 0.0, condinf = 0.0;
 	cond_matrix(A, cond1, n, 1);
@@ -108,9 +109,22 @@ int main(int args, char** argv){
 
 	cout << "  norm_1: " << cond1 << "\n" << "norm_inf: " << condinf << "\n";
 	
-	cout << "\n\nРешение системы с возмущенной правой частью: \n";
+	cout << "\n\n������� ������� � ����������� ������ ������: \n";
 
+	double max1 = 0.0, max_inf = 0.0;
+	vozm(A, x, max1, max_inf, n);
 
+	//cout << max1
+	//vector_valuation(x_save, x, delta_x, n, 1);
+	//vector_valuation_Sys(A_save, A, delta_b, n, 1);
+
+	cout << "vozm: \n";
+	cout << "  norm_1: delta_x / delta_b = " << max1 << endl;
+
+	//vector_valuation(x_save, x, delta_x, n, 0);
+	//vector_valuation_Sys(A_save, A, delta_b, n, 0);
+
+	cout << "norm_inf: delta_x / delta_b = " << max_inf << endl;
 
 	A = readMatrixFromFile(path_dis, n); //Matrix A|b of sys Ax=b
 
@@ -168,14 +182,16 @@ int main(int args, char** argv){
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";
 
-	cout << "\n\nЧисленное решение: \n";
+	cout << "--------------------------------\n";
+
+	cout << "\n\n��������� �������: \n";
 	print_Vector(x, n);
-	cout << "\n Невязка: \n";
+	cout << "\n �������: \n";
 	
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "Точное значение числа обусловленности: \n";
+	cout << "������ �������� ����� ���������������: \n";
 	
 	cond_matrix(A, cond1, n, 1);
 	cond_matrix(A, condinf, n, 0);
@@ -187,17 +203,43 @@ int main(int args, char** argv){
 
 	vector_valuation(x_save, x, delta_x, n, 1);
 	vector_valuation_Sys(A_save, A, delta_b, n, 1);
+	vozm(A, x, max1, max_inf, n);
+	
+	cout << "������ ����� ���������������: \n";
+	cout << "vozm: \n";
 
-	cout << "Точное значение числа обусловленности: \n";
-	cout << "  norm_1: delta_x / delta_b = " << delta_x << " / " << delta_b  << " = " << delta_x / delta_b << endl;
+	if (max1 < delta_x / delta_b)
+		cout << "  norm_1: delta_x / delta_b = " << delta_x << " / " << delta_b  << " = " << delta_x / delta_b << endl;
+	else
+		cout << "  norm_1: delta_x / delta_b = " << max1 << "\n";
+
 
 	vector_valuation(x_save, x, delta_x, n, 0);
 	vector_valuation_Sys(A_save, A, delta_b, n, 0);
 
-	cout << "norm_inf: delta_x / delta_b = " << delta_x << " / " << delta_b << " = " << delta_x / delta_b << endl;
+
+	if (max_inf < delta_x / delta_b)
+		cout << "norm_inf: delta_x / delta_b = " << delta_x << " / " << delta_b << " = " << delta_x / delta_b << endl;
+	else
+		cout << "norm_inf: delta_x / delta_b = " << max_inf << endl;
 
 
-	for (size_t j = 0; j < n + 1; ++j) {
+	//double max1 = 0.0, max_inf = 0.0;
+
+	
+	
+	//cout << max1
+	//vector_valuation(x_save, x, delta_x, n, 1);
+	//vector_valuation_Sys(A_save, A, delta_b, n, 1);
+
+
+	//vector_valuation(x_save, x, delta_x, n, 0);
+	//vector_valuation_Sys(A_save, A, delta_b, n, 0);
+
+
+
+
+	for (size_t j = 0; j < n; ++j) {
 		delete[] A[j];
 		delete[] A_save[j];
 	}

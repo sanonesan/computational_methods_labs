@@ -1,7 +1,9 @@
 #pragma once
 #define eps 1e-16
 #include <string>
-#include <cstddef>
+//#include <cstddef>
+#include <iostream>
+
 
 using namespace std;
 
@@ -64,6 +66,8 @@ int vector_Sys_A_min_B(double**& A, double** B, double*& res, size_t& n);
 int vector_valuation(double*& X, double*& _X, double& res, size_t& n, int flag);
 
 int vector_valuation_Sys(double**& X, double**& _X, double& res, size_t& n, int flag);
+
+int vozm(double**& A, double*& x_save, double& max1, double& max_inf, size_t& n);
 
 int cond_matrix(double**& A, double& cond1, size_t& n, int flag);
 

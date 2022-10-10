@@ -3,12 +3,9 @@
 #include "Matrix_public.h"
 #include "method_gauss.h"
 #include <iostream>
-
+#include <cmath>
 
 #define eps 1e-16
-
-
-using namespace std;
 
 int QR_method_find_Q_and_R(
 	double** &Q, 

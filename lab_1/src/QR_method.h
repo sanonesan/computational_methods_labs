@@ -1,7 +1,6 @@
 #pragma once
-#include <cstddef>
+#include <iostream>
 
-using namespace std;
 
 int QR_method_find_Q_and_R(
 	double** &Q, 
