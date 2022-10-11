@@ -2,3 +2,4 @@
 include/
 obj/
 Makefile
+.vscode
