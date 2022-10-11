@@ -87,16 +87,16 @@ int main(int args, char** argv){
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";
 
-	cout << "\n\n��������� �������: \n";
+	cout << "\n\nЧисленное решение: \n";
 	print_Vector(x, n);
-	cout << "\n �������: \n";
+	cout << "\n Невязка: \n";
 
 	double dis_1, dis_inf; 
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "������ �������� ����� ���������������: \n";
+	cout << "Точное значение числа обусловленности: \n";
 
 	double cond1 = 0.0, condinf = 0.0;
 	cond_matrix(A, cond1, n, 1);
@@ -109,7 +109,7 @@ int main(int args, char** argv){
 
 	cout << "  norm_1: " << cond1 << "\n" << "norm_inf: " << condinf << "\n";
 	
-	cout << "\n\n������� ������� � ����������� ������ ������: \n";
+	cout << "\n\nРешение системы с возмущенной правой частью: \n";
 
 	double max1 = 0.0, max_inf = 0.0;
 	vozm(A, x, max1, max_inf, n);
@@ -184,14 +184,14 @@ int main(int args, char** argv){
 
 	cout << "--------------------------------\n";
 
-	cout << "\n\n��������� �������: \n";
+	cout << "\n\nЧисленное решение: \n";
 	print_Vector(x, n);
-	cout << "\n �������: \n";
+	cout << "\n Невязка: \n";
 	
 	discrepancy(A, x, dis_1, n, 1);
 	discrepancy(A, x, dis_inf, n, 0);
 	cout << "  norm_1: " << dis_1 << "\n" << "norm_inf: " << dis_inf << "\n\n";
-	cout << "������ �������� ����� ���������������: \n";
+	cout << "Значение числа обусловленности: \n";
 	
 	cond_matrix(A, cond1, n, 1);
 	cond_matrix(A, condinf, n, 0);
@@ -205,7 +205,7 @@ int main(int args, char** argv){
 	vector_valuation_Sys(A_save, A, delta_b, n, 1);
 	vozm(A, x, max1, max_inf, n);
 	
-	cout << "������ ����� ���������������: \n";
+	cout << "Значение числа обусловленности: \n";
 	cout << "vozm: \n";
 
 	if (max1 < delta_x / delta_b)
