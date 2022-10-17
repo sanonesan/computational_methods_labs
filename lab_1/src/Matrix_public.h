@@ -71,3 +71,4 @@ int vozm(double**& A, double*& x_save, double& max1, double& max_inf, size_t& n)
 
 int cond_matrix(double**& A, double& cond1, size_t& n, int flag);
 
+int reverse_matrix_qr(double**& A, double**& B, size_t& n);

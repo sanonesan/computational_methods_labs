@@ -336,7 +336,6 @@ int reverse_matrix(double**& A, double**& X, size_t& n) {
 			B[t][n] = 0.0;
 		}
 		B[j][n] = 1.0;
-		
 		method_gauss(B, n, X[j]);
 	}
 	
@@ -533,4 +532,60 @@ int vozm(double**& A, double*& x_save, double & max1, double & max_inf, size_t& 
 
 	return 0;
 
+}
+
+int reverse_matrix_qr(double**& A, double**& X, size_t& n){
+
+	double** B = new double* [n];
+
+	double* b = new double [n];
+	double* tmp = new double [n];
+	double** Q = new double* [n];
+	double** R = new double* [n];
+
+	for (size_t j = 0; j < n; ++j){
+		B[j] = new double[n + 1];
+		Q[j] = new double[n];
+		R[j] = new double[n];
+	}
+
+
+	QR_method_find_Q_and_R(Q, R, A, n, X[0]);
+
+		copy_Matrix_A_to_B(R, B, n);
+
+
+	for (size_t j = 0; j < n; ++j)
+	{
+
+		for (size_t t = 0; t < n; ++t) {
+			b[t] = (t == j) ? 1.0 : 0.0;
+		}
+		
+		matrix_vector_mult(Q, b, tmp, n);
+
+		for (size_t t = 0; t < n; ++t) {
+			B[t][n] = tmp[t];
+		}
+		
+		reverse_course(B, n, X[j]);
+
+		
+	}
+	
+	transpose_matrix(X, n);
+	check_matrix_zero(X, n);
+	
+	for (size_t j = 0; j < n; ++j){
+		delete[] B[j];
+		delete[] Q[j];
+		delete[] R[j];
+	}
+	delete[] B;
+	delete[] Q;
+	delete[] R;
+	delete[] b;
+	delete[] tmp;
+
+	return 0;
 }

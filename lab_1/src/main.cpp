@@ -103,14 +103,6 @@ int main(int args, char** argv){
 	//cout << "a: \n";
 	cond_matrix(A, condinf, n, 0);
 
-
-
-	//cout << "a: \n";
-
-	cout << "  norm_1: " << cond1 << "\n" << "norm_inf: " << condinf << "\n";
-	
-	cout << "\n\nРешение системы с возмущенной правой частью: \n";
-
 	double max1 = 0.0, max_inf = 0.0;
 	vozm(A, x, max1, max_inf, n);
 
@@ -120,11 +112,15 @@ int main(int args, char** argv){
 
 	cout << "vozm: \n";
 	cout << "  norm_1: delta_x / delta_b = " << max1 << endl;
-
-	//vector_valuation(x_save, x, delta_x, n, 0);
-	//vector_valuation_Sys(A_save, A, delta_b, n, 0);
-
 	cout << "norm_inf: delta_x / delta_b = " << max_inf << endl;
+
+	//cout << "a: \n";
+
+	cout << "  norm_1: " << cond1 << "\n" << "norm_inf: " << condinf << "\n";
+	
+	cout << "\n\nРешение системы с возмущенной правой частью: \n";
+
+	
 
 	A = readMatrixFromFile(path_dis, n); //Matrix A|b of sys Ax=b
 
@@ -226,7 +222,22 @@ int main(int args, char** argv){
 
 	//double max1 = 0.0, max_inf = 0.0;
 
-	
+	double** B = new double* [n];
+	for (size_t j = 0; j < n; ++j)
+		B[j] = new double[n];
+
+	cout << "\n-----------------------\n";
+	reverse_matrix(A, B, n);
+	print_Matrix(B, n);
+	cout << "\n-----------------------\n";
+	reverse_matrix_qr(A, B, n);
+	print_Matrix(B, n);
+
+
+	for (size_t j = 0; j < n; ++j)
+		delete[] B[j];
+	delete[] B;
+
 	
 	//cout << max1
 	//vector_valuation(x_save, x, delta_x, n, 1);
