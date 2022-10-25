@@ -43,8 +43,8 @@ int Rb_sys_matrix(
 	double c = 0.0, s = 0.0;
 
 	
-	marix_make_E(Q, n);
-	marix_make_E(R, n);
+	matrix_make_E(Q, n);
+	matrix_make_E(R, n);
 
 	double a = 0.0, b = 0.0;
 

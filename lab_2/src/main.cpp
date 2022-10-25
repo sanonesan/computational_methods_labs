@@ -4,6 +4,7 @@
 #include "method_gauss.h"
 #include "simple_iter_method.h"
 #include "Jacoby_method.h"
+#include "Relaxation_method.h"
 #include <clocale>
 
 using namespace std;
@@ -56,6 +57,37 @@ int main(int args, char** argv){
 	x = Jacoby_method(A, x0, n);
 
 	print_Vector(x, n);
+
+	double w = 1;
+
+	x = Relaxation_method(A, x0, w, n);
+
+	print_Vector(x, n);
+
+	try{
+		size_t k = 10;
+		double* a = new double[k];
+		double* b = new double[k];
+		double* c = new double[k];
+		double* d = new double[k];
+
+		for(size_t i = 0; i < k; ++i){
+			a[i] = 6;
+			b[i] = 8;
+			c[i] = 1;
+			d[i] = i+1;
+		}
+
+		x = Relaxation_method(a, b, c, d, x0, w, k);
+
+		print_Vector(x, k);
+
+	}
+	catch( const char* e){
+		cerr << e << endl;
+	}
+
+
 	
 	// double** L;
 	// double** D;

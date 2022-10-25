@@ -21,7 +21,9 @@ int copy_Sys_A_to_B(double**& A, double**& B, size_t& n);
 
 int copy_Vector_A_to_B(double*& A, double*& B, size_t& n);
 
-int marix_make_E(double** &A, size_t &n);
+int matrix_make_E(double** &A, size_t &n);
+
+int matrix_number_mult(double**& A, double& w, size_t &n);
 
 int matrix_mult(double** &A, double** &B, double**& T, size_t n);
 

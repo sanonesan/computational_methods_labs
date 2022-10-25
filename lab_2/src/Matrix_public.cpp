@@ -98,7 +98,7 @@ int copy_Vector_A_to_B(double*& A, double*& B, size_t& n) {
 }
 
 
-int marix_make_E(double** &A, size_t& n) {
+int matrix_make_E(double** &A, size_t& n) {
 
 	for (size_t i = 0; i < n; ++i)
 		for (size_t j = 0; j < n; ++j)
@@ -592,15 +592,7 @@ int reverse_matrix_qr(double**& A, double**& X, size_t& n){
 
 int LDU_method(double**& A, double**& L, double**& D, double**& U, size_t& n){
 
-	L = new double* [n];
-	D = new double* [n];
-	U = new double* [n];
-
-	for (size_t i = 0; i < n; ++i){
-		L[i] = new double [n];
-		D[i] = new double [n];
-		U[i] = new double [n];
-	}	
+	
 
 	for (size_t i = 0; i< n; ++i){
 
@@ -620,4 +612,14 @@ int LDU_method(double**& A, double**& L, double**& D, double**& U, size_t& n){
 	return 0;
 
 
+}
+
+int matrix_number_mult(double**& A, double& w, size_t &n){
+	for (size_t i = 0; i < n; ++i){
+        for (size_t j = 0; j < n; ++ j){
+            A[i][j] *= w;
+        }
+        
+    }
+	return 0;
 }
