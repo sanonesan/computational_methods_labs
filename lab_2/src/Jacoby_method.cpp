@@ -22,7 +22,7 @@ double* Jacoby_method(double**& A, double*& x0, size_t n){
         }
         C[i][n] = A[i][n] / A[i][i];
     }
-    print_Sys_Matrix(C, n);
+    //print_Sys_Matrix(C, n);
 
     for (size_t i = 0; i < n; ++i){
         
@@ -31,6 +31,8 @@ double* Jacoby_method(double**& A, double*& x0, size_t n){
 
     double dC = 0.0;
     norm_inf_matrix(C, dC, n);
+    cout << "|C| = " << dC << "\n";
+
     dC = (1 - dC) / dC;
 
     copy_Vector_A_to_B(x0, xk, n);

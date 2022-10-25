@@ -66,11 +66,13 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
 
     matrix_mult(TMP1, TMP2, C, n);
 
-    print_Matrix(C, n);
+    //print_Matrix(C, n);
     LDU_method(C, L, D, U, n);
 
     double dC = 0.0;
     norm_inf_matrix(C, dC, n);
+
+    cout << "|C| = " << dC << "\n";
 
 
     double dCU = 0.0;
@@ -83,8 +85,10 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
 
     copy_Vector_A_to_B(x0, xk, n);
 
+    int iter = 0;
     while (true)
     {
+        ++iter;
         for (size_t i = 0; i < n; ++i)
         {
 
@@ -119,6 +123,7 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
 
     }
 
+    cout << "k = " << iter << endl;
 
     for (size_t j = 0; j < n; ++j)
     {
@@ -195,7 +200,7 @@ double *Relaxation_method(double*& a, double*& b, double*& c, double*& d, double
         C[i][n] = d[i];
 
     }
-    print_Sys_Matrix(C, n);
+    //print_Sys_Matrix(C, n);
     LDU_method(C, L, D, U, n);
 
     //copy_Sys_A_to_B(A, C, n);
@@ -232,26 +237,30 @@ double *Relaxation_method(double*& a, double*& b, double*& c, double*& d, double
 
     matrix_mult(TMP1, TMP2, C, n);
 
-    print_Matrix(C, n);
+    //print_Matrix(C, n);
 
     LDU_method(C, L, D, U, n);
-
+    //print_Matrix(U, n);
     double dC = 0.0;
     norm_inf_matrix(C, dC, n);
+    cout << "|C| = " << dC << "\n";
 
 
     double dCU = 0.0;
     norm_inf_matrix(U, dCU, n);
 
     dC = (1 - dC) / dCU;
+    //cout << "Парам останова = " << dC << "\n";
+
 
     double sum = 0.0;
     double norm = 0.0;
 
     copy_Vector_A_to_B(x0, xk, n);
-
+    int iter = 0;
     while (true)
     {
+        ++iter;
         for (size_t i = 0; i < n; ++i)
         {
             sum = 0.0;
@@ -282,6 +291,7 @@ double *Relaxation_method(double*& a, double*& b, double*& c, double*& d, double
 
     }
 
+    cout << "k = " << iter << endl;
 
     for (size_t j = 0; j < n; ++j)
     {
