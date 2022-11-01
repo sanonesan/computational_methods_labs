@@ -1,5 +1,5 @@
 #pragma once
-#define eps 1e-16
+#define eps 1e-4
 #include <string>
 //#include <cstddef>
 #include <iostream>

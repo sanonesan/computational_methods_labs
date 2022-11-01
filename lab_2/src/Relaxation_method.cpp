@@ -1,9 +1,17 @@
 
 #include <iostream>
 #include "Matrix_public.h"
+#include <cmath>
 
 double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
 {
+
+    double* xt = new double[n];
+    xt[0] = 5;
+    xt[1] = -7;
+    xt[2] = 12;
+    xt[3] = 4;
+
 
     double *x = new double[n];
     double *xk = new double[n];
@@ -71,6 +79,7 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
 
     double dC = 0.0;
     norm_inf_matrix(C, dC, n);
+    double normC = dC;
 
     cout << "|C| = " << dC << "\n";
 
@@ -86,6 +95,9 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
     copy_Vector_A_to_B(x0, xk, n);
 
     int iter = 0;
+    double normX = 0.0;   
+
+    //for(int p = 0; p < 61; ++p)
     while (true)
     {
         ++iter;
@@ -112,18 +124,51 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
         {
             tmp[i] = x[i] - xk[i];
         }
-
         norm_inf_vector(tmp, norm, n);
 
-        if (norm < dC * eps)
+
+
+        // matrix_vector_mult(A, x, tmp, n);
+        // for(size_t i = 0; i < n; ++i)
+        //     tmp[i] -= A[i][n];
+
+
+
+        // if (norm < eps)
+        // {
+        //     break;
+        // }
+
+        // if (norm < dC * eps)
+        // {
+        //     break;
+        // }
+
+    
+        norm_inf_vector(x, normX, n);
+
+        if (norm / (normX + 0.01) < eps)
         {
             break;
         }
+        
+
         copy_Vector_A_to_B(x, xk, n);
+
+        if (iter == 1){
+            cout << "k_est = " << ceil(log((1 - normC) * eps / norm) / log(normC) )<< endl;
+        }
 
     }
 
     cout << "k = " << iter << endl;
+
+    for(size_t i = 0; i < n; ++i){
+            tmp[i] = x[i] - xt[i];
+        }              
+    norm_inf_vector(tmp, norm, n);
+
+    cout << "|norm_err| = " << norm << "\n";
 
     for (size_t j = 0; j < n; ++j)
     {
@@ -244,6 +289,7 @@ double *Relaxation_method(double*& a, double*& b, double*& c, double*& d, double
     double dC = 0.0;
     norm_inf_matrix(C, dC, n);
     cout << "|C| = " << dC << "\n";
+    double normC = dC;
 
 
     double dCU = 0.0;
@@ -288,6 +334,10 @@ double *Relaxation_method(double*& a, double*& b, double*& c, double*& d, double
             break;
         }
         copy_Vector_A_to_B(x, xk, n);
+
+        if (iter == 1){
+            cout << "k_est = " << ceil(log((1 - normC) * eps / norm) / log(normC) )<< endl;
+        }
 
     }
 

@@ -537,7 +537,6 @@ int vozm(double**& A, double*& x_save, double & max1, double & max_inf, size_t& 
 int reverse_matrix_qr(double**& A, double**& X, size_t& n){
 
 	double** B = new double* [n];
-
 	double* b = new double [n];
 	double* tmp = new double [n];
 	double** Q = new double* [n];

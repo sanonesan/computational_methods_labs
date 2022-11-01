@@ -6,7 +6,7 @@
 #include "Jacoby_method.h"
 #include "Relaxation_method.h"
 #include <clocale>
-#include <time.h>
+//#include <time.h>
 
 
 using namespace std;
@@ -52,9 +52,15 @@ int main(int args, char** argv){
 	//double* x0 = new double [n];
 	
 	for (size_t i = 0; i < n; ++i){
-		x0[i] = 1;
+		x0[i] = 0;
 	}
 	
+	// x0[0] = 1;
+	// x0[0] = 2;
+	// x0[0] = -3;
+	// x0[0] = 4;
+
+
 	cout << "\n-----------Simple iter------------\n";
 	
 	cout << "tau = 0.051282\n";
@@ -129,13 +135,13 @@ int main(int args, char** argv){
 		d[i] = i+1;
 	}
 
-	clock_t start = clock();
+	//clock_t start = clock();
 
 	x = Relaxation_method(a, b, c, d, x0, w, k);
 
-	clock_t end = clock();
+	//clock_t end = clock();
 
-	double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+	//double seconds = (double)(end - start) / CLOCKS_PER_SEC;
 
 	//cout << "The time: " << seconds << " \n ------------------------- \n";
 	//print_Vector(x, k);
@@ -148,11 +154,11 @@ int main(int args, char** argv){
 		c[i] = 6;
 		d[i] = i+1;
 	}
-	start = clock();
+	//start = clock();
 	x = Relaxation_method(a, b, c, d, x0, w, k);
-	end = clock();
+	//end = clock();
 
-	seconds = (double)(end - start) / CLOCKS_PER_SEC;
+	//seconds = (double)(end - start) / CLOCKS_PER_SEC;
 	//cout << "The time: " << seconds << " \n";
 	cout << "\n-------------------------------\n";
 	//print_Vector(x, k);

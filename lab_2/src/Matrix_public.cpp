@@ -233,13 +233,13 @@ int norm_inf_vector(double*& v, double& norm, size_t& n) {
 
 	norm = 0.0;
 	for (size_t j = 0; j < n; ++j) {
-		if (fabs(fabs(norm) - fabs(v[j])) > eps) {
+		if (fabs(fabs(norm) - fabs(v[j])) > 1e-16) {
 			if (fabs(norm) < fabs(v[j])) {
 				norm = fabs(v[j]);
 			}
 		}
 	}
-	if (fabs(norm) < eps && norm != 0.0) {
+	if (fabs(norm) < 1e-16 && norm != 0.0) {
 		norm = 0.0;
 		norm *= (1 / norm > 0) ? (1) : (-1);
 	}
