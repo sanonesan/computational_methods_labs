@@ -70,9 +70,14 @@ double *Relaxation_method(double **&A, double *&x0, double &w, size_t n)
         }
     }
 
+
+
     reverse_matrix_qr(C, TMP1, n);
 
+
     matrix_mult(TMP1, TMP2, C, n);
+
+
 
     //print_Matrix(C, n);
     LDU_method(C, L, D, U, n);

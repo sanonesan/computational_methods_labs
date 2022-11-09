@@ -26,7 +26,7 @@ int main(int args, char** argv){
 	//string path = "C:\\Code\\labs_comput\\lab_1\\input.txt";
 	//string path_dis = "C:\\Code\\labs_comput\\lab_1\\input_disturbed.txt";
 
-	string path = "/home/san/Code/labs_comput/lab_2/test_files/data35.txt";
+	string path = "/home/san/Code/labs_comput/lab_2/test_files/input12.txt";
 	string path_dis = "/home/san/Code/labs_comput/lab_2/test_files/P_DATA6_D.TXT";
 
 	double** A = readMatrixFromFile(path, n); //Matrix A|b of sys Ax=b
