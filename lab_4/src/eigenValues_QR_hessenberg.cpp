@@ -22,6 +22,8 @@ double* hessenberg(double**& A, size_t& n){
 
     double a, b, c, s;
 
+    print_Matrix(Ak, n);
+
 	for (size_t i = 1; i < n-1; ++i) {
 
 		for (size_t j = i + 1; j < n; ++j) {
@@ -35,19 +37,75 @@ double* hessenberg(double**& A, size_t& n){
 
 				Ak[i][k] = (c * a + s * b);
 				Ak[j][k] = (-s * a + c * b);
+
+                // a = A[i][k];
+				// b = A[j][k];
+
+				// if (a == 0 && b != 0){
+				// 	Ak[i][k] = (s * b);
+				// 	Ak[j][k] = (c * b);
+				// }
+				// if (a != 0 && b == 0){
+				// 	Ak[i][k] = (c * a);
+				// 	Ak[j][k] = (-s * a );
+				// }
+
+				// if (a == 0 && b == 0){
+				// 	Ak[i][k] = 0;
+				// 	Ak[j][k] = 0;
+				// }
+
+				// if (a != 0 && b != 0){
+					
+				// 	Ak[i][k] = (c * a + s * b);
+				// 	Ak[j][k] = (-s * a + c * b);
+
+				// }
 				
 			}	
             for (size_t k = 0; k < n; ++k) {
+                
 
+                
                 a = Ak[k][i];
 				b = Ak[k][j];
 
 				Ak[k][i] = (c * a + s * b);
 				Ak[k][j] = (-s * a + c * b);
 
+                // a = A[i][k];
+				// // b = A[j][k];
+
+				// if (a == 0 && b != 0){
+				// 	Ak[k][i] = (s * b);
+				// 	Ak[k][j] = (c * b);
+				// }
+				// if (a != 0 && b == 0){
+				// 	Ak[k][i] = (c * a);
+				// 	Ak[k][j] = (-s * a );
+				// }
+
+				// if (a == 0 && b == 0){
+				// 	Ak[k][i] = 0;
+				// 	Ak[k][j] = 0;
+				// }
+
+				// if (a != 0 && b != 0){
+					
+				// 	Ak[k][i] = (c * a + s * b);
+				// 	Ak[k][j] = (-s * a + c * b);
+
+				// }
+
+
+
             }
+
+    		//print_Matrix(Ak, n);
+
         
 		}
+
 
 	}
 
@@ -76,6 +134,7 @@ double* hessenberg(double**& A, size_t& n){
     double sum = 0;
 
     while (true)
+	//for(size_t u = 0; u < 5; ++u)
     {   
         ++iter;
         g = Ak[n-1][n-1];
@@ -95,12 +154,14 @@ double* hessenberg(double**& A, size_t& n){
         sum = 0;
 
         for (size_t i = 0; i < n-2; ++i) {
-
-                sum += Ak[i+1][i];               
+			sum += fabs(Ak[i+1][i]);               
         }
 
         if (sum < eps)
             break;
+
+		//print_Matrix(Ak, n);
+
 
     } 
     
