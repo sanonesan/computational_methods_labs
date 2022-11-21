@@ -24,20 +24,22 @@ double* hessenberg(double**& A, size_t& n){
 
     print_Matrix(Ak, n);
 
+	int oper = 0;
+
 	for (size_t i = 1; i < n-1; ++i) {
 
 		for (size_t j = i + 1; j < n; ++j) {
 
 			coefs_hessen(i, j, c, s, Ak, n);
 
-			for (size_t k = 0; k < n; ++k) {
+			for (size_t k = i-1; k < n; ++k) {
                 
 				a = Ak[i][k];
 				b = Ak[j][k];
 
 				Ak[i][k] = (c * a + s * b);
 				Ak[j][k] = (-s * a + c * b);
-
+				oper += 4;
                 // a = A[i][k];
 				// b = A[j][k];
 
@@ -63,7 +65,7 @@ double* hessenberg(double**& A, size_t& n){
 				// }
 				
 			}	
-            for (size_t k = 0; k < n; ++k) {
+            for (size_t k = i-1; k < n; ++k) {
                 
 
                 
@@ -72,6 +74,7 @@ double* hessenberg(double**& A, size_t& n){
 
 				Ak[k][i] = (c * a + s * b);
 				Ak[k][j] = (-s * a + c * b);
+				oper += 4;
 
                 // a = A[i][k];
 				// // b = A[j][k];
@@ -132,34 +135,39 @@ double* hessenberg(double**& A, size_t& n){
 
     int iter = 0;
     double sum = 0;
+	size_t m = n;
 
     while (true)
 	//for(size_t u = 0; u < 5; ++u)
     {   
         ++iter;
-        g = Ak[n-1][n-1];
+        g = Ak[m-1][m-1];
 
-        for (size_t i = 0; i < n; ++i){
+        for (size_t i = 0; i < m; ++i){
             Ak[i][i] -= g;
         }
 
-        QR_matrix(Q,R,Ak,n);
+        oper += QR_matrix(Q,R,Ak,m);
 
-        matrix_mult(R, Q, Ak, n);
+        matrix_mult(R, Q, Ak, m);
         
-        for (size_t i = 0; i < n; ++i){
+        for (size_t i = 0; i < m; ++i){
             Ak[i][i] += g;
         }
 
         sum = 0;
 
-        for (size_t i = 0; i < n-2; ++i) {
+        for (size_t i = 0; i < m-2; ++i) {
 			sum += fabs(Ak[i+1][i]);               
         }
 
         if (sum < eps)
             break;
 
+		if (fabs(Ak[m-1][m-2]) < eps && m != 1 ){
+			--m;
+			//cout << "sadf\n";
+		}
 		//print_Matrix(Ak, n);
 
 
@@ -174,6 +182,8 @@ double* hessenberg(double**& A, size_t& n){
 
 
     cout << "iter = " << iter << "\n";
+    cout << "oper = " << oper << "\n";
+
 
     return lambda_mas;
 }

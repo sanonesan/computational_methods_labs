@@ -112,7 +112,7 @@ int QR_matrix(
 	matrix_make_E(R, n);
 
 	double a = 0.0, b = 0.0;
-
+	int iter = 0;
 	for (size_t i = 0; i < n - 1; ++i) {
 
 		for (size_t j = i + 1; j < n; ++j) {
@@ -127,10 +127,13 @@ int QR_matrix(
 				if (a == 0 && b != 0){
 					A[i][k] = (s * b);
 					A[j][k] = (c * b);
+					iter += 2;
 				}
 				if (a != 0 && b == 0){
 					A[i][k] = (c * a);
 					A[j][k] = (-s * a );
+					iter += 2;
+
 				}
 
 				if (a == 0 && b == 0){
@@ -142,6 +145,8 @@ int QR_matrix(
 					
 					A[i][k] = (c * a + s * b);
 					A[j][k] = (-s * a + c * b);
+					iter += 4;
+
 
 				}
 
@@ -177,7 +182,7 @@ int QR_matrix(
 	delete [] A_save;
 
 
-	return 0;
+	return iter;
 }
 
 int coefs(size_t& k, size_t& l, double& c, double& s, double**& A, size_t& n) {

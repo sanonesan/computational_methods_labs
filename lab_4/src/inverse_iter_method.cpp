@@ -45,8 +45,8 @@ double* inverse_iter_method(double**& A, double*& x0, double lambda, size_t n){
         Q[j] = new double[n];
         R[j] = new double[n];
     }
-
-    QR_matrix(Q, R, C, n);
+    int oper = 0;
+    oper += QR_matrix(Q, R, C, n);
 
     copy_Matrix_A_to_B(R, C, n);
     transpose_matrix(Q, n);
@@ -67,12 +67,13 @@ double* inverse_iter_method(double**& A, double*& x0, double lambda, size_t n){
         }
 
         check_sys_matrix_zero(C, n);
-        reverse_course(C, n, xk);
+        oper += reverse_course(C, n, xk);
         
         e_norm(xk, norm, n);
 
         for(size_t i = 0; i < n; ++i){
             xk[i] /= norm;
+            ++oper;
         }
 
         sum = 0;
@@ -98,7 +99,9 @@ double* inverse_iter_method(double**& A, double*& x0, double lambda, size_t n){
 
 
 
-    cout << "k = " << iter << "\n";
+    cout << "iter = " << iter << "\n";
+    cout << "oper = " << oper << "\n";
+
 
     for (size_t j = 0; j < n; ++j){
         delete[] C[j];
@@ -140,7 +143,7 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
 
     double sum = 0;
     int iter = 0;
-
+    int oper = 0;
     while (true)
     {
         ++iter;
@@ -155,13 +158,14 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
             return x;
         }
         
-        method_gauss(C, n, xk);
+        oper += method_gauss(C, n, xk);
 
         e_norm(xk, norm, n);
 
 
         for(size_t i = 0; i < n; ++i){
             xk[i] /= norm;
+            ++oper;
         }
         sum = 0;
         for(size_t i = 0; i < n; ++i){
@@ -187,7 +191,9 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
 
     }
 
-    cout << "k = " << iter << "\n";
+    cout << "iter = " << iter << "\n";
+    cout << "oper = " << oper << "\n";
+
 
     for (size_t j = 0; j < n; ++j){
         delete[] C[j];

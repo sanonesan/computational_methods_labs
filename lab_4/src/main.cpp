@@ -23,6 +23,8 @@ int main(int args, char** argv){
 	size_t n; //vector size
 
 	string path = "/home/san/Code/labs_comput/lab_4/test_files/lab_4_mat.txt";
+	//string path = "/home/san/Code/labs_comput/lab_4/test_files/input1.txt";
+
 
 	double** A = readMatrixFromFile(path, n); 
 		
@@ -31,6 +33,8 @@ int main(int args, char** argv){
 
 	cout << "System:\n";
 	print_Matrix(A, n);
+
+	transpose_matrix(A, n);
 
 	double* lambda_mas = hessenberg(A, n);
 
@@ -43,8 +47,32 @@ int main(int args, char** argv){
 	for(size_t i = 0; i < n; ++i){
 		x0[i] = 0;
 	}
-	x0[2]=1;
+	
+	x0[0]=0.8;
+	x0[1]=0;
+	x0[2]=0.2;
+	x0[3]=0.4;
 
+
+// Lambda_0 = 0.997313
+// iter = 3
+// oper = 122
+// ( 0.864461,	0.00338916,	0.244595,	0.439169 )^T
+
+// Lambda_1 = 2.00425
+// iter = 5
+// oper = 200
+// ( 0.0119071,	-0.709759,	0.607555,	-0.356337 )^T
+
+// Lambda_2 = 2.98702
+// iter = 5
+// oper = 200
+// ( -0.502548,	-0.0157964,	0.430896,	0.749349 )^T
+
+// Lambda_3 = 4.01142
+// iter = 2
+// oper = 80
+// ( -0.00343211,	0.704259,	0.620789,	-0.344426 )^T
 
 	double* x; 
 	cout << "-----------------------------------------------------\n";
