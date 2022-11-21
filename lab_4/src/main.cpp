@@ -34,7 +34,15 @@ int main(int args, char** argv){
 	cout << "System:\n";
 	print_Matrix(A, n);
 
-	transpose_matrix(A, n);
+
+	double** A_save = new double* [n];
+	for(size_t i = 0; i < n; ++i){
+		A_save[i] = new double [n];
+	}
+
+	//copy_Matrix_A_to_B(A, A_save, n);
+
+	//transpose_matrix(A, n);
 
 	double* lambda_mas = hessenberg(A, n);
 
@@ -75,13 +83,26 @@ int main(int args, char** argv){
 // ( -0.00343211,	0.704259,	0.620789,	-0.344426 )^T
 
 	double* x; 
+	double* check = new double [n];
 	cout << "-----------------------------------------------------\n";
 	cout << "\ninverse iteration: \n\n";
 	for(size_t i = 0; i < n; ++i){
 		cout << "Lambda_" << i << " = " << lambda_mas[i] << "\n";
 		x = inverse_iter_method(A, x0, lambda_mas[i], n);
+
+		//cout << "\nEigenvector (A^T) * x' = lambda * x': \n";
 		print_Vector(x, n);
-		cout << "\n";
+		
+		// cout << "\nx' * A: \n";
+		// vector_matrix_mult(x, A_save, check, n);
+		// print_Vector(check,n);
+
+		// cout << "x' * lambda: \n";
+
+		// for(size_t j = 0; j < n; ++j){
+		// 	cout << x[j] * lambda_mas[i] << " ";
+		// }
+		cout << "\n\n";
 	}
 	
 	cout << "-----------------------------------------------------\n";
@@ -96,9 +117,12 @@ int main(int args, char** argv){
 
 	for (size_t j = 0; j < n; ++j) {
 		delete[] A[j];
+		delete[] A_save[j];
 	}
 
 	delete[] A;
+	delete[] A_save;
+	delete[] check;
 	delete[] x0;
 	delete[] x;
 	

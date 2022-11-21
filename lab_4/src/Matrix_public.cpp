@@ -205,6 +205,24 @@ int matrix_vector_mult(double** A, double* B, double*& T, size_t n){
 
 }
 
+int vector_matrix_mult(double* B, double** A, double*& T, size_t n){
+
+	for (size_t i = 0; i < n; ++i) {
+		T[i] = 0.0;
+		for (size_t j = 0; j < n; ++j) {
+
+			T[i] += A[j][i] * B[j];
+			if (fabs(T[i]) < eps) {
+				T[i] *= (1 / T[i] > 0) ? (1) : (-1);
+			}
+
+		}
+	}
+
+	return 0;
+}
+
+
 int scalar_mult(double* A, double* B, double& T, size_t n){
 
 	for(size_t i = 0; i < n; ++i){

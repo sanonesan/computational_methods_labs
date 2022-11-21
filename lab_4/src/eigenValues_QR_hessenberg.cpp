@@ -25,6 +25,13 @@ double* hessenberg(double**& A, size_t& n){
     print_Matrix(Ak, n);
 
 	int oper = 0;
+	/*
+
+		Првиведение к форме Хессенберга
+
+	*/
+
+
 
 	for (size_t i = 1; i < n-1; ++i) {
 
@@ -112,6 +119,8 @@ double* hessenberg(double**& A, size_t& n){
 
 	}
 
+	// //------------------------------------------------ //
+
     check_matrix_zero(Ak, n);
     print_Matrix(Ak, n);
 
@@ -138,7 +147,7 @@ double* hessenberg(double**& A, size_t& n){
 	size_t m = n;
 
     while (true)
-	//for(size_t u = 0; u < 5; ++u)
+	//for(size_t u = 0; u < 1000; ++u)
     {   
         ++iter;
         g = Ak[m-1][m-1];
@@ -157,11 +166,11 @@ double* hessenberg(double**& A, size_t& n){
 
         sum = 0;
 
-        for (size_t i = 0; i < m-2; ++i) {
-			sum += fabs(Ak[i+1][i]);               
+        for (size_t i = 1; i < n; ++i) {
+			sum += fabs(Ak[i][i-1]);               
         }
 
-        if (sum < eps)
+        if (sum < eps * 10)
             break;
 
 		if (fabs(Ak[m-1][m-2]) < eps && m != 1 ){

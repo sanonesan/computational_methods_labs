@@ -32,6 +32,8 @@ int matrix_mult(double** &A, double** &B, double**& T, size_t n);
 
 int matrix_vector_mult(double** A, double* B, double*& T, size_t n);
 
+int vector_matrix_mult(double* B, double** A, double*& T, size_t n);
+
 int scalar_mult(double* A, double* B, double& T, size_t n);
 
 int normalize_Sys_MatrixLine(size_t& k, double**& A, size_t& n);
