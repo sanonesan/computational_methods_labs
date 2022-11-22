@@ -56,11 +56,15 @@ int main(int args, char** argv){
 		x0[i] = 0;
 	}
 	
-	x0[0]=0.8;
-	x0[1]=0;
-	x0[2]=0.2;
-	x0[3]=0.4;
+	x0[0]=0.864461;  
+	x0[1]=0.00338916;
+	x0[2]=0.244595;
+	x0[3]=0.439169;
 
+	// x0[0]=0.0119071;  
+	// x0[1]=-0.709759;
+	// x0[2]=0.607555;
+	// x0[3]=-0.356337;
 
 // Lambda_0 = 0.997313
 // iter = 3
@@ -108,8 +112,7 @@ int main(int args, char** argv){
 	cout << "-----------------------------------------------------\n";
 	cout << "\nRayleigh: \n\n";
 	for(size_t i = 0; i < n; ++i){
-		cout << "Lambda_" << i << " = " << lambda_mas[i] << "\n";
-		x = inverse_iter_method_Rayleigh(A, x0, lambda_mas[i], n);
+		x = inverse_iter_method_Rayleigh(A, x0, n);
 		print_Vector(x, n);
 		cout << "\n";
 	}

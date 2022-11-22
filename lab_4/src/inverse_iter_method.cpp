@@ -79,8 +79,7 @@ double* inverse_iter_method(double**& A, double*& x0, double lambda, size_t n){
         sum = 0;
         for(size_t i = 0; i < n; ++i){
             tmp[i] =  ((x[i]) - (xk[i]));
-            
-            
+                        
             sum += fabs(x[i] + xk[i]);
             
         }  
@@ -122,7 +121,7 @@ double* inverse_iter_method(double**& A, double*& x0, double lambda, size_t n){
 }
 
 
-double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, size_t n){
+double* inverse_iter_method_Rayleigh(double**& A, double*& x0, size_t n){
 
     double* x = new double[n];
     double* xk = new double[n];
@@ -140,24 +139,40 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
     copy_Vector_A_to_B(x0, xk, n);
     copy_Vector_A_to_B(x0, x, n);
 
+    
+
 
     double sum = 0;
     int iter = 0;
     int oper = 0;
+
+
+    e_norm(xk, norm, n);
+
+    for(size_t i = 0; i < n; ++i){
+        xk[i] /= norm;
+        ++oper;
+    }
+
+    double lambda = 0;
+
     while (true)
     {
         ++iter;
 
+        matrix_vector_mult(C, xk, tmp, n);
+        scalar_mult(tmp, xk, lambda, n);
+
         for (size_t i = 0; i < n; ++i){
             C[i][i] -= lambda;
-            C[i][n] = x[i];
+            C[i][n] = xk[i];
 
         }
 
         if (false == inv_check(C, n)){
             return x;
         }
-        
+
         oper += method_gauss(C, n, xk);
 
         e_norm(xk, norm, n);
@@ -167,6 +182,7 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
             xk[i] /= norm;
             ++oper;
         }
+
         sum = 0;
         for(size_t i = 0; i < n; ++i){
             tmp[i] = x[i] - xk[i];
@@ -186,13 +202,13 @@ double* inverse_iter_method_Rayleigh(double**& A, double*& x0, double lambda, si
             break;
         }
 
-        matrix_vector_mult(C, xk, tmp, n);
-        scalar_mult(tmp, xk, lambda, n);
+        
 
     }
 
     cout << "iter = " << iter << "\n";
     cout << "oper = " << oper << "\n";
+	cout << "Lambda_" << " = " << lambda << "\n";
 
 
     for (size_t j = 0; j < n; ++j){
