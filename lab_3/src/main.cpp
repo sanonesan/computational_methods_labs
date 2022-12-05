@@ -6,6 +6,10 @@
 #include "interpol.h"
 #include "spline.h"
 
+#include <fstream>
+#include <vector>
+
+
 #define pi 3.14159
 using namespace std;
 
@@ -21,7 +25,7 @@ int main(int args, char** argv){
 	
 	
 	double* x = new double[n];
-	double xx = 0.222;
+	double xx = 0.8;
 
 	cout << "x = " << xx << "\n";
 
@@ -30,7 +34,15 @@ int main(int args, char** argv){
 
 	//ravn
 
-	double h = (b - a) / (n-1);
+	size_t c_size = 500;
+	double* cords_interpol = new double [c_size];
+	double h = ((b+2) - (a-2)) / (c_size-1);
+	for(size_t i = 0; i < c_size; ++i){
+		cords_interpol[i] = (a-2) + i * h;
+	}
+
+
+	h = (b - a) / (n-1);
 	for(size_t i = 0; i <= n; ++i){
 		x[i] = a + i * h;
 	}
@@ -39,9 +51,24 @@ int main(int args, char** argv){
 	for(size_t i = 0; i < n; ++i){
 		y[i] = func(x[i]);
 	}
-	cout << "Lagrange interpolation (unoform grid): \n";
+	cout << "Lagrange interpolation (uniform grid): \n";
 	double k = interpol_lagrange(xx, x ,y, n);
 	cout << k << endl;
+
+
+	string path1 = "/home/san/Code/labs_comput/lab_3/interpol_uniform_grid_out.txt";
+
+	ofstream file;
+    file.open(path1);
+
+    if (file.is_open())
+    {	
+		cout << "YES\n";
+		for(size_t i = 0; i < c_size; ++i){			
+			file << cords_interpol[i] << interpol_lagrange(cords_interpol[i], x ,y, n);
+		}
+		file.close();
+    }
 
 
 	//cheb
@@ -81,7 +108,7 @@ int main(int args, char** argv){
 		y[i] = func(x[i]);
 	}
 
-	double** A = spline(xx, x, y, n);
+	double** A = spline(x, y, n);
 
 	int kk = -1;
     for(size_t i = 0; i < n-1; ++i){

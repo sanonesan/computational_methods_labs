@@ -1,6 +1,6 @@
 #pragma once 
 #include <cstddef>
-#define eps 1e-4
+#define eps 1e-16
 
 
 double* Relaxation_method(double**& A, double*& x0, double& w, size_t n);

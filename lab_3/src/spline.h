@@ -6,4 +6,4 @@
 
 using namespace std;
 
-double** spline(double x, double *&x_mas, double *&y_mas, size_t& n);
+double** spline(double *&x_mas, double *&y_mas, size_t& n);

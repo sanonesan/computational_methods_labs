@@ -1,9 +1,11 @@
 #include "spline.h"
 #include "Matrix_public.h"
 #include "Relaxation_method.h"
+#include "method_gauss.h"
+
 using namespace std;
 
-double** spline(double x, double *&x_mas, double *&y_mas, size_t &n)
+double** spline(double *&x_mas, double *&y_mas, size_t &n)
 {
 
     double spline = 0;
@@ -68,12 +70,17 @@ double** spline(double x, double *&x_mas, double *&y_mas, size_t &n)
 	}
 
     c_res1 = Relaxation_method(C, x0, w, kk);
+    
+    //method_gauss(C, kk, c_res1);
 
-    double* c_res = new double[k];
+    double* c_res = new double[n];
 
     for(size_t i = 0; i < k; ++i){
-        c_res[i] = (i == 0 || i == k - 1) ? 0.0 : c_res1[i-1];
+        c_res[i] = (i == 0) ? 0.0 : c_res1[i-1];
     }
+    // print_Vector(c_res1, kk);
+    // print_Vector(c_res, n);
+
     delete[] c_res1;
 
     for(size_t i = 0; i < k; ++i){
@@ -82,6 +89,13 @@ double** spline(double x, double *&x_mas, double *&y_mas, size_t &n)
         A[i][2] = c_res[i];
         A[i][3] = (c_res[i+1] - c_res[i]) / 3 / h[i];
     }
+
+    // for(size_t i = 0; i < k; ++i){
+    //     for(size_t j = 0; j < 4; ++j){
+    //         cout << A[i][j] << "    ";
+    //     }
+    //     cout << "\n";
+    // }
 
     return A;
 }
