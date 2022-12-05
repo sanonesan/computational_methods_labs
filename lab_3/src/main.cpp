@@ -28,6 +28,11 @@ double func2(double& x){
 	return x * x;
 }
 
+double func3(double& x){
+	//return exp(x) + x*x + 35;
+	return 1 / (1 + x * x);
+}
+
 int main(int args, char** argv){
 
 	setlocale(LC_ALL, "Rus");
@@ -43,16 +48,16 @@ int main(int args, char** argv){
 
 	
 	// double a = 0.0, b = 2.0;
-	double a = -1.0, b = 1.0;
+	double a = -5.0, b = 5.0;
 
 
 	//ravn
 
-	size_t c_size = 500;
+	size_t c_size = 1000;
 	double* cords_interpol = new double [c_size];
-	double h = ((b+1) - (a-1)) / (c_size-1);
+	double h = ((b) - (a)) / (c_size-1);
 	for(size_t i = 0; i < c_size; ++i){
-		cords_interpol[i] = (a-1) + i * h;
+		cords_interpol[i] = (a) + i * h;
 	}
 
 	h = (b - a) / (n-1);
@@ -66,7 +71,7 @@ int main(int args, char** argv){
 
 	double* y = new double[n];
 	for(size_t i = 0; i < n; ++i){
-		y[i] = func1(x[i]);
+		y[i] = func3(x[i]);
 	}
 
 /*-----------------------
@@ -82,28 +87,28 @@ int main(int args, char** argv){
 	// //print_Vector(x, n);
 
 	
-	// cout << "Lagrange interpolation (uniform grid): \n";
-	// double k = interpol_lagrange(xx, x ,y, n);
-	// cout << "L(2.2) = " << k << "\n";
-	// cout << "exp(2.2) = " << func(xx) << "\n";
-	// cout << "| exp(2.2) - L(2.2) | = " << fabs(k - func(xx))  << "\n";
+	cout << "Lagrange interpolation (uniform grid): \n";
+	double k = interpol_lagrange(xx, x ,y, n);
+	cout << "L(2.2) = " << k << "\n";
+	cout << "exp(2.2) = " << func(xx) << "\n";
+	cout << "| exp(2.2) - L(2.2) | = " << fabs(k - func(xx))  << "\n";
 
 
 
 
-	// path1 = "/home/san/Code/labs_comput/lab_3/interpol_uniform_grid_out.txt";
+	path1 = "/home/san/Code/labs_comput/lab_3/interpol_uniform_grid_out.txt";
 
-    // file.open(path1);
+    file.open(path1);
 
 
-    // if (file.is_open())
-    // {	
+    if (file.is_open())
+    {	
 		
-	// 	for(size_t i = 0; i < c_size; ++i){			
-	// 		file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
-	// 	}
-	// 	file.close();
-    // }
+		for(size_t i = 0; i < c_size; ++i){			
+			file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
+		}
+		file.close();
+    }
 
 /*-----------------------
 
@@ -111,30 +116,30 @@ int main(int args, char** argv){
 
 ------------------------*/
 
-	// for(size_t i = 0; i <= n; ++i){
-	// 	x[i] = (a + b) / n + (b - a) / n * cos((2*i + 1) * pi / 2 / (n+1));
-	// }
+	for(size_t i = 0; i <= n; ++i){
+		x[i] = (a + b) / n + (b - a) / n * cos((2*i + 1) * pi / 2 / (n+1));
+	}
 
-	// for(size_t i = 0; i < n; ++i){
-	// 	y[i] = func(x[i]);
-	// }
+	for(size_t i = 0; i < n; ++i){
+		y[i] = func3(x[i]);
+	}
 
-	// cout << "Lagrange interpolation (Chebyshov's grid): \n";
-	// k = interpol_lagrange(xx, x ,y, n);
-	// cout << k << endl;
+	cout << "Lagrange interpolation (Chebyshov's grid): \n";
+	k = interpol_lagrange(xx, x ,y, n);
+	cout << k << endl;
 
-	// path1 = "/home/san/Code/labs_comput/lab_3/interpol_chebyshov_grid_out.txt";
+	path1 = "/home/san/Code/labs_comput/lab_3/interpol_chebyshov_grid_out.txt";
 
-    // file.open(path1);
+    file.open(path1);
 
-    // if (file.is_open())
-    // {	
+    if (file.is_open())
+    {	
 		
-	// 	for(size_t i = 0; i < c_size; ++i){			
-	// 		file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
-	// 	}
-	// 	file.close();
-    // }
+		for(size_t i = 0; i < c_size; ++i){			
+			file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
+		}
+		file.close();
+    }
 
 
 
@@ -144,42 +149,42 @@ int main(int args, char** argv){
 
 ------------------------*/
 
-	// string path = "/home/san/Code/labs_comput/lab_3/test_files/interpol.txt";
+	string path = "/home/san/Code/labs_comput/lab_3/test_files/interpol.txt";
 
-	// double* x_new = read_vec(path, n);
-	// for(size_t i = 0; i < n; ++i){
-	// 	y[i] = func(x_new[i]);
-	// }
+	double* x_new = read_vec(path, n);
+	for(size_t i = 0; i < n; ++i){
+		y[i] = func3(x_new[i]);
+	}
 
-	// cout << "Extrapolation: \n";
+	cout << "Extrapolation: \n";
 
-	// k = interpol_lagrange(xx, x_new ,y, n);
-	// cout << k << endl;
+	k = interpol_lagrange(xx, x_new ,y, n);
+	cout << k << endl;
 
 
-	// h = (b - a) / (n-1);
-	// //h = 0.2;
+	h = (b - a) / (n-1);
+	//h = 0.2;
 
-	// for(size_t i = 0; i < n; ++i){
-	// 	x[i] = a + i * h;
-	// }
+	for(size_t i = 0; i < n; ++i){
+		x[i] = a + i * h;
+	}
 	
-	// for(size_t i = 0; i < n; ++i){
-	// 	y[i] = func(x[i]);
-	// }
+	for(size_t i = 0; i < n; ++i){
+		y[i] = func3(x[i]);
+	}
 
-	// path1 = "/home/san/Code/labs_comput/lab_3/extrapol_out.txt";
+	path1 = "/home/san/Code/labs_comput/lab_3/extrapol_out.txt";
 
-    // file.open(path1);
+    file.open(path1);
 
-    // if (file.is_open())
-    // {	
+    if (file.is_open())
+    {	
 		
-	// 	for(size_t i = 0; i < c_size; ++i){			
-	// 		file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
-	// 	}
-	// 	file.close();
-    // }
+		for(size_t i = 0; i < c_size; ++i){			
+			file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
+		}
+		file.close();
+    }
 
 
 /* SPLINE */
