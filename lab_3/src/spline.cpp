@@ -89,7 +89,7 @@ double** spline(double *&x_mas, double *&y_mas, size_t &n)
     //c_res1 = Relaxation_method(C, x0, w, kk);
     c_res1 = Relaxation_method(ai, bi, ci, di, x0, w, kk);
 
-    print_Vector(c_res1, kk);
+    //print_Vector(c_res1, kk);
     //method_gauss(C, kk, c_res1);
 
     double* c_res = new double[n];

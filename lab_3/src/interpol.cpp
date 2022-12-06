@@ -5,10 +5,10 @@ double interpol_lagrange(double x, double *&x_mas, double *&y_mas, size_t &n)
     double lagrange_pol = 0;
     double c_i = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; ++i)
     {
         c_i = 1;
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < n; ++j)
         {
             if (j == i)
                 continue;
