@@ -753,7 +753,7 @@ int triagonal_matrix_algorithm(double*& ai, double*& bi, double*& ci, double*& d
     }
 
 	res[kk-1] = u[kk-1];
-    for(size_t i = kk-2; i < kk; --i){
+    for(size_t i = kk-2; i > -1; --i){
         res[i] = u[i] + v[i] * res[i + 1];
     }
 
