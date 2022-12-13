@@ -49,13 +49,13 @@ int main(int args, char **argv)
 	ofstream file;
 	string path1, path2;
 
-	size_t n = 100; // vector size
+	size_t n = 10; // vector size
 	double xx = 1;
 	// double a = 0.0, b = 2.0;
 
-	double a = -3.0, b = 3.0;
+	double a = -5.0, b = 5.0;
 
-	size_t c_size = 2000;
+	size_t c_size = 1000;
 	double *cords_interpol = new double[c_size];
 	double h = ((b) - (a)) / (c_size - 1);
 	for (size_t i = 0; i < c_size; ++i)
@@ -76,7 +76,7 @@ int main(int args, char **argv)
 	double *y = new double[n];
 	for (size_t i = 0; i < n; ++i)
 	{
-		y[i] = func2(x[i]);
+		y[i] = func3(x[i]);
 	}
 
 	path1 = "/home/san/Code/labs_comput/lab_3/interpol_uniform_grid_out.txt";
@@ -125,6 +125,9 @@ int main(int args, char **argv)
 	cout << "Вектор нормы ошибки: \n";
 	print_Vector(mas, u);
 
+	///////////////////////////////////////////////////
+
+
 	// cout << "L(2.2) = " << k << "\n";
 	// cout << "exp(2.2) = " << func(xx) << "\n";
 	// cout << "| exp(2.2) - L(2.2) | = " << fabs(k - func(xx))  << "\n";
@@ -164,36 +167,43 @@ int main(int args, char **argv)
 
 		for (size_t i = 0; i < n; ++i)
 		{
-			y[i] = func2(x[i]);
+			y[i] = func(x[i]);
 		}
-		mas[m - 1] = fabs(func2(xx) - interpol_lagrange(xx, x, y, n));
+		mas[m - 1] = fabs(func(xx) - interpol_lagrange(xx, x, y, n));
 	}
 	cout << "Вектор нормы ошибки: \n";
 	print_Vector(mas, u);
 
-	// for(size_t i = 0; i <= n; ++i){
-	// 	x[i] = (a + b) / 2 + (b - a) / 2 * cos((2*i + 1) * pi / 2 / (n+1));
-	// }
+	n = 10;
 
-	// for(size_t i = 0; i < n; ++i){
-	// 	//y[i] = 1;
-	// 	y[i] = func2(x[i]);
-	// }
+	x = new double[n];
+	y = new double[n];
 
-	// cout << "Lagrange interpolation (Chebyshov's grid): \n";
-	// k = interpol_lagrange(xx, x ,y, n);
-	// cout << k << endl;
+	for(size_t i = 0; i < n; ++i){
+		x[i] = (a + b) / 2 + (b - a) / 2 * cos((2*i + 1) * pi / 2 / (n));
+	}
 
-	// file.open(path2);
+	//print_Vector(x, n);
 
-	// if (file.is_open())
-	// {
+	for(size_t i = 0; i < n; ++i){
+		//y[i] = 1;
+		y[i] = func3(x[i]);
+	}
 
-	// 	for(size_t i = 0; i < c_size; ++i){
-	// 		file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
-	// 	}
-	// 	file.close();
-	// }
+	cout << "Lagrange interpolation (Chebyshov's grid): \n";
+	k = interpol_lagrange(xx, x ,y, n);
+	cout << k << endl;
+
+	file.open(path2);
+
+	if (file.is_open())
+	{
+
+		for(size_t i = 0; i < c_size; ++i){
+			file << cords_interpol[i] << " " << interpol_lagrange(cords_interpol[i], x ,y, n) << "\n";
+		}
+		file.close();
+	}
 
 	/*-----------------------
 
@@ -292,7 +302,7 @@ int main(int args, char **argv)
 
 	for (size_t i = 0; i < n; ++i)
 	{
-		y[i] = func(x[i]);
+		y[i] = func3(x[i]);
 	}
 
 	A = spline(x, y, n);
@@ -315,34 +325,40 @@ int main(int args, char **argv)
 
 	cout << fabs(res1 - res) << endl;
 
-	cout << "\n"
-		 << log2(fabs(func(xx) - res) / fabs(func(xx) - res1)) << "\n";
+	cout << "\n" << log2(fabs(func(xx) - res) / fabs(func(xx) - res1)) << "\n";
 
-	// path1 = "/home/san/Code/labs_comput/lab_3/spline_out.txt";
+	path1 = "/home/san/Code/labs_comput/lab_3/spline_out.txt";
 
-	// file.open(path1);
+	file.open(path1);
 
-	// if (file.is_open())
-	// {
-	// 	h = ((b) - (a)) / (c_size-1);
-	// 	for(size_t i = 0; i < c_size; ++i){
-	// 		cords_interpol[i] = (a) + i * h;
-	// 	}
+	for (size_t i = 0; i < n; ++i)
+	{
+		y[i] = func2(x[i]);
+	}
 
-	// 	for(size_t j = 0; j < c_size; ++j){
+	A = spline(x, y, n);
 
-	// 		xx = cords_interpol[j];
-	// 		for(size_t i = 0; i < n-1; ++i){
+	if (file.is_open())
+	{
+		h = ((b) - (a)) / (c_size-1);
+		for(size_t i = 0; i < c_size; ++i){
+			cords_interpol[i] = (a) + i * h;
+		}
 
-	// 			if(x[i+1] - xx > 0 && xx - x[i] > 0){
-	// 				file << xx << " " << A[i][0] + A[i][1] * (xx - x[i]) + A[i][2] * pow(xx - x[i], 2) + A[i][3] * pow(xx - x[i], 3) << "\n";
-	// 				break;
-	// 			}
+		for(size_t j = 0; j < c_size; ++j){
 
-	// 		}
-	// 	}
-	// 	file.close();
-	// }
+			xx = cords_interpol[j];
+			for(size_t i = 0; i < n-1; ++i){
+
+				if(x[i+1] - xx > 0 && xx - x[i] > 0){
+					file << xx << " " << A[i][0] + A[i][1] * (xx - x[i]) + A[i][2] * pow(xx - x[i], 2) + A[i][3] * pow(xx - x[i], 3) << "\n";
+					break;
+				}
+
+			}
+		}
+		file.close();
+	}
 
 	cout << "--------------------------------\n";
 	cout << "--------------------------------\n";

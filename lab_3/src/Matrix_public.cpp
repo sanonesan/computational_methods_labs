@@ -735,3 +735,30 @@ int matrix_number_mult(double**& A, double& w, size_t &n){
     }
 	return 0;
 }
+
+
+int triagonal_matrix_algorithm(double*& ai, double*& bi, double*& ci, double*& di, double* res, size_t& kk){
+	
+	double* v = new double [kk];
+    double* u = new double [kk];
+    double temp = 0;
+
+    v[0] = - ci[0] / bi[0];
+    u[0] = di[0] / bi[0];
+
+    for(size_t i = 1; i < kk; ++i){
+        temp = bi[i] + ai[i] * v[i-1];
+        v[i] = (i == kk - 1) ? 0.0 : - ci[i] / temp;
+        u[i] = (di[i] - ai[i] * u[i-1]) / temp;
+    }
+
+	res[kk-1] = u[kk-1];
+    for(size_t i = kk-2; i < kk; --i){
+        res[i] = u[i] + v[i] * res[i + 1];
+    }
+
+	delete[] v;
+	delete[] u;
+
+	return 0;
+}

@@ -86,3 +86,5 @@ int cond_matrix(double**& A, double& cond1, size_t& n, int flag);
 int reverse_matrix_qr(double**& A, double**& B, size_t& n);
 
 int LDU_method(double**& A, double**& L, double**& D, double**& U, size_t& n);
+
+int triagonal_matrix_algorithm(double*& ai, double*& bi, double*& ci, double*& di, double* res, size_t& kk);
