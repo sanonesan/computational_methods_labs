@@ -18,7 +18,6 @@ ofstream file7;
 ofstream file8;
 ofstream file9;
 ofstream file10;
-string path = "../res/";
 
 //Вывод вектора
 template<typename T>
@@ -179,7 +178,7 @@ T  bisection(Func foo, pair<T,T> section, size_t& iter_counter){
             break;
         
     }
-    error_order(x_mas, xk);
+    //error_order(x_mas, xk);
     x_mas.clear();
 
     return (fabs(xk) > eps) ? xk : 0.0;    
@@ -210,7 +209,7 @@ T  chord_method(Func foo,  pair<T,T> section, size_t& iter_counter){
     }
     xk = a;
 
-	error_order(x_mas, xk);
+	//error_order(x_mas, xk);
     x_mas.clear();
 	return xk;
 }
@@ -256,7 +255,6 @@ T  newton_method(Func foo, Diff diff_foo, pair<T,T> section, size_t& iter_counte
 
 
 // Классический метод Ньютона для системы уравенений
-// На каждой итерации считается матрица Якоби
 template<typename T, typename Func, typename J>
 vector<T>  newton_sys_method(Func foo1, Func foo2, J jacobi, const vector<T>& x0)
 {
@@ -505,6 +503,7 @@ int main(int args, char **argv){
         );
 	print_vec(rootNewSys);
 
+    string path = "../res/";
     
     file1.open(path + "1_4.txt");
 	file2.open(path + "5_6.txt");
@@ -525,7 +524,7 @@ int main(int args, char **argv){
 	while (i < 10)
 	{
 		while (j < 10) {
-			rootNewSys = newton_sys_method1(test4f1<Type>, test4f2<Type>, test4Jacobi<Type>, vector<Type>{i, j}, iter);
+			rootNewSys = newton_sys_method1(test5f1<Type>, test5f2<Type>, test5Jacobi<Type>, vector<Type>{i, j}, iter);
             //cout << i << "\t" << j << "\t";
 			foo(iter, i, j, path);
 			j += h;
