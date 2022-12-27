@@ -32,7 +32,14 @@ template<typename T>
 T test4_diff(T x);
 
 template<typename T>
-pair<T, T> test5(T x, T y);
+T test4f1(T x, T y);
+
+template<typename T>
+T test4f2(T x, T y);
+
+template<typename T>
+matrix<T> test5Jacobi(T x, T y);
+
 
 template<typename T>
 T test5f1(T x, T y);
@@ -42,3 +49,10 @@ T test5f2(T x, T y);
 
 template<typename T>
 matrix<T> test5Jacobi(T x, T y);
+
+template<typename T>
+T test6(T x);
+
+template<typename T>
+T test6_diff(T x);
+
