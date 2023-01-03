@@ -56,3 +56,8 @@ T test6(T x);
 template<typename T>
 T test6_diff(T x);
 
+template<typename T>
+T test7(T x);
+
+template<typename T>
+T test7_diff(T x);

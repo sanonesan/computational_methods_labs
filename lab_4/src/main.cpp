@@ -22,8 +22,8 @@ int main(int args, char** argv){
 
 	size_t n; //vector size
 
-	string path = "/home/san/Code/labs_comput/lab_4/test_files/lab_4_mat.txt";
-	//string path = "/home/san/Code/labs_comput/lab_4/test_files/input1.txt";
+	//string path = "/home/san/Code/labs_comput/lab_4/test_files/lab_4_mat.txt";
+	string path = "/home/san/Code/labs_comput/lab_3/test_files/EIGEN4.TXT";
 
 
 	double** A = readMatrixFromFile(path, n); 

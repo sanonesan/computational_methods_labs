@@ -251,7 +251,7 @@ int main(int args, char **argv)
 
 	//Оценка P
 
-	n = 8;
+	n = 10;
 
 	h = (b - a) / (n - 1);
 
@@ -268,7 +268,7 @@ int main(int args, char **argv)
 
 	for (size_t i = 0; i < n; ++i)
 	{
-		y[i] = func(x[i]);
+		y[i] = func2(x[i]);
 	}
 
 	double **A = spline(x, y, n);
@@ -283,8 +283,9 @@ int main(int args, char **argv)
 		{
 			res = A[i][0] + A[i][1] * (xx - x[i]) + A[i][2] * pow(xx - x[i], 2) + A[i][3] * pow(xx - x[i], 3);
 			cout << "\nSpline (uniform grid): \n";
-			cout << res << "\n";
-			// cout << fabs(res - xx*xx) << "\n";
+			cout << res << "\n adgdsagasdg \n";
+
+			cout << fabs(res - xx*xx) << "\n";
 			break;
 		}
 	}
@@ -302,13 +303,12 @@ int main(int args, char **argv)
 
 	for (size_t i = 0; i < n; ++i)
 	{
-		y[i] = func3(x[i]);
+		y[i] = func1(x[i]);
 	}
 
 	A = spline(x, y, n);
 
 	double res1 = 0.0;
-
 	for (size_t i = 0; i < n - 1; ++i)
 	{
 		if (x[i + 1] - xx > 0 && xx - x[i] > 0)
@@ -317,7 +317,7 @@ int main(int args, char **argv)
 			cout << "Spline (uniform grid): \n";
 			cout << res1 << "\n";
 			cout << res1 << "\n";
-			// cout << fabs(res - xx) << "\n";
+			cout << fabs(res - xx) << "\n";
 			// cout << fabs(res - xx*xx) << "\n";
 			break;
 		}
@@ -337,6 +337,15 @@ int main(int args, char **argv)
 	}
 
 	A = spline(x, y, n);
+
+	cout << "\n\n\n\nDZ2: \n";
+	for(size_t i = 0; i < n-1; ++i){
+		for(size_t j = 0; j < 4; ++j){
+			cout << A[i][j] << "    ";
+		}
+		cout << "\n";
+	}
+
 
 	if (file.is_open())
 	{
@@ -364,6 +373,67 @@ int main(int args, char **argv)
 	cout << "--------------------------------\n";
 	xx = 2;
 	// cout << func_pow2(xx, 2) << "\n";
+
+	n = 4;
+	delete[] x;
+	delete[] y;
+	x = new double[n];
+	y = new double[n];
+
+	x[0] = 0;
+	x[1] = 0.333333;
+	x[2] = 0.666667;
+	x[3] = 1;
+
+	y[0] = 0.0;
+	y[1] = -0.000843679;
+	y[2] = -0.00325299;
+	y[3] = -0.00712056;
+
+	print_Vector(x, n);
+	print_Vector(y,n);
+
+	A = spline(x, y, n);
+
+	cout << "\n\n\n\nDZ2: \n";
+	for(size_t j = 0; j < 4; ++j){
+		if (j == 0)
+			cout << "a: ";
+		if (j == 1)
+			cout << "b: ";
+		if (j == 2)
+			cout << "c: ";
+		if (j == 3)
+			cout << "d: ";
+		for(size_t i = 0; i < n-1; ++i){
+			
+			cout << A[i][j] << "    ";
+		}
+		cout << "\n";
+	}
+
+	double res2 = 0.0;
+
+	for(size_t i = 0; i < 3; ++i){
+		res2 += A[i][0] * pow(0.333333, 1) + A[i][1] * pow(0.333333, 2) + A[i][2] * pow(0.333333, 3) + A[i][3] * pow(0.333333, 4);
+	}
+
+	cout << "\n I = " << res2 << "\n";
+
+	// double res1 = 0.0;
+	// for (size_t i = 0; i < n - 1; ++i)
+	// {
+	// 	if (x[i + 1] - xx > 0 && xx - x[i] > 0)
+	// 	{
+	// 		res1 = A[i][0] + A[i][1] * (xx - x[i]) + A[i][2] * pow(xx - x[i], 2) + A[i][3] * pow(xx - x[i], 3);
+	// 		cout << "Spline (uniform grid): \n";
+	// 		cout << res1 << "\n";
+	// 		cout << res1 << "\n";
+	// 		cout << fabs(res - xx) << "\n";
+	// 		// cout << fabs(res - xx*xx) << "\n";
+	// 		break;
+	// 	}
+	// }
 
 	return 0;
 }

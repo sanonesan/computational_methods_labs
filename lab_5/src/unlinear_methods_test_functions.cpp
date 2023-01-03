@@ -117,3 +117,14 @@ template<typename T>
 T test6_diff(T x) {
 	return 7 * cos(x);
 }
+
+
+template<typename T>
+T test7(T x){
+	return pow(x-1, 7);
+}
+
+template<typename T>
+T test7_diff(T x){
+	return 7 * pow(x-1, 6);
+}

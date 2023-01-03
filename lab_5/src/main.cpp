@@ -178,7 +178,7 @@ T  bisection(Func foo, pair<T,T> section, size_t& iter_counter){
             break;
         
     }
-    //error_order(x_mas, xk);
+    error_order(x_mas, xk);
     x_mas.clear();
 
     return (fabs(xk) > eps) ? xk : 0.0;    
@@ -209,7 +209,7 @@ T  chord_method(Func foo,  pair<T,T> section, size_t& iter_counter){
     }
     xk = a;
 
-	//error_order(x_mas, xk);
+	error_order(x_mas, xk);
     x_mas.clear();
 	return xk;
 }
@@ -228,12 +228,13 @@ T  newton_method(Func foo, Diff diff_foo, pair<T,T> section, size_t& iter_counte
 
     T x, xk = chord(foo, section);
     vector<T> temp;
-
+	vector<T> X;
     do {
         ++iter_counter;
         
         x = xk;
-        temp.push_back(x);
+		X.push_back(x);
+
         pair<T,T> temp;
 
         xk = x - foo(x) / diff_foo(x);
@@ -247,8 +248,19 @@ T  newton_method(Func foo, Diff diff_foo, pair<T,T> section, size_t& iter_counte
             xk = chord(foo, temp);
         }
 
+
     } while (fabs(xk - x) > eps);
 
+	vector<T> x_mas = X;
+
+	// if (x_mas.size() > 4){
+	// 	for (size_t i = x_mas.size() - 4; i < x_mas.size() - 2; ++i){
+	// 	cout << "Порядок p = " << log(abs((x_mas[i+2] - x) / (x_mas[i+1] - x))) / log(abs((x_mas[i+1] - x) / (x_mas[i] - x))) << "\n";    }
+
+	// }
+	
+	error_order(X, x);
+	
     return x;    
 }
 
@@ -584,14 +596,41 @@ int main(int args, char **argv){
 	cout << "Результат: " << root << "\n";
 	cout << "Достигнутая точность: " << abs(exact_root - root) << "\n";
 	cout << "Невязка: " << abs(f6(root)) << "\n";
+
+	cout << "_____________________________________________\n";
+	cout << "_____________________________________________\n";
+	cout << "_____________________________________________\n";
+	cout << "_____________________________________________\n";
+	cout << "_____________________________________________\n";
+
+	cout << "Метод Ньютона (аналитическая производная):\n";
+	iter = 0;
+	auto f7 = test7<Type>;
+	auto f7_diff = test7_diff<Type>;
+	auto f7_diff_num = num_deriv(test7<Type>, eps);
+	section = {-5, 5};
+	exact_root = 1.;
+
+    root = newton_method(f7, f7_diff, section, iter);
+	cout << "Количество итераций: " << iter << "\n";
+	cout << "Результат: " << root << "\n";
+	cout << "Достигнутая точность: " << abs(exact_root - root) << "\n";
+	cout << "Невязка: " << abs(f7(root)) << "\n";
+
+    cout << "\n/--------------------------------------------/ \n\n";
+
+    cout << "Метод Ньютона (численная производная):\n";
+	iter = 0;
+    root = newton_method(f7, f7_diff_num, section, iter);
+	cout << "Количество итераций: " << iter << "\n";
+	cout << "Результат: " << root << "\n";
+	cout << "Достигнутая точность: " << abs(exact_root - root) << "\n";
+	cout << "Невязка: " << abs(f7(root)) << "\n";
     
 
 
     return 0;
 }
-
-
-
 
 void foo(size_t k, double x, double y, string path)
 {

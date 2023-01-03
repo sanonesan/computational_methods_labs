@@ -6,10 +6,7 @@
 
 #define eps 1e-16
 
-
 using namespace std;
-
-
 
 double* hessenberg(double**& A, size_t& n);
 
