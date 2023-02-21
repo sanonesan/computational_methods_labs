@@ -380,15 +380,20 @@ int main(int args, char **argv)
 	x = new double[n];
 	y = new double[n];
 
-	x[0] = 0;
+	x[0] = 0.;
 	x[1] = 0.333333;
 	x[2] = 0.666667;
-	x[3] = 1;
+	x[3] = 1.;
 
-	y[0] = 0.0;
-	y[1] = -0.000843679;
-	y[2] = -0.00325299;
-	y[3] = -0.00712056;
+	// y[0] = 0.0;
+	// y[1] = -0.000843679;
+	// y[2] = -0.00325299;
+	// y[3] = -0.00712056;
+
+	y[0] = 0.;
+	y[1] = 0.;
+	y[2] = 0.;
+	y[3] = 1.;
 
 	print_Vector(x, n);
 	print_Vector(y,n);
@@ -413,10 +418,14 @@ int main(int args, char **argv)
 	}
 
 	double res2 = 0.0;
-
+	double dot = 0.333333;
 	for(size_t i = 0; i < 3; ++i){
-		res2 += A[i][0] * pow(0.333333, 1) + A[i][1] * pow(0.333333, 2) + A[i][2] * pow(0.333333, 3) + A[i][3] * pow(0.333333, 4);
+		res2 += A[i][0] * pow(dot, 1) + A[i][1] * pow(dot, 2) + A[i][2] * pow(dot, 3) + A[i][3] * pow(dot, 4);
 	}
+	size_t j = 1;
+	size_t i = j;
+	xx = 0.5;
+	cout << xx << " " << A[i][0] + A[i][1] * (xx - x[j]) + A[i][2] * pow(xx - x[j], 2) + A[i][3] * pow(xx - x[j], 3) << "\n";
 
 	cout << "\n I = " << res2 << "\n";
 

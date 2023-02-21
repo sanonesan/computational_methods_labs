@@ -42,6 +42,19 @@ double** spline(double *&x_mas, double *&y_mas, size_t &n)
         di[i] = 3 * (g[i+1] - g[i]);
     }
 
+    cout << "\n 3 diag mat: \n";
+    
+
+    check_vector_zero(ai, kk);
+    check_vector_zero(bi, kk);
+    check_vector_zero(ci, kk);
+    check_vector_zero(di, kk);
+
+    print_Vector(ai, kk);
+    print_Vector(bi, kk);
+    print_Vector(ci, kk);
+    print_Vector(di, kk);
+
     double* c_res1 = new double[kk];
     
     triagonal_matrix_algorithm(ai, bi, ci, di, c_res1, kk);
@@ -51,6 +64,10 @@ double** spline(double *&x_mas, double *&y_mas, size_t &n)
     for(size_t i = 0; i < k; ++i){
         c_res[i] = (i == 0) ? 0.0 : c_res1[i-1];
     }
+
+    check_vector_zero(c_res, k);
+    print_Vector(c_res, k);
+
 
     for(size_t i = 0; i < k; ++i){
         A[i][0] = y_mas[i];
