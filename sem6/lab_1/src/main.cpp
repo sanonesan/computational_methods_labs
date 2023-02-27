@@ -38,17 +38,17 @@ T runge_cutta(T start_time, T end_time, T tau, vector<T> x, vector<F> func, stri
 		cout << "\n error \n";
 	}
 
-	fout << scientific;
-	fout.precision(8);
+	//fout << scientific;
+	//fout.precision(8);
 
-	fout << "%time(s) \t x-pos \t y-pos \n" ;
+	//fout << "%time(s) \t x-pos \t y-pos \n" ;
 	//fout << start_time << "\t" << x[0] << "\t"<<  x[1] << "\n";
 	
 	T coef = 0.;
 
 	while (start_time <= end_time){
 
-		fout << start_time; 
+		//fout << start_time; 
 		for(size_t i = 0; i < func.size(); ++i){
 			x[i] += runge_coef(start_time, tau, x, func[i]);
 			fout << "\t" << x[i] ;
@@ -108,7 +108,6 @@ int main(int args, char **argv){
 
 	vector<function<T (const vector<T>& x, const T t)>> _functions;	
 	vector<T> x = {1.,0.1};
-	print_vec(x);
 	_functions.push_back(func_1);
 	_functions.push_back(func_2);
 
@@ -122,7 +121,7 @@ int main(int args, char **argv){
 	t_final = 50;
 	tau = 0.01;
 
-	string out_path = "RK4_output.csv";
+	string out_path = "RK4_output.txt";
 
 	runge_cutta(t, t_final, tau, x, _functions, out_path);
 
