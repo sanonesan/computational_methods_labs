@@ -38,6 +38,8 @@ T runge_cutta(T start_time, T end_time, T tau, vector<T> x, vector<F> func, stri
 		cout << "\n error \n";
 	}
 
+	vector<T> tmp(x);
+
 	//fout << scientific;
 	//fout.precision(8);
 
@@ -50,10 +52,13 @@ T runge_cutta(T start_time, T end_time, T tau, vector<T> x, vector<F> func, stri
 
 		//fout << start_time; 
 		for(size_t i = 0; i < func.size(); ++i){
-			x[i] += runge_coef(start_time, tau, x, func[i]);
-			fout << "\t" << x[i] ;
+			x[i] += runge_coef(start_time, tau, tmp, func[i]);
+			fout << "\t" << x[i];
 		}
-		fout << "\n";
+		for(size_t i = 0; i < func.size(); ++i)
+			tmp[i] = x[i];
+		
+		fout << "\n";	
 
 		start_time += tau;
 	}
