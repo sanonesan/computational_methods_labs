@@ -2,64 +2,38 @@
 #include<fstream>
 #include<vector>
 #include<cmath>
+#include <functional>
 #define eps 1e-9
 
 using namespace std;
-template<typename T>
-using matrix = vector<vector<T>>;
 
 double a = 0.1, mu = 0.1, w = 0.25, nu = 0.15;
 
-//H
-template<typename T>
-T func_H(const T x, const T y){
-	return pow(x * x + y * y, 2) - 2 * a * a * (x * x - y * y);
+template<typename T, typename F>
+T runge_coef(const T t, const T tau, const vector<T>& x, F func){
+
+	vector<T> tmp(x);
+
+	T k1, k2, k3, k4;
+
+	k1 = tau * func(tmp, t);
+	for(size_t k = 0; k < x.size(); ++k)
+		tmp[k] = x[k] + 0.5 * k1;	
+	k2 = tau * func(tmp, t + 0.5 * tau);
+	for(size_t k = 0; k < x.size(); ++k)
+		tmp[k] = x[k] + 0.5 * k2;
+	k3 = tau * func(tmp, t + 0.5 * tau);
+	for(size_t k = 0; k < x.size(); ++k)
+		tmp[k] = x[k] + k3;
+	k4 = tau * func(tmp, t + tau);
+	
+	return 0.166666 * (k1 + k4) + 0.333333 * (k2 + k3);
 }
 
-//num_deriv_dH_dx
-template<typename T>
-T func_dH_dx(const T x, const T y){
+template<typename T, typename F>
+T runge_cutta(T start_time, T end_time, T tau, vector<T> x, vector<F> func, string out_path){
 
-	return (func_H(x + eps, y) - func_H(x, y)) / eps;
-}
-
-//num_deriv_dH_dy
-template<typename T>
-T func_dH_dy(const T x, const T y){
-	return (func_H(x , y + eps) - func_H(x, y)) / eps;
-}
-
-// dx/dt
-template<typename T>
-T func_1(const T x, const T y, const T t){
-	return func_dH_dy(x, y) - mu * func_H(x, y) * func_dH_dx(x, y) + nu * y * sin(w * t);
-}
-
-// dy/dt
-template<typename T>
-T func_2(const T x, const T y, const T t){
-	return -func_dH_dx(x, y) - mu * func_H(x, y) * func_dH_dy(x, y) + nu * y * sin(w * t);
-}
-
-
-
-
-int main(int args, char **argv){
-
-    typedef double Type;
-
-    Type t, t_final, tau;
-
-	vector<Type> x,y;
-
-	t = 0;
-	t_final = 50;
-	tau = 0.01;
-
-	x.push_back(1.0);
-	y.push_back(0.1);
-
-	ofstream fout("RK4_output.csv");
+	ofstream fout(out_path);
 	if(!fout){
 		cout << "\n error \n";
 	}
@@ -68,35 +42,90 @@ int main(int args, char **argv){
 	fout.precision(8);
 
 	fout << "%time(s) \t x-pos \t y-pos \n" ;
+	//fout << start_time << "\t" << x[0] << "\t"<<  x[1] << "\n";
+	
+	T coef = 0.;
 
-	Type k1, k2, k3, k4;
-	Type l1, l2, l3, l4;
-	Type t1, t2, t3, t4;
-	int counter = 0;
-	while (t <= t_final){
-		
-		k1 = tau * func_1(x[counter], y[counter], t);
-		l1 = tau * func_2(x[counter], y[counter], t);
+	while (start_time <= end_time){
 
-		k2 = tau * func_1(x[counter] + 0.5 * k1, y[counter] + 0.5 * l1, t);
-		l2 = tau * func_2(x[counter] + 0.5 * k1, y[counter] + 0.5 * l1, t);
+		fout << start_time; 
+		for(size_t i = 0; i < func.size(); ++i){
+			x[i] += runge_coef(start_time, tau, x, func[i]);
+			fout << "\t" << x[i] ;
+		}
+		fout << "\n";
 
-		k3 = tau * func_1(x[counter] + 0.5 * k2, y[counter] + 0.5 * l2, t);
-		l3 = tau * func_2(x[counter] + 0.5 * k2, y[counter] + 0.5 * l2, t);
-
-		k4 = tau * func_1(x[counter] + 0.5 * k3, y[counter] + 0.5 * l3, t);
-		l4 = tau * func_2(x[counter] + 0.5 * k3, y[counter] + 0.5 * l3, t);
-
-		x.push_back(x[counter] + 0.166 * k1 + 0.333 * k2 + 0.333 * k3 + 0.166 * k4);
-		y.push_back(y[counter] + 0.166 * l1 + 0.333 * l2 + 0.333 * l3 + 0.166 * l4);
-
-
-		++counter;
-		t+=tau;
-
-		fout << t << "\t" << x[counter] << "\t"<<  y[counter] << "\n";
-
+		start_time += tau;
 	}
+
+	fout.close();
+		
+}
+
+template<typename T>
+void print_vec(const vector<T>& vec){
+	cout << "\n( ";
+	for(size_t i = 0; i < vec.size() - 1; ++i)
+		cout << vec[i] << "\t";
+	cout << vec[vec.size()-1] << " )^T \n";
+}
+
+
+
+int main(int args, char **argv){
+
+	typedef double T;
+
+    T t, t_final, tau;
+
+	
+	// ---------------------------- //
+	// ---------funcs_var_4-------- //
+	// ---------------------------- //
+
+	//H
+	auto func_H = [](const vector<T> &x) -> T{
+		return pow(x[0] * x[0] + x[1] * x[1], 2) - 2 * a * a * (x[0] * x[0] - x[1] * x[1]);
+	};
+
+	//num_deriv_dH_dx_i
+	auto func_dH_dx_i = [func_H](vector<T> x, const size_t i) -> T{
+		T res = - func_H(x);
+		x[i] += eps;
+		res += func_H(x);
+		return res / eps;
+	};
+
+	// dx/dt
+	auto func_1 = [func_H, func_dH_dx_i](const vector<T>& x, const T t) -> T{
+		return func_dH_dx_i(x, 1) - mu * func_H(x) * func_dH_dx_i(x, 0) + nu * x[1] * sin(w * t);
+	};
+
+	// dy/dt
+	auto func_2 = [func_H, func_dH_dx_i](const vector<T>& x, const T t) -> T{
+		return -func_dH_dx_i(x, 0) - mu * func_H(x) * func_dH_dx_i(x, 1) + nu * x[1] * sin(w * t);
+	};
+
+	vector<function<T (const vector<T>& x, const T t)>> _functions;	
+	vector<T> x = {1.,0.1};
+	print_vec(x);
+	_functions.push_back(func_1);
+	_functions.push_back(func_2);
+
+
+	// ---------------------------- //
+	// ---------funcs_var_4-------- //
+	// ---------------------------- //
+
+
+	t = 0;
+	t_final = 50;
+	tau = 0.01;
+
+	string out_path = "RK4_output.csv";
+
+	runge_cutta(t, t_final, tau, x, _functions, out_path);
+
 
     return 0;
 }
