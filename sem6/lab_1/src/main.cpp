@@ -16,9 +16,9 @@ int main(int args, char **argv){
 	T tol = 0.001; //tolerance
     T t, t_final, tau;
 
-	// ---------------------------- //
-	// ---------funcs_var_4-------- //
-	// ---------------------------- //
+	// -------------------------------------------- //
+	// -----------------funcs_var_4---------------- //
+	// -------------------------------------------- //
 
 	//const
 	const T a = 0.1, mu = 0.1, w = 0.25, nu = 0.15;
@@ -79,28 +79,43 @@ int main(int args, char **argv){
 	_functions.push_back(func_2);
 
 
-	// ---------------------------- //
-	// ---------funcs_var_4-------- //
-	// ---------------------------- //
+	// -------------------------------------------- //
+	// -----------------funcs_var_4---------------- //
+	// -------------------------------------------- //
 
 
-	t = 0;
-	t_final = 50;
-	tau = 0.01;
+	// ============================================ //
+	// 												//
+	//	|	|	|	|	|	|	|	|	|	|	|	//
+	// 												//
+	// ============================================ //
 
-	// string out_path = "../output/RK4_fix_step_output.txt";
-	string out_path = "../output/RK4_fix_step_output.csv";
-	runge_cutta_fix_step(t, t_final, tau, x, _functions, out_path);
 
+	// -------------------------------------------- //
+	// ---------------solution_var_4--------------- //
+	// -------------------------------------------- //
+
+	
 	tol = 0.001;
 	t = 0;
 	t_final = 50;
 	tau = 0.001;
-	x[0] = 1.0;
-	x[1] = 0.01;
+
+	// ----------------RUNGE-CUTTA----------------- //
+
+	// string out_path = "../output/RK4_fix_step_output.txt";
+	string out_path = "../output/RK4_fix_step_output.csv";
+	RK4_fix_step(t, t_final, tau, x, _functions, out_path);
 
 	out_path = "../output/RK4_vary_step_output.csv";
-	runge_cutta_vary_step(t, t_final, tau, x, _functions, tol, out_path);
+	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
+
+	// ----------------RUNGE-CUTTA----------------- //
+	
+
+	// -------------------------------------------- //
+	// ---------------solution_var_4--------------- //
+	// -------------------------------------------- //
 
     return 0;
 }

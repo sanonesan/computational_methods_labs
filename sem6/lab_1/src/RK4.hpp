@@ -17,13 +17,16 @@ using namespace std;
     T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F &func);
 
     template<typename T, typename F>
-    void runge_cutta_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path);
+    void RK4_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path);
 
     template<typename T, typename F>
-    void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const T tol, const string &out_path);
+    void RK4_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const T tol, const string &out_path);
 */
 
 
+/*
+	Вычисление коэффициентов метода Рунге-Кутты
+*/
 template<typename T, typename F>
 T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F &func){
 
@@ -44,9 +47,11 @@ T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F
 	return 0.166666 * (k1 + k4) + 0.333333 * (k2 + k3);
 }
 
-
+/*
+	Метод Рунге-Кутты 4 порядка с фиксированным шагом
+*/
 template<typename T, typename F>
-void runge_cutta_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path){
+void RK4_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path){
 
 	ofstream fout(out_path);
 	if(!fout){
@@ -56,22 +61,25 @@ void runge_cutta_fix_step(T start_time, T end_time, T tau, vector<T> x, const ve
 
 	fout << scientific;
 	fout << "time," << "x," << "y\n";
+	fout << start_time;
+	for(size_t i = 0; i < func.size(); ++i){
+		fout << "," << x[i];
+	}
+	fout << "\n";
 	
 	vector<T> tmp(x);
 
 	while (start_time <= end_time){
-
-		fout << start_time;
+		
+		fout << start_time + tau;
 
 		for(size_t i = 0; i < func.size(); ++i){
 			x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
-			//fout << "\t" << x[i];
 			fout << "," << x[i];
-
 		}
+		fout << "\n";
 		
 		tmp.assign(x.begin(), x.end());
-		fout << "\n";
 
 		start_time += tau;
 	}
@@ -81,9 +89,11 @@ void runge_cutta_fix_step(T start_time, T end_time, T tau, vector<T> x, const ve
     return;
 }
 
-
+/*
+	Метод Рунге-Кутты 4 порядка с изменяющимя шагом
+*/
 template<typename T, typename F>
-void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const T tol, const string &out_path){
+void RK4_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const T tol, const string &out_path){
 
 	ofstream fout(out_path);
 	if(!fout){
@@ -93,15 +103,20 @@ void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const v
 
 	fout << scientific;
 	fout << "time," << "x," << "y\n";
+	fout << start_time;
+	for(size_t i = 0; i < func.size(); ++i){
+		fout << "," << x[i];
+	}
+	fout << "\n";
+
 
 	vector<T> tmp(x);
 	vector<T> x_1(x);
 	vector<T> x_2(x);
 	T breaker;
+	T coef_tol = tol / 5 / 10000;
 
-	while (start_time <= end_time){
-
-		fout << start_time;
+	while (true){
 
 		while (true) {
 			
@@ -121,21 +136,37 @@ void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const v
 				tau /= 2;
 			}
 			else{
+				x.assign(x_1.begin(), x_1.end());
 				break;
 			}
 
 		}
 
-		if (breaker < tol / 10000)
+		if (breaker < coef_tol)
 			tau *= 2;
 
-		x.assign(x_1.begin(), x_1.end());
+		fout << start_time;
 		for(size_t i = 0; i < func.size(); ++i){
 			fout << "," << x[i];
 		}
 		fout << "\n";
 
-		start_time += tau;		
+		if (start_time + tau <= end_time){
+			start_time += tau;					
+		}
+		else{
+			if((start_time < end_time) && (start_time + tau > end_time)){
+				tau = end_time - start_time;
+				fout << start_time + tau;
+				for(size_t i = 0; i < func.size(); ++i){
+					x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
+					fout << "," << x[i];
+				}
+				fout << "\n";
+			}
+			break;
+		}
+
 	}
 
 	fout.close();
