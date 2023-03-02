@@ -3,7 +3,7 @@
 #include<vector>
 #include<cmath>
 #include <functional>
-#define eps 1e-9
+#define eps 1e-16
 
 using namespace std;
 
@@ -16,8 +16,27 @@ void print_vec(const vector<T>& vec){
 }
 
 template<typename T>
-T norm(vector<T> vec){
-	return sqrt(vec[0]*vec[0] + vec[1]*vec[1]);
+T norm_1(const vector<T> &vec){
+	T res = 0;
+	for(size_t i = 0; i < vec.size(); ++i)
+		res += fabs(vec[i]);
+	return res;
+}
+template<typename T>
+T norm_inf(const vector<T> &vec){
+	T res = fabs(vec[0]);
+	for(size_t i = 1; i < vec.size(); ++i)
+		if(fabs(res - fabs(vec[i]) < eps))
+			res = fabs(vec[i]);
+	return res;
+}
+
+template<typename T>
+T norm_euclid(const vector<T> &vec){
+	T res = 0;
+	for(size_t i = 0; i < vec.size(); ++i)
+		res += fabs(vec[i] * vec[i]);
+	return sqrt(res);
 }
 
 double a = 0.1, mu = 0.1, w = 0.25, nu = 0.15;
@@ -43,15 +62,14 @@ T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F
 }
 
 template<typename T, typename F>
-void runge_cutta(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path){
+void runge_cutta_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path){
 
 	ofstream fout(out_path);
 	if(!fout){
 		cout << "\n error \n";
 	}
-
+	
 	vector<T> tmp(x);
-	T coef = 0.;
 
 	while (start_time <= end_time){
 
@@ -59,9 +77,8 @@ void runge_cutta(T start_time, T end_time, T tau, vector<T> x, const vector<F> &
 			x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
 			fout << "\t" << x[i];
 		}
-		for(size_t i = 0; i < func.size(); ++i)
-			tmp[i] = x[i];
-
+		
+		tmp.assign(x.begin(), x.end());
 		fout << "\n";
 
 		start_time += tau;
@@ -71,7 +88,7 @@ void runge_cutta(T start_time, T end_time, T tau, vector<T> x, const vector<F> &
 }
 
 template<typename T, typename F>
-void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const string &out_path){
+void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> &func, const T tol, const string &out_path){
 
 	ofstream fout(out_path);
 	if(!fout){
@@ -81,48 +98,44 @@ void runge_cutta_vary_step(T start_time, T end_time, T tau, vector<T> x, const v
 	vector<T> tmp(x);
 	vector<T> x_1(x);
 	vector<T> x_2(x);
-	bool flag = true;
+	T breaker;
 	while (start_time <= end_time){
 
-		for(size_t i = 0; i < func.size(); ++i){
-			x_1[i] += runge_coef(start_time, tau, x, i, func[i]);
-			x_2[i] += runge_coef(start_time, tau / 2, x, i, func[i]);
-			x_2[i] += runge_coef(start_time, tau / 2, x_2, i, func[i]);
+		while (true) {
 			
-		}
-		for(size_t i = 0; i < func.size(); ++i){
-			tmp[i] = x_1[i] - x_2[i];
-		}
-		while (norm(tmp) / 15 >= 0.001 && tau > 0.002)
-		{
-			tau /= 2;
 			for(size_t i = 0; i < func.size(); ++i){
-				x_1[i] += runge_coef(start_time, tau, x, i, func[i]);
-				x_2[i] += runge_coef(start_time, tau / 2, x, i, func[i]);
-				x_2[i] += runge_coef(start_time, tau / 2, x_2, i, func[i]);
+				x_1[i] = x[i] + runge_coef(start_time, tau, x, i, func[i]);
+				tmp[i] = x[i] + runge_coef(start_time, tau / 2, x, i, func[i]);
 			}
+			for(size_t i = 0; i < func.size(); ++i)
+				x_2[i] = tmp[i] + runge_coef(start_time, tau / 2, tmp, i, func[i]);
+
 			for(size_t i = 0; i < func.size(); ++i){
 				tmp[i] = x_1[i] - x_2[i];
-		}
-		}	
+			}		
 
-		if (norm(tmp) / 15 < 0.001 || tau < 0.002)
+			breaker = norm_inf(tmp) / 15;
+			if(breaker >= tol){
+				tau /= 2;
+			}
+			else{
+				break;
+			}
+		}
+		if (breaker < tol / 10000)
 			tau *= 2;
 
+		x.assign(x_1.begin(), x_1.end());
 		for(size_t i = 0; i < func.size(); ++i){
-			x[i] = x_1[i];
-			fout << "\t" << x_1[i];
+			fout << "\t" << x[i];
 		}
-		
-
-
 		fout << "\n";
-		start_time += tau;
+
+		start_time += tau;		
 	}
 
 	fout.close();
 }
-
 
 
 
@@ -144,9 +157,10 @@ int main(int args, char **argv){
 	//num_deriv_dH_dx_i
 	auto func_dH_dx_i = [func_H](vector<T> x, const size_t i) -> T{
 		T res = - func_H(x);
-		x[i] += eps;
+		T _eps = 1e-9;
+		x[i] += _eps;
 		res += func_H(x);
-		return res / eps;
+		return res / _eps;
 	};
 
 	//exact_deriv_dH_dx_i
@@ -198,7 +212,7 @@ int main(int args, char **argv){
 
 	string out_path = "RK4_output.txt";
 
-	runge_cutta(t, t_final, tau, x, _functions, out_path);
+	runge_cutta_fix_step(t, t_final, tau, x, _functions, out_path);
 
 	t = 0;
 	t_final = 50;
@@ -207,7 +221,7 @@ int main(int args, char **argv){
 	x[1] = 0.1;
 
 	out_path = "RK4_vary_output.txt";
-	runge_cutta_vary_step(t, t_final, tau, x, _functions, out_path);
+	runge_cutta_vary_step(t, t_final, tau, x, _functions, 0.001, out_path);
 
 
     return 0;
