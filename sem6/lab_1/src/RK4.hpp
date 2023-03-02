@@ -118,6 +118,21 @@ void RK4_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F>
 
 	while (true){
 
+		if (start_time + tau > end_time){
+			
+			if((start_time < end_time)){
+
+				tau = end_time - start_time;
+				fout << start_time + tau;
+				for(size_t i = 0; i < func.size(); ++i){
+					x[i] += runge_coef(start_time, tau, x_1, i, func[i]);
+					fout << "," << x[i];
+				}
+				fout << "\n";
+			}
+			break;
+		}
+
 		while (true) {
 			
 			for(size_t i = 0; i < func.size(); ++i){
@@ -140,7 +155,9 @@ void RK4_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F>
 				break;
 			}
 
-		}
+		}		
+
+		start_time += tau;	
 
 		if (breaker < coef_tol)
 			tau *= 2;
@@ -150,22 +167,6 @@ void RK4_vary_step(T start_time, T end_time, T tau, vector<T> x, const vector<F>
 			fout << "," << x[i];
 		}
 		fout << "\n";
-
-		if (start_time + tau <= end_time){
-			start_time += tau;					
-		}
-		else{
-			if((start_time < end_time) && (start_time + tau > end_time)){
-				tau = end_time - start_time;
-				fout << start_time + tau;
-				for(size_t i = 0; i < func.size(); ++i){
-					x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
-					fout << "," << x[i];
-				}
-				fout << "\n";
-			}
-			break;
-		}
 
 	}
 
