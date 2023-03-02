@@ -14,7 +14,7 @@ int main(int args, char **argv){
 	typedef double T;
 
 	T tol = 0.001; //tolerance
-    T t, t_final, tau;
+	T t, t_final, tau;
 
 	// -------------------------------------------- //
 	// -----------------funcs_var_4---------------- //
@@ -86,7 +86,7 @@ int main(int args, char **argv){
 
 	// ============================================ //
 	// 												//
-	//	|	|	|	|	|	|	|	|	|	|	|	//
+	//	////////////////////////////////////////	//
 	// 												//
 	// ============================================ //
 
@@ -101,7 +101,7 @@ int main(int args, char **argv){
 	t_final = 50;
 	tau = 0.001;
 
-	// ----------------RUNGE-CUTTA----------------- //
+	// ----------------RUNGE-KUTTA----------------- //
 
 	// string out_path = "../output/RK4_fix_step_output.txt";
 	string out_path = "../output/RK4_fix_step_output.csv";
@@ -110,7 +110,7 @@ int main(int args, char **argv){
 	out_path = "../output/RK4_vary_step_output.csv";
 	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
 
-	// ----------------RUNGE-CUTTA----------------- //
+	// ----------------RUNGE-KUTTA----------------- //
 	
 
 	// -------------------------------------------- //
