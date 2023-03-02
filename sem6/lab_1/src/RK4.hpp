@@ -47,6 +47,7 @@ T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F
 	return 0.166666 * (k1 + k4) + 0.333333 * (k2 + k3);
 }
 
+
 /*
 	Метод Рунге-Кутты 4 порядка с фиксированным шагом
 */
@@ -88,6 +89,7 @@ void RK4_fix_step(T start_time, T end_time, T tau, vector<T> x, const vector<F> 
 
     return;
 }
+
 
 /*
 	Метод Рунге-Кутты 4 порядка с изменяющимя шагом

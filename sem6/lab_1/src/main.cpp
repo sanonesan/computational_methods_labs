@@ -4,9 +4,9 @@
 #include<cmath>
 #include <functional>
 
-using namespace std;
-
 #include"RK4.hpp"
+
+using namespace std;
 
 
 int main(int args, char **argv){
@@ -23,10 +23,12 @@ int main(int args, char **argv){
 	//const
 	const T a = 0.1, mu = 0.1, w = 0.25, nu = 0.15;
 
+
 	//H
 	auto func_H = [a](const vector<T> &x) -> T{
 		return pow(x[0] * x[0] + x[1] * x[1], 2) - 2 * a * a * (x[0] * x[0] - x[1] * x[1]);
 	};
+
 
 	//num_deriv_dH_dx_i
 	auto func_num_deriv_dH_dx_i = [func_H](vector<T> x, const size_t i) -> T{
@@ -40,6 +42,7 @@ int main(int args, char **argv){
 		return res / _eps;
 	};
 
+
 	//exact_deriv_dH_dx_i
 	auto func_exact_deriv_dH_dx_i = [a, func_H](vector<T> x, const size_t i) -> T{
 		
@@ -51,6 +54,7 @@ int main(int args, char **argv){
 			throw invalid_argument("vector out of range");
 		}
 	};
+
 
 	// // dx/dt
 	// auto func_1 = [mu, nu, w, func_H, func_num_deriv_dH_dx_i](const vector<T>& x, const T t) -> T{
@@ -68,10 +72,12 @@ int main(int args, char **argv){
 		return func_exact_deriv_dH_dx_i(x, 1) - mu * func_H(x) * func_exact_deriv_dH_dx_i(x, 0) + nu * x[1] * sin(w * t);
 	};
 
+
 	// dy/dt
 	auto func_2 = [mu, nu, w, func_H, func_exact_deriv_dH_dx_i](const vector<T>& x, const T t) -> T{
 		return -func_exact_deriv_dH_dx_i(x, 0) - mu * func_H(x) * func_exact_deriv_dH_dx_i(x, 1) + nu * x[1] * sin(w * t);
 	};
+
 
 	vector<function<T (const vector<T>& x, const T t)>> _functions;
 	vector<T> x = {1.,0.1};

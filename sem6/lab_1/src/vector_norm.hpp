@@ -2,6 +2,7 @@
 
 #include<vector>
 #include<cmath>
+
 #define eps 1e-16
 
 using namespace std;
