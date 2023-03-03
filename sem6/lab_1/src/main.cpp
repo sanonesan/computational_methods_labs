@@ -102,25 +102,12 @@ int main(int args, char **argv){
 	// ---------------solution_var_4--------------- //
 	// -------------------------------------------- //
 
-	
-	tol = 0.001;
-	t = 0;
-	t_final = 50;
-	tau = 0.001;
-
-	// ----------------RUNGE-KUTTA----------------- //
-
-	// string out_path = "../output/RK4_fix_step_output.txt";
-	string out_path = "../output/RK4_fix_step_output.csv";
-	RK4_fix_step(t, t_final, tau, x, _functions, out_path);
-
-	out_path = "../output/RK4_vary_step_output.csv";
-	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
-
-	// ----------------RUNGE-KUTTA----------------- //
-
 
 	// -------------------EULER-------------------- //
+	
+	// ............................................ //
+	//Тест из методички
+
 	// T k, m;
 	// k = 20;
 	// m = 0.3;
@@ -139,12 +126,30 @@ int main(int args, char **argv){
 	// };
 	// _functions[0] = func_3;
 	// _functions[1] = func_4;
-	
-	out_path = "../output/euler_output.csv";
+
+	// ............................................ //
+
+	tol = 0.001;
+	t = 0;
+	t_final = 50;
+	tau = 0.001;
+
+	string out_path = "../output/euler_output.csv";
 	ode_euler(t, t_final, tau, x, _functions, out_path);
 	
 	// -------------------EULER-------------------- //
+	
 
+	// ----------------RUNGE-KUTTA----------------- //
+
+	// string out_path = "../output/RK4_fix_step_output.txt";
+	out_path = "../output/RK4_fix_step_output.csv";
+	RK4_fix_step(t, t_final, tau, x, _functions, out_path);
+
+	out_path = "../output/RK4_vary_step_output.csv";
+	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
+
+	// ----------------RUNGE-KUTTA----------------- //
 
 	// -------------------------------------------- //
 	// ---------------solution_var_4--------------- //
