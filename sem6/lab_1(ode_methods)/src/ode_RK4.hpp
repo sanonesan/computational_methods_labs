@@ -44,7 +44,7 @@ T runge_coef(const T t, const T tau, const vector<T>& x, const size_t k, const F
 
 	k4 = tau * func(tmp, t + tau);
 
-	return 0.166666 * (k1 + k4) + 0.333333 * (k2 + k3);
+	return 0.166667 * (k1 + k4) + 0.333333 * (k2 + k3);
 }
 
 
