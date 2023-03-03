@@ -19,6 +19,13 @@ using namespace std;
     T norm_euclid(const vector<T> &vec);
 */
 
+template<typename T>
+void print_vec(vector<T> vec){
+	cout << "\n( ";
+	for(size_t i = 0; i < vec.size() - 1; ++i)
+		cout <<  vec[i] << "\t";
+	cout << vec[vec.size() - 1] << " )^T \n";
+}
 
 /*
 	Октаэдрическая норма ( || * ||_{1})

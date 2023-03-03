@@ -4,8 +4,10 @@
 #include<cmath>
 #include <functional>
 
-#include"RK4.hpp"
-#include"ode_euler.hpp"
+#include"vector_norm.hpp"
+#include"ode_Euler.hpp"
+#include"ode_RK4.hpp"
+#include"ode_Adams.hpp"
 
 using namespace std;
 
@@ -106,7 +108,8 @@ int main(int args, char **argv){
 	// -------------------EULER-------------------- //
 	
 	// ............................................ //
-	//Тест из методички
+	// ...........Тест..из..методички.............. //
+
 
 	// T k, m;
 	// k = 20;
@@ -127,6 +130,8 @@ int main(int args, char **argv){
 	// _functions[0] = func_3;
 	// _functions[1] = func_4;
 
+
+	// ...........Тест..из..методички.............. //
 	// ............................................ //
 
 	tol = 0.001;
@@ -134,8 +139,8 @@ int main(int args, char **argv){
 	t_final = 50;
 	tau = 0.001;
 
-	string out_path = "../output/euler_output.csv";
-	ode_euler(t, t_final, tau, x, _functions, out_path);
+	string out_path = "../output/ode_Euler_output.csv";
+	ode_Euler(t, t_final, tau, x, _functions, out_path);
 	
 	// -------------------EULER-------------------- //
 	
@@ -143,13 +148,34 @@ int main(int args, char **argv){
 	// ----------------RUNGE-KUTTA----------------- //
 
 	// string out_path = "../output/RK4_fix_step_output.txt";
-	out_path = "../output/RK4_fix_step_output.csv";
-	RK4_fix_step(t, t_final, tau, x, _functions, out_path);
+	out_path = "../output/ode_RK4_fix_step_output.csv";
+	ode_RK4_fix_step(t, t_final, tau, x, _functions, out_path);
 
-	out_path = "../output/RK4_vary_step_output.csv";
-	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
-
+	out_path = "../output/ode_RK4_vary_step_output.csv";
+	ode_RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
+	
 	// ----------------RUNGE-KUTTA----------------- //
+
+
+	
+
+	// --------------ADAMS-BASHFORT---------------- //
+
+	out_path = "../output/ode_AB4_output.csv";
+	ode_AB4(t, t_final, tau, x, _functions, out_path);
+
+	// --------------ADAMS-BASHFORT---------------- //
+
+
+
+	// -----------PREDICTOR-CORRECTOR------------ //
+
+	out_path = "../output/ode_Predictor_Corrector_output.csv";
+	ode_Predictor_Corrector(t, t_final, tau, x, _functions, out_path);
+
+	// -----------PREDICTION-CORRECTION------------ //
+
+
 
 	// -------------------------------------------- //
 	// ---------------solution_var_4--------------- //
