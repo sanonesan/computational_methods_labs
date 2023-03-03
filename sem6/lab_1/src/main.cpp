@@ -168,13 +168,12 @@ int main(int args, char **argv){
 
 
 
-	// -----------PREDICTOR-CORRECTOR------------ //
+	// ------------PREDICTOR-CORRECTOR------------- //
 
 	out_path = "../output/ode_Predictor_Corrector_output.csv";
 	ode_Predictor_Corrector(t, t_final, tau, x, _functions, out_path);
 
-	// -----------PREDICTION-CORRECTION------------ //
-
+	// ------------PREDICTOR-CORRECTOR------------- //
 
 
 	// -------------------------------------------- //
