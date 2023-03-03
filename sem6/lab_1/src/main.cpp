@@ -5,6 +5,7 @@
 #include <functional>
 
 #include"RK4.hpp"
+#include"ode_euler.hpp"
 
 using namespace std;
 
@@ -117,7 +118,33 @@ int main(int args, char **argv){
 	RK4_vary_step(t, t_final, tau, x, _functions, tol, out_path);
 
 	// ----------------RUNGE-KUTTA----------------- //
+
+
+	// -------------------EULER-------------------- //
+	// T k, m;
+	// k = 20;
+	// m = 0.3;
+	// T wa = k/m;
+	// tau = 0.01;
+	// x = {1., 0.};
+	// // dx/dt
+	// auto func_3 = [](const vector<T>& x, const T t) -> T{
+	// 	return x[1];
+	// };
+
+
+	// // dy/dt
+	// auto func_4 = [wa](const vector<T>& x, const T t) -> T{
+	// 	return - wa * x[0];
+	// };
+	// _functions[0] = func_3;
+	// _functions[1] = func_4;
 	
+	out_path = "../output/euler_output.csv";
+	ode_euler(t, t_final, tau, x, _functions, out_path);
+	
+	// -------------------EULER-------------------- //
+
 
 	// -------------------------------------------- //
 	// ---------------solution_var_4--------------- //
