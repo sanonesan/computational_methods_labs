@@ -4,7 +4,6 @@
 #include"./include/tests/Test1.hpp"
 
 
-
 int main(int args, char **argv){
 
 	typedef double T;

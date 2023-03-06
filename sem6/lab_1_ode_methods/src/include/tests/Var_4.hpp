@@ -2,7 +2,7 @@
 
 #include<vector>
 #include<cmath>
-#include <functional> 
+#include<functional> 
 
 
 template<typename T>
