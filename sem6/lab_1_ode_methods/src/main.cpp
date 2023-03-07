@@ -1,4 +1,4 @@
-#include"./include/Solver.hpp"
+#include"./include/Solver_ODE.hpp"
 
 #include"./include/tests/Var_4.hpp"
 #include"./include/tests/Test1.hpp"
@@ -7,7 +7,7 @@
 int main(int args, char **argv){
 
 	typedef double T;
-	Solver<T> solver;
+	Solver_ODE<T> solver;
 
 	T t, t_final, tau;	
 
@@ -21,7 +21,7 @@ int main(int args, char **argv){
 
 	solver.tol = 0.001;
 	solver.file_name = "var4";
-	solver.solve_all(t, t_final, tau, var4._x0, var4._ode_system);	
+	solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);	
 
 	// ---------------solution_var_4--------------- //
 
@@ -36,7 +36,7 @@ int main(int args, char **argv){
 	
 	solver.tol = 0.01;
 	solver.file_name = "test1";
-	solver.solve_all(t, t_final, tau, test1._x0, test1._ode_system);
+	solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
 	// -------------------Test1-------------------- //
 
