@@ -23,7 +23,7 @@ void ode_Euler(T start_time, T end_time, T tau, std::vector<T> x, const std::vec
 	fout << std::scientific;
 	fout << "time"; 
 	for(std::size_t i = 0; i < func.size(); ++i){
-		fout << "," << "u" << i;
+		fout << ",u" << i;
 	}
 	fout << "\n";
 	fout << start_time;
