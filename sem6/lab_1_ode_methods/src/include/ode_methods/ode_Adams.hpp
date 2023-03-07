@@ -12,7 +12,7 @@
 
 
 /*
-	Метод Адамса-Башфорта (первые 4 шага --- Рунге-Кутта 4 порядка)
+	Метод Адамса-Башфорта (первые 3 шага --- Рунге-Кутта 4 порядка)
 */
 template<typename T, typename F>
 void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path){
@@ -91,7 +91,7 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 
 
 /*
-	Метод прогноз-коррекция (первые 4 шага --- Рунге-Кутта 4 порядка)
+	Метод прогноз-коррекция (первые 3 шага --- Рунге-Кутта 4 порядка)
 */
 template<typename T, typename F>
 void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path){
