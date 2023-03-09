@@ -271,10 +271,13 @@ int main(int args, char** argv){
 
 	K.Print();
 
-	K.read_Matrix(path);
+	K.read_Square_Matrix(path);
 	K.Print();
 
-	K.transpose().Print();
+	K.transpose_this();
+	K.Print();
+
+
 
 	
 
