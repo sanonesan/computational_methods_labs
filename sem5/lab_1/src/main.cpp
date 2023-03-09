@@ -6,6 +6,8 @@
 #include <clocale>
 #include <cmath>
 
+#include"Matrix.hpp"
+
 using namespace std;
 
 
@@ -14,13 +16,10 @@ int main(int args, char** argv){
 
 	setlocale(LC_ALL, "Rus");
 
+	size_t n; 
 
-	size_t n; //vector size
-	//string path = "C:\\Code\\labs_comput\\lab_1\\input.txt";
-	//string path_dis = "C:\\Code\\labs_comput\\lab_1\\input_disturbed.txt";
-
-	string path = "/home/san/Code/labs_comput/lab_1/test_files/P_DATA6.TXT";
-	string path_dis = "/home/san/Code/labs_comput/lab_1/test_files/P_DATA6_D.TXT";
+	string path = "../test_files/P_DATA6.TXT";
+	string path_dis = "../test_files/P_DATA6_D.TXT";
 
 	double** A = readMatrixFromFile(path, n); //Matrix A|b of sys Ax=b
 	
@@ -259,6 +258,28 @@ int main(int args, char** argv){
 	delete[] A_save;
 	delete[] x;
 	delete[] x_save;
+
+
+	std::cout<<"---------------------------------------------\n";
+	std::cout<<"---------------------------------------------\n";
+	std::cout<<"---------------------------------------------\n";
+	std::cout<<"---------------------------------------------\n";
+
+
+	path = "../test_files/test.txt";
+	Matrix<double> K(5);
+
+	K.Print();
+
+	K.read_Matrix(path);
+	K.Print();
+
+
+	
+
+
+
+
 
 	return 0;
 }
