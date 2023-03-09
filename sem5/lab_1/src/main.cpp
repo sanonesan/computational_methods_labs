@@ -274,12 +274,9 @@ int main(int args, char** argv){
 	K.read_Matrix(path);
 	K.Print();
 
+	K.transpose().Print();
 
 	
-
-
-
-
 
 	return 0;
 }
