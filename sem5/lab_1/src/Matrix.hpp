@@ -15,22 +15,21 @@ class Matrix{
 
     private:
 
-        
-
-    public:
-
-        std::size_t n;
         std::size_t rows;
         std::size_t cols;
 
-        std::vector<std::vector<T>> array; 
 
+    public:
+
+        std::vector<std::vector<T>> array; 
+        
         //Constructors
         Matrix<T>();
-        Matrix<T>(std::size_t n);
+        Matrix<T>(std::size_t _n);
         Matrix<T>(std::size_t rows, std::size_t cols);
         Matrix<T>(std::vector<std::vector<T>> const &array);
-
+        //Copy constructor
+        Matrix<T>(const Matrix<T>& matrix);
         //Destructor
         ~Matrix<T>(){};
 
@@ -40,22 +39,37 @@ class Matrix{
         std::size_t get_cols() const;
         std::vector<std::vector<T>> get_array() const;
 
+
+        //-----------RESULT = NEW_MATRIX-----------//
+
         //Matrix operations
+
+
         Matrix<T> add(const Matrix<T>& another_matrix) const;
         Matrix<T> subtract(const Matrix<T>& another_matrix) const;
         Matrix<T> dot(const Matrix<T>& another_matrix) const;
         Matrix<T> transpose() const;
+
+
+        //Value operations
+
+        Matrix<T> add(const T value) const;
+        Matrix<T> subtract(const T value) const;
+        Matrix<T> multiply(const T value) const;
+        Matrix<T> divide(const T value) const;
+
+
+        //--------INFLUENCE_CURRENT_MATRIX---------//
+
+        //Matrix operations
 
         Matrix<T> &add_this(const Matrix<T>& another_matrix);
         Matrix<T> &subtract_this(const Matrix<T>& another_matrix);
         Matrix<T> &dot_this(const Matrix<T>& another_matrix);
         Matrix<T> &transpose_this();
 
+
         //Value operations
-        Matrix<T> add(const T value) const;
-        Matrix<T> subtract(const T value) const;
-        Matrix<T> multiply(const T value) const;
-        Matrix<T> divide(const T value) const;
 
         Matrix<T> &add_this(const T value);
         Matrix<T> &subtract_this(const T value);
@@ -63,18 +77,21 @@ class Matrix{
         Matrix<T> &divide_this(const T value);
 
 
+        //matrix norms
+
+        T norm_1() const;
+        T norm_inf() const;
 
         void read_Square_Matrix(const std::string path);
-        void read_Sys(const std::string path);
+        void read_Matrix(const std::string path);
 
-        void Print();
+        void print();
 
 };
 
 
 template<class T>
 Matrix<T>::Matrix(){
-    this->n = 0;
     this->rows = 0;
     this->cols = 0;
 }
@@ -82,7 +99,6 @@ Matrix<T>::Matrix(){
 
 template<class T>
 Matrix<T>::Matrix(std::size_t _n){
-    this->n = _n;
     this->cols = _n;
     this->rows = _n;
     this->array = std::vector<std::vector<T>> (_n, std::vector<T>(_n));
@@ -92,15 +108,12 @@ Matrix<T>::Matrix(std::size_t _n){
 template<class T>
 Matrix<T>::Matrix(std::size_t _rows, std::size_t _cols){
 
-    if(_rows == _cols){ this->n = _rows; }
-    else{ this->n = 0; }
-        
     this->rows = _rows;
     this->cols = _cols;
     this->array = std::vector<std::vector<T>> (_rows, std::vector<T>(_cols));
 
-    for(std::size_t i = 0; i < this->n; ++i){
-        for(std::size_t j = 0; j < this->n; ++j)
+    for(std::size_t i = 0; i < this->rows; ++i){
+        for(std::size_t j = 0; j < this->cols; ++j)
             this->array[i][j] = 0.;
     }
 }
@@ -117,16 +130,16 @@ Matrix<T>::Matrix(std::vector<std::vector<T>> const &array){
     this->array = array;
 }
 
+//Copy constructor
+template<class T>
+Matrix<T>::Matrix(const Matrix<T>& matrix){
+    this->rows = matrix.rows;
+    this->cols = matrix.cols;
+    this->array = matrix.array;
+}
+
 
 // Getters
-
-template<class T>
-std::size_t Matrix<T>::get_n() const{
-    if(this->n == 0)
-        std::cout << "this matrix is not squared!";
-
-    return this->n;
-}
 
 template<class T>
 std::size_t Matrix<T>::get_rows() const{
@@ -152,7 +165,15 @@ std::vector<std::vector<T>> Matrix<T>::get_array() const{
 }
 
 
+
+/*
+/////////////////////////////////////////////
+//-----------RESULT = NEW_MATRIX-----------//
+/////////////////////////////////////////////
+*/
+
 //Matrix operations
+
 
 template<class T>
 Matrix<T> Matrix<T>::add(const Matrix<T>& another_matrix) const{
@@ -163,17 +184,17 @@ Matrix<T> Matrix<T>::add(const Matrix<T>& another_matrix) const{
     if(this->rows != another_matrix.rows && this->cols != another_matrix.cols)
         throw std::invalid_argument("These matrixs cannot be added first.cols != second.rows && first.rows != second.cols");
     
-    Matrix result_matrix(this->array);
+    Matrix<T> result_matrix(this->array);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = result_matrix[i][j];
             tmp += another_matrix.array[i][j];
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -192,17 +213,17 @@ Matrix<T> Matrix<T>::subtract(const Matrix<T>& another_matrix) const{
     if(this->rows != another_matrix.rows && this->cols != another_matrix.cols)
         throw std::invalid_argument("These matrixs cannot be substructed first.cols != second.rows && first.rows != second.cols");
     
-    Matrix result_matrix(this->array);
+    Matrix<T> result_matrix(this->array);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = result_matrix[i][j];
             tmp -= another_matrix.array[i][j];
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -225,7 +246,7 @@ Matrix<T> Matrix<T>::dot(const Matrix<T>& another_matrix) const{
         throw std::invalid_argument("These matrixs cannot be multiplied null matrix");
     }
 
-    Matrix result_matrix(this->rows, another_matrix.cols);
+    Matrix<T> result_matrix(this->rows, another_matrix.cols);
     
     T tmp = 0;
     for(std::size_t i = 0; i < result_matrix.rows; ++i){
@@ -238,7 +259,7 @@ Matrix<T> Matrix<T>::dot(const Matrix<T>& another_matrix) const{
                 tmp += this->array[i][k] * another_matrix[k][j];
 
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
 
             result_matrix.array[i][j] = tmp;
         }
@@ -254,13 +275,13 @@ Matrix<T> Matrix<T>::transpose() const{
         throw std::invalid_argument("null matrix");
 
 
-    Matrix result_matrix(this->cols, this->rows);
+    Matrix<T> result_matrix(this->cols, this->rows);
 
-    for (size_t i = 0; i < n; ++i)
-		for (size_t j = i + 1; j < n; ++j){
-			result_matrix.array[i][j] = this->array[j][i];
-			result_matrix.array[j][i] = this->array[i][j];
-		}
+    for (std::size_t i = 0; i < this->rows; ++i)
+        for (std::size_t j = i; j < this->cols; ++j){
+            result_matrix.array[i][j] = this->array[j][i];
+            result_matrix.array[j][i] = this->array[i][j];
+        }
     
     return result_matrix;
 }
@@ -273,16 +294,16 @@ Matrix<T> Matrix<T>::add(const T value) const{
     if(this->rows == 0 || this->cols == 0)
         throw std::invalid_argument("null matrix");
 
-    Matrix result_matrix(this->rows, this->cols);
+    Matrix<T> result_matrix(this->rows, this->cols);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] + value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -297,16 +318,16 @@ Matrix<T> Matrix<T>::subtract(const T value) const{
     if(this->rows == 0 || this->cols == 0)
         throw std::invalid_argument("null matrix");
 
-    Matrix result_matrix(this->rows, this->cols);
+    Matrix<T> result_matrix(this->rows, this->cols);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] - value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -322,16 +343,16 @@ Matrix<T> Matrix<T>::multiply(const T value) const{
     if(this->rows == 0 || this->cols == 0)
         throw std::invalid_argument("null matrix");
     
-    Matrix result_matrix(this->rows, this->cols);
+    Matrix<T> result_matrix(this->rows, this->cols);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] * value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -347,16 +368,16 @@ Matrix<T> Matrix<T>::divide(const T value) const{
     if(this->rows == 0 || this->cols == 0)
         throw std::invalid_argument("null matrix");
 
-    Matrix result_matrix(this->rows, this->cols);
+    Matrix<T> result_matrix(this->rows, this->cols);
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] / value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             result_matrix.array[i][j] = tmp;
         }
@@ -366,12 +387,13 @@ Matrix<T> Matrix<T>::divide(const T value) const{
 }
 
 
+/*
+/////////////////////////////////////////////
+//--------INFLUENCE_CURRENT_MATRIX---------//
+/////////////////////////////////////////////
+*/
 
-
-
-
-
-
+//Matrix operations
 
 template<class T>
 Matrix<T> &Matrix<T>::add_this(const Matrix<T>& another_matrix){
@@ -383,14 +405,14 @@ Matrix<T> &Matrix<T>::add_this(const Matrix<T>& another_matrix){
         throw std::invalid_argument("These matrixs cannot be added first.cols != second.rows && first.rows != second.cols");
     
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j];
             tmp += another_matrix.array[i][j];
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array[i][j] = tmp;
         }
@@ -399,6 +421,7 @@ Matrix<T> &Matrix<T>::add_this(const Matrix<T>& another_matrix){
 
     return *this;
 }
+
 
 template<class T>
 Matrix<T> &Matrix<T>::subtract_this(const Matrix<T>& another_matrix){
@@ -410,14 +433,14 @@ Matrix<T> &Matrix<T>::subtract_this(const Matrix<T>& another_matrix){
         throw std::invalid_argument("These matrixs cannot be substructed first.cols != second.rows && first.rows != second.cols");
     
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j];
             tmp -= another_matrix.array[i][j];
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array.array[i][j] = tmp;
         }
@@ -425,6 +448,7 @@ Matrix<T> &Matrix<T>::subtract_this(const Matrix<T>& another_matrix){
 
     return *this;
 }
+
 
 template<class T>
 Matrix<T> &Matrix<T>::dot_this(const Matrix<T>& another_matrix){
@@ -453,7 +477,7 @@ Matrix<T> &Matrix<T>::dot_this(const Matrix<T>& another_matrix){
                 tmp += this->array[i][k] * another_matrix[k][j];
 
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
 
             result_array[i][j] = tmp;
         }
@@ -464,6 +488,7 @@ Matrix<T> &Matrix<T>::dot_this(const Matrix<T>& another_matrix){
 
     return *this;
 }
+
 
 template<class T>
 Matrix<T> &Matrix<T>::transpose_this(){
@@ -502,6 +527,8 @@ Matrix<T> &Matrix<T>::transpose_this(){
 
 
 //Value operations
+
+
 template<class T>
 Matrix<T> &Matrix<T>::add_this(const T value){
 
@@ -510,12 +537,12 @@ Matrix<T> &Matrix<T>::add_this(const T value){
 
     T tmp;
 
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] + value;        
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array[i][j] = tmp;
         }
@@ -524,6 +551,7 @@ Matrix<T> &Matrix<T>::add_this(const T value){
     return *this;
 }
 
+
 template<class T>
 Matrix<T> &Matrix<T>::subtract_this(const T value){
 
@@ -531,13 +559,13 @@ Matrix<T> &Matrix<T>::subtract_this(const T value){
         throw std::invalid_argument("null matrix");
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] - value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array[i][j] = tmp;
         }
@@ -554,13 +582,13 @@ Matrix<T> &Matrix<T>::multiply_this(const T value){
         throw std::invalid_argument("null matrix");
     
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] * value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array[i][j] = tmp;
         }
@@ -577,13 +605,13 @@ Matrix<T> &Matrix<T>::divide_this(const T value){
         throw std::invalid_argument("null matrix");
 
     T tmp;
-    for(std::size_t i = 0; i < this->n; ++i){        
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){        
+        for(std::size_t j = 0; j < this->cols; ++j){
 
             tmp = this->array[i][j] / value;
         
             if(fabs(tmp) < eps)
-                tmp *= (1 / tmp > 0) ? (1) : (-1);
+                if (1 / tmp < 0) tmp *= -1;
             
             this->array[i][j] = tmp;
         }
@@ -594,13 +622,42 @@ Matrix<T> &Matrix<T>::divide_this(const T value){
 
 
 
+template<class T>
+T Matrix<T>::norm_1() const{
+    T norm = 0.;
+    T tmp = 0.;
+    for(std::size_t i = 0; i < this->rows; ++i){
+        tmp = 0.;
+        for(std::size_t j = 0; j < this->cols; ++j){
+            tmp += fabs(this->array[j][i])
+        }
+        if (norm < temp) norm = temp;
+    }
+    if(fabs(norm) < eps && norm != 0.){
+        norm = 0.;
+        if (1 / norm < 0) norm *= -1;
+    }
+    return norm;
+}
 
 
-
-
-
-
-
+template<class T>
+T Matrix<T>::norm_inf() const{
+    T norm = 0.;
+    T tmp = 0.;
+    for(std::size_t i = 0; i < this->rows; ++i){
+        tmp = 0.;
+        for(std::size_t j = 0; j < this->cols; ++j){
+            tmp += fabs(this->array[i][j])
+        }
+        if (norm < temp) norm = temp;
+    }
+    if(fabs(norm) < eps && norm != 0.){
+        norm = 0.;
+        if (1 / norm < 0) norm *= -1;
+    }
+    return norm;
+}
 
 
 template<class T>
@@ -611,28 +668,48 @@ void Matrix<T>::read_Square_Matrix(const std::string path){
     if(!fin.is_open()){
         throw std::invalid_argument("Smth's wrong with path");
     }
-
-    fin >> this->n;
+    fin >> this->rows;
+    this->cols = this->rows;
     fin.get();    
-    std::vector<std::vector<T>> array(this->n, std::vector<T>(this->n));
+    std::vector<std::vector<T>> array(n, std::vector<T>(n));
 
-    for(std::size_t i = 0; i < this->n; ++i){
-        for(std::size_t j = 0; j < this->n; ++j){
+    for(std::size_t i = 0; i < this->rows; ++i){
+        for(std::size_t j = 0; j < this->cols; ++j){
             fin >> array[i][j];
         }
     }
 
     fin.close();
-
-    this->rows = this->n;
-    this->cols = this->n;
     this->array = array;
 }
 
 
+template<class T>
+void Matrix<T>::read_Matrix(const std::string path){
+
+    std::ifstream fin;
+    fin.open(path);
+    if(!fin.is_open()){
+        throw std::invalid_argument("Smth's wrong with path");
+    }
+    fin >> this->rows;
+    fin >> this->cols;
+    fin.get();    
+    std::vector<std::vector<T>> colsarray(n, std::vector<T>(n));
+
+    for(std::size_t i = 0; i < this->rows; ++i){
+        for(std::size_t j = 0; j < this->cols; ++j){
+            fin >> array[i][j];
+        }
+    }
+
+    fin.close();
+    this->array = array;
+}
+
 
 template<typename T>
-void Matrix<T>::Print(){
+void Matrix<T>::print(){
 
     if(this->rows == 0 || this->cols == 0)
         throw std::invalid_argument("null matrix");

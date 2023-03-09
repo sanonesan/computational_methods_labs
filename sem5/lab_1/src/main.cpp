@@ -269,13 +269,13 @@ int main(int args, char** argv){
 	path = "../test_files/test.txt";
 	Matrix<double> K(5);
 
-	K.Print();
+	K.print();
 
 	K.read_Square_Matrix(path);
-	K.Print();
+	K.print();
 
-	K.transpose_this();
-	K.Print();
+	K.transpose().print();
+	K.print();
 
 
 
