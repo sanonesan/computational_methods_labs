@@ -16,18 +16,18 @@
         - метод Адамса-Башфорта (первые 3 шага --- Рунге-Кутта 4 порядка);
         - метод прогноз-коррекция (первые 3 шага --- Рунге-Кутта 4 порядка).
 */
-template<typename T>
+template<class T>
 class Solver_ODE{
 
     public:
 
-        T tol = 0.000001;
+        T tol = 1e-9;
         std::string file_name = "";
         std::string output_folder = "../output/";
 
         //Default constructor
         Solver_ODE(){
-            this->tol = 0.000001;
+            this->tol = 1e-9;
             this->output_folder = "../output/";
             this->file_name = "";
         }

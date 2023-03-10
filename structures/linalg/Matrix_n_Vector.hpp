@@ -24,11 +24,8 @@ class Vector;
 
 
 template<class T>
-class Vector{
+class Vector: public std::vector<T>{
 
-
-    private:
-        std::size_t _size;
     public:
 
         friend Matrix<T>;
@@ -36,12 +33,10 @@ class Vector{
         std::vector<T> _vector;
 
         Vector<T>();
-        Vector<T>(const std::size_t size);
+        explicit Vector<T>(const std::size_t size);
         Vector<T>(const std::vector<T>& vec);
         Vector<T>(const Vector<T>& vec);
         ~Vector<T>(){};
-
-        std::size_t size() const;
 
         Vector<T> dot(const Matrix<T>& matrix);
 
@@ -51,6 +46,71 @@ class Vector{
         T norm_inf() const;
         T norm_euclid() const;
 
+
+        //Vector operations
+
+
+        Vector<T> add(const Vector<T>& another_vector) const;
+        Vector<T> subtract(const Vector<T>& another_vector) const;
+
+        T dot(const Vector<T>& another_vector);
+        T dot(const std::vector<T>& another_vector);
+
+        //Value operations
+
+        Vector<T> add(const T value) const;
+        Vector<T> subtract(const T value) const;
+        Vector<T> multiply(const T value) const;
+        Vector<T> divide(const T value) const;
+
+
+        //Vector operations
+
+        Vector<T> &add_this(const Vector<T>& another_vector) const;
+        Vector<T> &subtract_this(const Vector<T>& another_vector) const;
+
+        //Value operations
+
+        Vector<T> &add_this(const T value) const;
+        Vector<T> &subtract_this(const T value) const;
+        Vector<T> &multiply_this(const T value) const;
+        Vector<T> &divide_this(const T value) const;
+
+
+        //Bool operations
+
+        bool operator==(const Vector<T>& another_vector);
+        bool operator!=(const Vector<T>& another_vector);
+
+
+        //Vector operations
+
+        Vector<T> operator+(const Vector<T>& another_vector);
+        Vector<T> operator-(const Vector<T>& another_vector);
+        T operator*(const Vector<T>& another_vector);
+
+
+        //Value operations
+
+        Vector<T> operator+(const T value);
+        Vector<T> operator-(const T value);
+        Vector<T> operator*(const T value);
+        Vector<T> operator/(const T value);
+
+
+        //Matrix operations
+
+        Vector<T> &operator=(const Vector<T>& another_vector);
+        Vector<T> &operator+=(const Vector<T>& another_vector);
+        Vector<T> &operator-=(const Vector<T>& another_vector);
+
+
+        //Value operations
+
+        Vector<T> &operator+=(const T value);
+        Vector<T> &operator-=(const T value);
+        Vector<T> &operator*=(const T value);
+        Vector<T> &operator/=(const T value);
 
 };
 template<class T>
@@ -76,13 +136,13 @@ class Matrix{
 
         friend Vector<T>;
 
-        std::vector<std::vector<T>> _array; 
+        std::vector<Vector<T>> _array; 
         
         //Constructors
         Matrix<T>();
         Matrix<T>(std::size_t _n);
         Matrix<T>(std::size_t _rows, std::size_t _cols);
-        Matrix<T>(std::vector<std::vector<T>> const &_array);
+        Matrix<T>(std::vector<Vector<T>> const &_array);
         //Copy constructor
         Matrix<T>(const Matrix<T>& matrix);
         //Destructor
@@ -92,7 +152,7 @@ class Matrix{
         std::size_t get_n() const;
         std::size_t get_rows() const;
         std::size_t get_cols() const;
-        std::vector<std::vector<T>> get_array() const;
+        std::vector<Vector<T>> get_array() const;
 
         //-----------RESULT = NEW_MATRIX-----------//
 
@@ -147,9 +207,6 @@ class Matrix{
         bool operator!=(const Matrix<T>& manother_matrix);
 
 
-        
-
-
         //Matrix operations
 
         Matrix<T> operator+(const Matrix<T>& another_matrix);
@@ -166,19 +223,19 @@ class Matrix{
         //Matrix operations
 
         Matrix<T> &operator=(const Matrix<T>& another_matrix);
-        Matrix<T> operator+=(const Matrix<T>& another_matrix);
-        Matrix<T> operator-=(const Matrix<T>& another_matrix);
-        Matrix<T> operator*=(const Matrix<T>& another_matrix);
+        Matrix<T> &operator+=(const Matrix<T>& another_matrix);
+        Matrix<T> &operator-=(const Matrix<T>& another_matrix);
+        Matrix<T> &operator*=(const Matrix<T>& another_matrix);
 
         //Value operations
 
-        Matrix<T> operator+=(const T value);
-        Matrix<T> operator-=(const T value);
-        Matrix<T> operator*=(const T value);
+        Matrix<T> &operator+=(const T value);
+        Matrix<T> &operator-=(const T value);
+        Matrix<T> &operator*=(const T value);
 
+        Vector<T> operator[](const std::size_t i) const;
         Vector<T> dot(const Vector<T>& vector);
         Vector<T> dot(const std::vector<T>& vector);
-        //friend Matrix<T> dot_thins(const Vector<T>& vector);
 
 };
 
@@ -203,7 +260,7 @@ template<class T>
 Matrix<T>::Matrix(std::size_t _n){
     this->_cols = _n;
     this->_rows = _n;
-    this->_array = std::vector<std::vector<T>> (_n, std::vector<T>(_n));
+    this->_array = std::vector<Vector<T>> (_n, std::vector<T>(_n));
 }
 
 
@@ -212,17 +269,19 @@ Matrix<T>::Matrix(std::size_t _rows, std::size_t _cols){
 
     this->_rows = _rows;
     this->_cols = _cols;
-    this->_array = std::vector<std::vector<T>> (_rows, std::vector<T>(_cols));
+    this->_array = std::vector<Vector<T>> (_rows, std::vector<T>(_cols));
 
     for(std::size_t i = 0; i < this->_rows; ++i){
-        for(std::size_t j = 0; j < this->_cols; ++j)
+        for(std::size_t j = 0; j < this->_cols; ++j){
             this->_array[i][j] = 0.;
+        }
+            
     }
 }
 
 
 template<class T>
-Matrix<T>::Matrix(std::vector<std::vector<T>> const &_array){
+Matrix<T>::Matrix(std::vector<Vector<T>> const &_array){
 
     if(_array.size() == 0 || _array[0].size() == 0)
         throw std::invalid_argument("Size of _array should be > 0");
@@ -259,7 +318,7 @@ std::size_t Matrix<T>::get_cols() const{
 }
 
 template<class T>
-std::vector<std::vector<T>> Matrix<T>::get_array() const{
+std::vector<Vector<T>> Matrix<T>::get_array() const{
     if(this-> _rows || this->_cols == 0)
         throw std::invalid_argument("null matrix");
     
@@ -292,7 +351,7 @@ Matrix<T> Matrix<T>::add(const Matrix<T>& another_matrix) const{
     for(std::size_t i = 0; i < this->_rows; ++i){        
         for(std::size_t j = 0; j < this->_cols; ++j){
 
-            tmp = result_matrix[i][j];
+            tmp = result_matrix._array[i][j];
             tmp += another_matrix._array[i][j];
         
             if(fabs(tmp) < eps)
@@ -321,7 +380,7 @@ Matrix<T> Matrix<T>::subtract(const Matrix<T>& another_matrix) const{
     for(std::size_t i = 0; i < this->_rows; ++i){
         for(std::size_t j = 0; j < this->_cols; ++j){
 
-            tmp = result_matrix[i][j];
+            tmp = result_matrix._array[i][j];
             tmp -= another_matrix._array[i][j];
         
             if(fabs(tmp) < eps)
@@ -566,7 +625,7 @@ Matrix<T> &Matrix<T>::dot_this(const Matrix<T>& another_matrix){
         throw std::invalid_argument("These matrixs cannot be multiplied null matrix");
     }
 
-    std::vector<std::vector<T>> result_array(this->_rows, std::vector<T> (another_matrix._cols));
+    std::vector<Vector<T>> result_array(this->_rows, std::vector<T> (another_matrix._cols));
 
     T tmp = 0;
     for(std::size_t i = 0; i < this->_rows; ++i){        
@@ -601,7 +660,7 @@ Matrix<T> &Matrix<T>::transpose_this(){
     if(this->_rows != this->_cols){
         Matrix result_matrix(this->_cols, this->_rows);
 
-        std::vector<std::vector<T>> result_array(this->_cols, std::vector<T>(this->_rows));
+        std::vector<Vector<T>> result_array(this->_cols, std::vector<T>(this->_rows));
 
         for (std::size_t i = 0; i < this->_rows; ++i)
             for (std::size_t j = i; j < this->_cols; ++j){
@@ -772,7 +831,7 @@ void Matrix<T>::read_Square_Matrix(const std::string path){
     fin >> this->_rows;
     this->_cols = this->_rows;
     fin.get();    
-    std::vector<std::vector<T>> _array(this->_rows, std::vector<T>(this->_cols));
+    std::vector<Vector<T>> _array(this->_rows, std::vector<T>(this->_cols));
 
     for(std::size_t i = 0; i < this->_rows; ++i){
         for(std::size_t j = 0; j < this->_cols; ++j){
@@ -796,7 +855,7 @@ void Matrix<T>::read_Matrix(const std::string path){
     fin >> this->_rows;
     fin >> this->_cols;
     fin.get();    
-    std::vector<std::vector<T>> colsarray(this->_rows, std::vector<T>(this->_cols));
+    std::vector<Vector<T>> colsarray(this->_rows, std::vector<T>(this->_cols));
 
     for(std::size_t i = 0; i < this->_rows; ++i){
         for(std::size_t j = 0; j < this->_cols; ++j){
@@ -896,17 +955,17 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T>& another_matrix){
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator+=(const Matrix<T>& another_matrix){    
+Matrix<T> &Matrix<T>::operator+=(const Matrix<T>& another_matrix){    
     return this->add_this(another_matrix);
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator-=(const Matrix<T>& another_matrix){
+Matrix<T> &Matrix<T>::operator-=(const Matrix<T>& another_matrix){
     return this->subtract_this(another_matrix);
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator*=(const Matrix<T>& another_matrix){
+Matrix<T> &Matrix<T>::operator*=(const Matrix<T>& another_matrix){
     return this->dot_this(another_matrix);
 }
 
@@ -914,17 +973,17 @@ Matrix<T> Matrix<T>::operator*=(const Matrix<T>& another_matrix){
 //Value operations
 
 template<class T>
-Matrix<T> Matrix<T>::operator+=(const T value){    
+Matrix<T> &Matrix<T>::operator+=(const T value){    
     return this->add_this(value);
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator-=(const T value){
+Matrix<T> &Matrix<T>::operator-=(const T value){
     return this->subtract_this(value);
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator*=(const T value){
+Matrix<T> &Matrix<T>::operator*=(const T value){
     return this->multiply_this(value);
 }
 
@@ -955,7 +1014,7 @@ Vector<T> Matrix<T>::dot(const Vector<T>& vector){
     if(vector.size() == 0)
         throw std::invalid_argument("null vector");
 
-    if(this->_cols != vector._size)
+    if(this->_cols != vector.size())
         throw std::invalid_argument("matrix.cols != vector.size");
 
     Vector<T> result_vector(this->_rows);
@@ -965,12 +1024,12 @@ Vector<T> Matrix<T>::dot(const Vector<T>& vector){
     for(std::size_t i = 0; i < this->_rows; ++i){
         tmp = 0.;
         for(std::size_t j = 0; j < this->_cols; ++j){
-            tmp += this->_array[i][j] * vector._vector[j];
+            tmp += this->_array[i][j] * vector[j];
         }
         if(fabs(tmp) < eps)
                 if (1 / tmp < 0) tmp *= -1;
 
-        result_vector._vector[i] = tmp;
+        result_vector[i] = tmp;
     }
 
     return result_vector;
@@ -984,6 +1043,13 @@ Vector<T> Matrix<T>::dot(const std::vector<T>& vector){
 };
 
 
+template<class T>
+Vector<T> Matrix<T>::operator[](const std::size_t i) const{
+    if(i >= this->_rows)
+        throw std::invalid_argument("index out of range");
+    Vector<T> res(this->_array[i]);
+    return res;
+};
 
 
 
@@ -995,33 +1061,31 @@ Vector<T> Matrix<T>::dot(const std::vector<T>& vector){
 
 
 template<class T>
-Vector<T>::Vector(){
-    this->_size = 0;
-};
+Vector<T>::Vector(): std::vector<T>(){};
 
 
 template<class T>
-Vector<T>::Vector(const std::size_t size){
-    this->_size = size;
-    this->_vector = std::vector<T> (size);
+Vector<T>::Vector(const std::size_t size): std::vector<T>(){
+
+    (*this).resize(size);
+
+    for(std::size_t i = 0; i < size; ++i)
+        (*this)[i] = 0.;
 };
 
 
 template<class T>
 Vector<T>::Vector(const std::vector<T>& vec){
-    this->_vector = vec;
-    this->_size = this->_vector.size();
+    (*this).resize(vec.size());
+    for(std::size_t i = 0; i < vec.size(); ++i)
+        (*this)[i] = vec[i];
 };
 
 template<class T>
 Vector<T>::Vector(const Vector<T>& vec){
-    this->_size = vec._size;
-    this->_vector = vec._vector;
-};
-
-template<class T>
-std::size_t Vector<T>::size() const{
-    return this->_size;
+    (*this).resize(vec.size());
+    for(std::size_t i = 0; i < vec.size(); ++i)
+        (*this)[i] = vec[i];
 };
 
 
@@ -1031,25 +1095,25 @@ Vector<T> Vector<T>::dot(const Matrix<T>& matrix){
     if(matrix._rows == 0 || matrix._cols == 0)
         throw std::invalid_argument("null matrix");
 
-    if(this->_size == 0)
+    if((*this).size() == 0)
         throw std::invalid_argument("null vector");
 
-    if(this->_size != matrix._rows)
+    if((*this).size() != matrix._rows)
         throw std::invalid_argument("vector._size != matrix._rows");
 
-    Vector<T> result_vector(this->_size);
+    Vector<T> result_vector((*this).size());
 
     T tmp;
 
-    for(std::size_t i = 0; i < this->_size; ++i){
+    for(std::size_t i = 0; i < (*this).size(); ++i){
         tmp = 0.;
         for(std::size_t j = 0; j < matrix._rows; ++j){
-            tmp += this->_vector[i] * matrix._array[i][j];
+            tmp += (*this)[i] * matrix._array[i][j];
         }
         if(fabs(tmp) < eps)
                 if (1 / tmp < 0) tmp *= -1;
 
-        result_vector._vector[i] = tmp;
+        result_vector[i] = tmp;
     }
 
     return result_vector;
@@ -1063,8 +1127,8 @@ template<class T>
 T Vector<T>::norm_1() const{
 	
 	T norm = 0;
-	for(std::size_t i = 0; i < this->_size; ++i)
-		norm += fabs(this->_vector[i]);
+	for(std::size_t i = 0; i < (*this).size(); ++i)
+		norm += fabs((*this)[i]);
 
 	return norm < eps ? 0. : norm;
 }
@@ -1076,10 +1140,10 @@ T Vector<T>::norm_1() const{
 template<class T> 
 T Vector<T>::norm_inf() const{
 	
-	T norm = fabs(this->_vector[0]);
-	for(std::size_t i = 1; i < this->_size; ++i)
-		if(fabs(norm - fabs(this->_vector[i]) < eps))
-			norm = fabs(this->_vector[i]);
+	T norm = fabs((*this)[0]);
+	for(std::size_t i = 1; i < (*this).size(); ++i)
+		if(fabs(norm - fabs((*this)[i]) < eps))
+			norm = fabs((*this)[i]);
 	
 	return norm < eps ? 0. : norm;
 }
@@ -1092,8 +1156,8 @@ template<class T>
 T Vector<T>::norm_euclid() const{
 
 	T norm = 0;
-	for(std::size_t i = 0; i < this->_size; ++i)
-		norm += fabs(vehis->_vector[i] * his->_vector[i]);
+	for(std::size_t i = 0; i < (*this).size(); ++i)
+		norm += fabs((*this)[i] * (*this)[i]);
 
 	return norm < eps ? 0. : sqrt(norm);
 }
@@ -1104,9 +1168,376 @@ std::ostream& operator<<(std::ostream &out, const Vector<T>& vec){
 
     out << "( ";
     for(std::size_t i = 0; i < vec.size() - 1; ++i){
-        out << vec._vector[i] << "\t";
+        out << vec[i] << "\t";
     }
-    out << vec._vector[vec.size() - 1] << " )^T";
+    out << vec[vec.size() - 1] << " )^T";
     
     return out;
 }
+
+
+
+//Bool operations
+template<class T>
+bool Vector<T>::operator==(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return true;
+
+    if((*this).size() != another_vector.size())
+        return false;
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        if((*this)[i] != another_vector[i])
+            return false;
+    }
+
+    return true;
+};
+
+
+template<class T>
+bool Vector<T>::operator!=(const Vector<T>& another_vector){
+    return !((*this) == another_vector);
+};
+
+//Matrix operations
+
+template<class T>
+Vector<T> Vector<T>::operator+(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return (*this);
+
+    if((*this).size() != another_vector.size())
+        throw std::invalid_argument(" different size") ;
+    
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] + another_vector[i];
+    }
+
+    return result_vector;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::operator-(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return (*this);
+
+    if((*this).size() != another_vector.size())
+        throw std::invalid_argument(" different size") ;
+    
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] - another_vector[i];
+    }
+
+    return result_vector;
+};
+
+
+
+template<class T>
+T Vector<T>::operator*(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 || another_vector.size() == 0)
+        throw std::invalid_argument("null vector");
+
+    if((*this).size() != another_vector.size())
+        throw std::invalid_argument(" vectors have different size") ;
+
+    T tmp = 0;
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        tmp += (*this)[i] * another_vector[i];
+    }
+
+    return tmp;
+};
+
+
+
+// //Value operations
+template<class T>
+Vector<T> Vector<T>::operator+(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument(" different size");
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] + value;
+    }
+
+    return result_vector;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::operator-(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument(" different size");
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] - value;
+    }
+
+    return result_vector;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::operator*(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] * value;
+    }
+
+    return result_vector;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::operator/(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    Vector<T> result_vector((*this).size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        result_vector[i] = (*this)[i] / value;
+    }
+
+    return result_vector;
+};
+
+//Vector operations
+
+template<class T>
+Vector<T> &Vector<T>::operator=(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return (*this);
+
+    (*this).resize(another_vector.size());
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this).assign(another_vector.begin(), another_vector.end());
+    }
+
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::operator+=(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return (*this);
+
+    if((*this).size() != another_vector.size())
+        throw std::invalid_argument(" different size");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] += another_vector[i];
+    }
+
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::operator-=(const Vector<T>& another_vector){
+
+    if((*this).size() == 0 && another_vector.size() == 0)
+        return (*this);
+
+    if((*this).size() != another_vector.size())
+        throw std::invalid_argument(" different size");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] -= another_vector[i];
+    }
+
+    return (*this);
+};
+
+
+// Value operations
+
+template<class T>
+Vector<T> &Vector<T>::operator+=(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] += value;
+    }
+
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::operator-=(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] -= value;
+    }
+
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::operator*=(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] *= value;
+    }
+
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::operator/=(const T value){
+
+    if((*this).size() == 0)
+        throw std::invalid_argument("null vector");
+
+    for(std::size_t i = 0; i < (*this).size(); ++i){
+        (*this)[i] /= value;
+    }
+
+    return (*this);
+};
+
+
+
+template<class T>
+T Vector<T>::dot(const Vector<T>& another_vector){
+    return (*this) * another_vector;
+};
+
+
+template<class T>
+T Vector<T>::dot(const std::vector<T>& another_vector){
+
+    Vector<T> tmp(another_vector);
+
+    return (*this) * tmp;    
+};
+
+
+//Vector operations
+
+
+
+
+template<class T>
+Vector<T> Vector<T>::add(const Vector<T>& another_vector) const{
+    return (*this) + another_vector;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::subtract(const Vector<T>& another_vector) const{
+    return (*this) - another_vector;
+};
+
+
+//Value operations
+
+
+
+template<class T>
+Vector<T> Vector<T>::add(const T value) const{
+    return (*this) + value;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::subtract(const T value) const{
+    return (*this) - value;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::multiply(const T value) const{
+    return (*this) * value;
+};
+
+
+template<class T>
+Vector<T> Vector<T>::divide(const T value) const{
+    return (*this) / value;
+};
+
+
+//Vector operations
+
+template<class T>
+Vector<T> &Vector<T>::add_this(const Vector<T>& another_vector) const{
+    (*this) += another_vector;    
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::subtract_this(const Vector<T>& another_vector) const{
+    (*this) -= another_vector;
+    return (*this);
+};
+
+//Value operations
+
+template<class T>
+Vector<T> &Vector<T>::add_this(const T value) const{
+    (*this) += value;
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::subtract_this(const T value) const{
+    (*this) -= value;
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::multiply_this(const T value) const{
+    (*this) *= value;
+    return (*this);
+};
+
+
+template<class T>
+Vector<T> &Vector<T>::divide_this(const T value) const{
+    (*this) /= value;
+    return (*this);
+};
