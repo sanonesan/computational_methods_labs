@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iomanip>
 #include <stdexcept>
+#include <memory>
 
 #define eps 1e-16
 
@@ -112,14 +113,20 @@ class Vector: public std::vector<T>{
         Vector<T> &operator*=(const T value);
         Vector<T> &operator/=(const T value);
 
+
+        friend std::ostream& operator<<(std::ostream &out, const Vector<T>& vec){
+
+            out << "( ";
+            for(std::size_t i = 0; i < vec.size() - 1; ++i){
+                out << vec[i] << "\t";
+            }
+            out << vec[vec.size() - 1] << " )^T";
+            
+            return out;
+        }
+
+
 };
-template<class T>
-std::ostream& operator<<(std::ostream &out, const Vector<T>& vec);
-
-
-//----------------------------------------//
-//----------------MATRIX------------------//
-//----------------------------------------//
 
 
 template<class T>
@@ -130,19 +137,19 @@ class Matrix{
 
         std::size_t _rows;
         std::size_t _cols;
-
-
+        std::vector<Vector<T>> _array; 
+        
     public:
 
         friend Vector<T>;
-
-        std::vector<Vector<T>> _array; 
         
         //Constructors
         Matrix<T>();
         Matrix<T>(std::size_t _n);
         Matrix<T>(std::size_t _rows, std::size_t _cols);
         Matrix<T>(std::vector<Vector<T>> const &_array);
+        Matrix<T>(std::vector<std::vector<T>> const &_array);
+
         //Copy constructor
         Matrix<T>(const Matrix<T>& matrix);
         //Destructor
@@ -233,15 +240,29 @@ class Matrix{
         Matrix<T> &operator-=(const T value);
         Matrix<T> &operator*=(const T value);
 
-        Vector<T> operator[](const std::size_t i) const;
+        Vector<T> &operator[](const std::size_t i);
+
+
         Vector<T> dot(const Vector<T>& vector);
         Vector<T> dot(const std::vector<T>& vector);
 
+
+        friend std::ostream& operator<<(std::ostream &out, Matrix<T>& matrix){
+    
+            if(matrix.get_rows() == 0 || matrix.get_cols() == 0)
+                throw std::invalid_argument("null matrix");
+
+            for (std::size_t i = 0; i < matrix.get_rows(); ++i) {
+                for (std::size_t j = 0; j < matrix.get_cols(); ++j) 
+                    out << std::setw(15) << matrix.get_array()[i][j];		
+                out << "\n";
+            }
+            out << "\n";
+
+            return out;
+        };
+
 };
-
-template<class T>
-std::ostream& operator<<(std::ostream &out, const Matrix<T>& matrix);
-
 
 
 //----------------------------------------//
@@ -291,6 +312,22 @@ Matrix<T>::Matrix(std::vector<Vector<T>> const &_array){
     this->_array = _array;
 }
 
+
+template<class T>
+Matrix<T>::Matrix(std::vector<std::vector<T>> const &_array){
+
+    if(_array.size() == 0 || _array[0].size() == 0)
+        throw std::invalid_argument("Size of _array should be > 0");
+
+    std::vector<Vector<T>> res;
+    this->_rows = _array.size();
+    this->_cols = _array[0].size();
+
+    this->_array.resize(this->_rows);
+    for(std::size_t i = 0; i < this->_rows; ++i)
+        this->_array[i] = _array[i];
+}
+
 //Copy constructor
 template<class T>
 Matrix<T>::Matrix(const Matrix<T>& matrix){
@@ -319,7 +356,7 @@ std::size_t Matrix<T>::get_cols() const{
 
 template<class T>
 std::vector<Vector<T>> Matrix<T>::get_array() const{
-    if(this-> _rows || this->_cols == 0)
+    if(this-> _rows == 0 || this->_cols == 0)
         throw std::invalid_argument("null matrix");
     
     return this->_array;
@@ -987,23 +1024,15 @@ Matrix<T> &Matrix<T>::operator*=(const T value){
     return this->multiply_this(value);
 }
 
-
-//iostream 
-
 template<class T>
-std::ostream& operator<<(std::ostream &out, const Matrix<T>& matrix){
-    if(matrix.get_rows() == 0 || matrix.get_cols() == 0)
-        throw std::invalid_argument("null matrix");
+Vector<T> &Matrix<T>::operator[](const std::size_t i){
+    if(i >= this->_rows)
+        throw std::invalid_argument("index out of range");
+    
+    return this->_array[i];
+};
 
-    for (std::size_t i = 0; i < matrix.get_rows(); ++i) {
-        for (std::size_t j = 0; j < matrix.get_cols(); ++j) 
-            out << std::setw(15) << matrix._array[i][j];		
-        out << "\n";
-    }
-    out << "\n";
 
-    return out;
-}
 
 template<class T>
 Vector<T> Matrix<T>::dot(const Vector<T>& vector){
@@ -1043,13 +1072,7 @@ Vector<T> Matrix<T>::dot(const std::vector<T>& vector){
 };
 
 
-template<class T>
-Vector<T> Matrix<T>::operator[](const std::size_t i) const{
-    if(i >= this->_rows)
-        throw std::invalid_argument("index out of range");
-    Vector<T> res(this->_array[i]);
-    return res;
-};
+
 
 
 
@@ -1163,17 +1186,6 @@ T Vector<T>::norm_euclid() const{
 }
 
 
-template<class T>
-std::ostream& operator<<(std::ostream &out, const Vector<T>& vec){
-
-    out << "( ";
-    for(std::size_t i = 0; i < vec.size() - 1; ++i){
-        out << vec[i] << "\t";
-    }
-    out << vec[vec.size() - 1] << " )^T";
-    
-    return out;
-}
 
 
 
