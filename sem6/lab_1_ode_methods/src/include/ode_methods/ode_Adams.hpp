@@ -52,7 +52,7 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 
         fout << start_time + tau;
 		for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
+			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
 		fout << "\n";
@@ -129,7 +129,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 
         fout << start_time + tau;
 		for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += runge_coef(start_time, tau, tmp, i, func[i]);
+			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
 		fout << "\n";

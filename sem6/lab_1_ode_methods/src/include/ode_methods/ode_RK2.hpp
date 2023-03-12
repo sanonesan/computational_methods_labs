@@ -13,13 +13,13 @@
 
 /* 
     template<typename T>
-    T RK4_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k, const F &func);
+    T RK2_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k, const F &func);
 
     template<typename T, typename F>
-    void RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const string &out_path);
+    void RK2_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const string &out_path);
 
     template<typename T, typename F>
-    void RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const string &out_path);
+    void RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const string &out_path);
 */
 
 
@@ -27,23 +27,17 @@
 	Вычисление коэффициентов метода Рунге-Кутты
 */
 template<typename T, typename F>
-T RK4_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k, const F &func){
+T RK2_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k, const F &func){
 
 	std::vector<T> tmp(x);
-	T k1, k2, k3, k4;
+	T k1, k2;
 
 	k1 = tau * func(tmp, t);
-	tmp[k] = x[k] + 0.5 * k1;
+	tmp[k] = x[k] + k1;
 
-	k2 = tau * func(tmp, t + 0.5 * tau);
-	tmp[k] = x[k] + 0.5 * k2;
+	k2 = tau * func(tmp, t + tau);
 
-	k3 = tau * func(tmp, t + 0.5 * tau);
-	tmp[k] = x[k] + k3;
-
-	k4 = tau * func(tmp, t + tau);
-
-	return 0.166667 * (k1 + k4) + 0.333333 * (k2 + k3);
+	return 0.5 * (k1 + k2);
 }
 
 
@@ -51,7 +45,7 @@ T RK4_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k,
 	Метод Рунге-Кутты 4 порядка с фиксированным шагом
 */
 template<typename T, typename F>
-void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path){
+void ode_RK2_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path){
 
 	std::ofstream fout(out_path);
 	if(!fout){
@@ -78,7 +72,7 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
 		fout << start_time + tau;
 
 		for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
+			x[i] += RK2_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
 		fout << "\n";
@@ -98,7 +92,7 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
 	Метод Рунге-Кутты 4 порядка с изменяющимя шагом
 */
 template<typename T, typename F>
-void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const std::string &out_path){
+void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const std::string &out_path){
 
 	std::ofstream fout(out_path);
 	if(!fout){
@@ -134,7 +128,7 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 				tau = end_time - start_time;
 				fout << start_time + tau;
 				for(std::size_t i = 0; i < func.size(); ++i){
-					x[i] += RK4_coef(start_time, tau, x_1, i, func[i]);
+					x[i] += RK2_coef(start_time, tau, x_1, i, func[i]);
 					fout << "," << x[i];
 				}
 				fout << "\n";
@@ -145,11 +139,11 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 		while (true) {
 			
 			for(std::size_t i = 0; i < func.size(); ++i){
-				x_1[i] = x[i] + RK4_coef(start_time, tau, x, i, func[i]);
-				tmp[i] = x[i] + RK4_coef(start_time, tau / 2, x, i, func[i]);
+				x_1[i] = x[i] + RK2_coef(start_time, tau, x, i, func[i]);
+				tmp[i] = x[i] + RK2_coef(start_time, tau / 2, x, i, func[i]);
 			}
 			for(std::size_t i = 0; i < func.size(); ++i)
-				x_2[i] = tmp[i] + RK4_coef(start_time, tau / 2, tmp, i, func[i]);
+				x_2[i] = tmp[i] + RK2_coef(start_time, tau / 2, tmp, i, func[i]);
 
 			for(std::size_t i = 0; i < func.size(); ++i){
 				tmp[i] = x_1[i] - x_2[i];
