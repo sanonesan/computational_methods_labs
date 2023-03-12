@@ -6,11 +6,7 @@
 #include <clocale>
 #include <cmath>
 
-#include"Matrix.hpp"
-
 using namespace std;
-
-
 
 int main(int args, char** argv){
 
@@ -247,8 +243,6 @@ int main(int args, char** argv){
 	//vector_valuation_Sys(A_save, A, delta_b, n, 0);
 
 
-
-
 	for (size_t j = 0; j < n; ++j) {
 		delete[] A[j];
 		delete[] A_save[j];
@@ -260,26 +254,6 @@ int main(int args, char** argv){
 	delete[] x_save;
 
 
-	std::cout<<"---------------------------------------------\n";
-	std::cout<<"---------------------------------------------\n";
-	std::cout<<"---------------------------------------------\n";
-	std::cout<<"---------------------------------------------\n";
-
-
-	path = "../test_files/test.txt";
-	Matrix<double> K(5);
-
-	K.print();
-
-	K.read_Square_Matrix(path);
-	K.print();
-
-	K.transpose().print();
-	K.print();
-
-
-
-	
 
 	return 0;
 }

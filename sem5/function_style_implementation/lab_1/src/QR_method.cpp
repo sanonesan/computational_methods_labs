@@ -61,6 +61,8 @@ int Rb_sys_matrix(
 				if (k < n) {
 					a = Q[i][k];
 					b = Q[j][k];
+					std::cout << (c * a + s * b) << " " << (-s * a + c * b) << "\n";
+
 					Q[i][k] = (c * a + s * b);
 					Q[j][k] = (-s * a + c * b);
 				}
