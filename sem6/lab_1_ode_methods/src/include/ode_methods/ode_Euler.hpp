@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <vector>
 
@@ -47,52 +48,53 @@ void ode_explicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
 }
 
 
-/*
-    Невный метод Эйлера
-*/
-template <typename T, typename F>
-void ode_implicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path, const T& tol) {
-    std::ofstream fout(out_path);
-    if (!fout) {
-        std::cout << "\n error \n";
-        return;
-    }
 
-    fout << std::scientific;
-    fout << "time";
-    for (std::size_t i = 0; i < func.size(); ++i) {
-        fout << ",u" << i;
-    }
-    fout << "\n";
-    fout << start_time;
-    for (std::size_t i = 0; i < func.size(); ++i) {
-        fout << "," << x[i];
-    }
-    fout << "\n";
+// /*
+//     Невный метод Эйлера
+// */
+// template <typename T, typename F>
+// void ode_implicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path, const T &tol) {
+//     std::ofstream fout(out_path);
+//     if (!fout) {
+//         std::cout << "\n error \n";
+//         return;
+//     }
 
-    std::vector<T> tmp(x);
-	// std::vector<T> tmp1(x);
-    while (start_time <= end_time) {
-        fout << start_time + tau;
+//     fout << std::scientific;
+//     fout << "time";
+//     for (std::size_t i = 0; i < func.size(); ++i) {
+//         fout << ",u" << i;
+//     }
+//     fout << "\n";
+//     fout << start_time;
+//     for (std::size_t i = 0; i < func.size(); ++i) {
+//         fout << "," << x[i];
+//     }
+//     fout << "\n";
 
-        for (std::size_t i = 0; i < x.size(); ++i) {
+//     std::vector<T> tmp(x);
 
-			
-			do{
-				tmp[i] = x[i];
-				x[i] = tmp[i] + tau * func[i](tmp, start_time);
+//     while (start_time <= end_time) {
+//         fout << start_time + tau;
 
-			}while (fabs(x[i] - tmp[i]) > tol);
-			
-			
-            fout << "," << x[i];
-        }
-        fout << "\n";
-        tmp.assign(x.begin(), x.end());
-        // tmp1.assign(x.begin(), x.end());
+//         for (std::size_t i = 0; i < x.size(); ++i) {
 
-        start_time += tau;
-    }
+//             /**
+//              *
+//              *
+//              * ????????????????
+//              *
+//              *
+//              *
+//              */
 
-    return;
-}
+//             fout << "," << x[i];
+//         }
+//         fout << "\n";
+//         tmp.assign(x.begin(), x.end());
+
+//         start_time += tau;
+//     }
+
+//     return;
+// }

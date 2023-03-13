@@ -2,6 +2,7 @@
 #define QR_METHOD_HPP
 
 #include <iostream>
+#include <cmath>
 
 #include "../../../../../structures/linalg/Matrix_n_Vector.hpp"
 
@@ -12,6 +13,12 @@ int QR_method(
     Matrix<T> &Q,
     Matrix<T> &R,
     Vector<T> &solution);
+
+template <typename T>
+int QR_decomposion_method(
+    const Matrix<T> &A,
+    Matrix<T> &Q,
+    Matrix<T> &R);
 
 template <typename T>
 int Rb_sys_matrix(

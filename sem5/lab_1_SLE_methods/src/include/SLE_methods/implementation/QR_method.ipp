@@ -1,6 +1,3 @@
-#include <cmath>
-#include <iostream>
-
 #include "../QR_method.hpp"
 #include "../method_gauss.hpp"
 
@@ -25,6 +22,48 @@ int QR_method(
 
     return 0;
 }
+
+template <typename T>
+int QR_decomposion_method(
+    const Matrix<T> &A,
+    Matrix<T> &Q,
+    Matrix<T> &R) {
+
+    std::size_t n = A.get_rows();
+
+    T c = 0., s = 0.;
+
+    Q.make_matrix_identity(n);
+    R = A;
+
+    T a = 0., b = 0.;
+
+    for (std::size_t i = 0; i < n - 1; ++i) {
+        for (std::size_t j = i + 1; j < n; ++j) {
+            coefs(i, j, c, s, R);
+
+            for (std::size_t k = 0; k < n; ++k) {
+                a = R[i][k];
+                b = R[j][k];
+                R[i][k] = (c * a + s * b);
+                R[j][k] = (-s * a + c * b);
+
+                a = Q[i][k];
+                b = Q[j][k];
+                Q[i][k] = (c * a + s * b);
+                Q[j][k] = (-s * a + c * b);
+            }
+
+        }
+    }
+
+    Q.check_matrix_zero();
+    R.check_matrix_zero();
+
+    return 0;
+}
+
+
 
 template <typename T>
 int Rb_sys_matrix(

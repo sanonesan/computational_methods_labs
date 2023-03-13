@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "./ode_methods/ode_Euler.hpp"
+#include "./ode_methods/ode_implicit_Euler.hpp"
+
 #include "./ode_methods/ode_RK2.hpp"
 #include "./ode_methods/ode_RK4.hpp"
 #include "./ode_methods/ode_Adams.hpp"

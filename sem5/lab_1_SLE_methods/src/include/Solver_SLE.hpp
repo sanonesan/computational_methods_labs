@@ -69,6 +69,27 @@ public:
 
         return result;
     }
+
+    /**
+     * @brief Get Q & R decomposion
+     *
+     * @result std::tuple<solution, Matrix<T> Q, Matrix<T> R>
+     **/
+    std::tuple<Matrix<T>, Matrix<T>> QR_decomposion(const Matrix<T> &A) {
+        // std::string out_path;
+        // out_path = this->output_folder + this->file_name + ".csv";
+
+        Matrix<T> Q(A.get_rows(), A.get_cols());
+        Matrix<T> R(A.get_rows(), A.get_cols());
+        Vector<T> solution;
+
+        QR_decomposion_method(A, Q, R);
+
+        std::tuple<Matrix<T>, Matrix<T>> result(Q, R);
+
+        return result;
+    }
+
 };
 
 #endif

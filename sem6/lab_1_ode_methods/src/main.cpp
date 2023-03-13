@@ -10,15 +10,15 @@ int main(int args, char **argv) {
 
     // ---------------solution_var_4--------------- //
 
-    Var_4<T> var4;
+    // Var_4<T> var4;
 
-    t = 0;
-    t_final = 50;
-    tau = 0.001;
+    // t = 0;
+    // t_final = 50;
+    // tau = 0.001;
 
-    solver.tol = 0.001;
-    solver.file_name = "var4";
-    solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
+    // solver.tol = 0.001;
+    // solver.file_name = "var4";
+    // solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
 
     // ---------------solution_var_4--------------- //
 
@@ -33,7 +33,7 @@ int main(int args, char **argv) {
     solver.tol = 0.01;
     solver.file_name = "test1";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
-
+    //solver.solve_ode_implicit_Euler(t, t_final, tau, test1._x0, test1._ode_system);
     // -------------------Test1-------------------- //
 
     return 0;
