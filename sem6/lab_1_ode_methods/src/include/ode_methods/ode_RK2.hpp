@@ -42,7 +42,7 @@ T RK2_coef(const T t, const T tau, const std::vector<T>& x, const std::size_t k,
 
 
 /*
-	Метод Рунге-Кутты 4 порядка с фиксированным шагом
+	Метод Рунге-Кутты 2 порядка с фиксированным шагом
 */
 template<typename T, typename F>
 void ode_RK2_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path){
@@ -89,7 +89,7 @@ void ode_RK2_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
 
 
 /*
-	Метод Рунге-Кутты 4 порядка с изменяющимя шагом
+	Метод Рунге-Кутты 2 порядка с изменяющимя шагом
 */
 template<typename T, typename F>
 void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const std::string &out_path){
@@ -149,7 +149,7 @@ void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 				tmp[i] = x_1[i] - x_2[i];
 			}		
 
-			breaker = norm_inf(tmp) / 15;
+			breaker = norm_inf(tmp) / 3;
 			if(breaker >= tol){
 				tau /= 2;
 			}

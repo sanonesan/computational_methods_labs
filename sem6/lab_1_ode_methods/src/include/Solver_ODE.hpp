@@ -69,10 +69,17 @@ public:
         Симметричная схема
     */
     template <typename F>
-    void solve_ode_symmetrical_scheme(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
+    void solve_ode_symmetrical_scheme_nonlinear_eq(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
-        out_path = this->output_folder + this->file_name + "_ode_symmetrical_scheme_output.csv";
-        ode_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+        out_path = this->output_folder + this->file_name + "_ode_symmetrical_scheme_nonlinear_eq_output.csv";
+        ode_symmetrical_scheme_nonlinear_eq(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+    }
+
+    template <typename F>
+    void solve_ode_2_step_symmetrical_scheme(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
+        std::string out_path;
+        out_path = this->output_folder + this->file_name + "_ode_2_step_symmetrical_scheme_output.csv";
+        ode_2_step_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
     }
     
 
@@ -139,12 +146,16 @@ public:
 
     /*
         Решение ODE всеми методами:
-            - явный метод Эйлера;
-            - метод Рунге-Кутты 4 порядка с фиксированным шагом;
-            - метод Рунге-Кутты 4 порядка с изменяющимя шагом;
-            - метод Адамса-Башфорта (первые 3 шага --- Рунге-Кутта 4 порядка);
-            - метод прогноз-коррекция (первые 3 шага --- Рунге-Кутта 4 порядка).
-    */
+        - явный метод Эйлера;
+        - неявный метод Эйлера;
+        - симметричная схема 2 порядка;
+        - метод Рунге-Кутты 2 порядка с фиксированным шагом;
+        - метод Рунге-Кутты 2 порядка с изменяющимя шагом;
+        - метод Рунге-Кутты 4 порядка с фиксированным шагом;
+        - метод Рунге-Кутты 4 порядка с изменяющимя шагом;
+        - метод Адамса-Башфорта (первые 3 шага --- Рунге-Кутта 4 порядка);
+        - метод прогноз-коррекция (первые 3 шага --- Рунге-Кутта 4 порядка).
+*/
     template <typename F>
     void solve_eq_with_all_methods(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
@@ -157,8 +168,8 @@ public:
         out_path = this->output_folder + this->file_name + "_ode_implicit_Euler_output.csv";
         ode_implicit_Euler(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
 
-        out_path = this->output_folder + this->file_name + "_ode_symmetrical_scheme_output.csv";
-        ode_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+        out_path = this->output_folder + this->file_name + "_ode_2_step_symmetrical_scheme_output.csv";
+        ode_2_step_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
 
         // -------------------EULER-------------------- //
 

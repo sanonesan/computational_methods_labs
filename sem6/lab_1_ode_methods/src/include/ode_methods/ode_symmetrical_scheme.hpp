@@ -1,4 +1,3 @@
-
 #ifndef ODE_SYMMETRICAL_SCHEME_HPP
 #define ODE_SYMMETRICAL_SCHEME_HPP
 
@@ -13,11 +12,68 @@
 
 #define eps 1e-16
 
+
+
 /*
-    Симметричная схема 2 порядка
+    Двухшаговая симметричная схема 2 порядка (предиктор-корректор)
 */
 template <typename T, typename F>
-void ode_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path, const T &tol) {
+void ode_2_step_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path, const T &tol) {
+    std::ofstream fout(out_path);
+    if (!fout) {
+        std::cout << "\n error \n";
+        return;
+    }
+
+    fout << std::scientific;
+    fout << "time";
+    for (std::size_t i = 0; i < func.size(); ++i) {
+        fout << ",u" << i;
+    }
+    fout << "\n";
+    fout << start_time;
+    for (std::size_t i = 0; i < func.size(); ++i) {
+        fout << "," << x[i];
+    }
+    fout << "\n";
+
+    Vector<T> tmp(x);
+    Vector<T> tmp1(x);
+
+    Vector<T> tmp_foo(func.size());
+
+    while (start_time <= end_time) {
+
+        
+
+        //predictor (explicit Euler)
+        for (std::size_t i = 0; i < x.size(); ++i) {
+            tmp_foo[i] = func[i](x, start_time);
+            tmp[i] = x[i] + tau * tmp_foo[i];
+        }
+
+        start_time += tau;
+
+        fout << start_time;
+
+        //corrector
+        for (std::size_t i = 0; i < x.size(); ++i) {
+            x[i] = x[i] + tau / 2 * (tmp_foo[i] + func[i](tmp, start_time));
+            fout << "," << x[i];
+        }
+
+        fout << "\n";
+
+    }
+
+    return;
+}
+
+/*
+    Симметричная схема 2 порядка (решение нелинейного уравнения)
+*/
+template <typename T, typename F>
+void ode_symmetrical_scheme_nonlinear_eq(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const std::string &out_path, const T &tol) {
     std::ofstream fout(out_path);
     if (!fout) {
         std::cout << "\n error \n";
