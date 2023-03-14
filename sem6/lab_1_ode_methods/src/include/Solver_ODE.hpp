@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "./ode_methods/ode_Euler.hpp"
+#include "./ode_methods/ode_explicit_Euler.hpp"
 #include "./ode_methods/ode_implicit_Euler.hpp"
+#include "./ode_methods/ode_symmetrical_scheme.hpp"
 
 #include "./ode_methods/ode_RK2.hpp"
 #include "./ode_methods/ode_RK4.hpp"
@@ -13,6 +14,10 @@
 /*
     Solver_ODE --- класс для решения ODE методами:
         - явный метод Эйлера;
+        - неявный метод Эйлера;
+        - симметричная схема 2 порядка;
+        - метод Рунге-Кутты 2 порядка с фиксированным шагом;
+        - метод Рунге-Кутты 2 порядка с изменяющимя шагом;
         - метод Рунге-Кутты 4 порядка с фиксированным шагом;
         - метод Рунге-Кутты 4 порядка с изменяющимя шагом;
         - метод Адамса-Башфорта (первые 3 шага --- Рунге-Кутта 4 порядка);
@@ -45,7 +50,7 @@ public:
     template <typename F>
     void solve_ode_explicit_Euler(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
-        out_path = this->output_folder + this->file_name + "_ode_Euler_output.csv";
+        out_path = this->output_folder + this->file_name + "_ode_explicit_Euler_output.csv";
         ode_explicit_Euler(t_start, t_final, tau, _x0, _ode_system, out_path);
     }
 
@@ -55,9 +60,21 @@ public:
     template <typename F>
     void solve_ode_implicit_Euler(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
-        out_path = this->output_folder + this->file_name + "_ode_Euler_output.csv";
+        out_path = this->output_folder + this->file_name + "_ode_implicit_Euler_output.csv";
         ode_implicit_Euler(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
     }
+
+
+    /*
+        Симметричная схема
+    */
+    template <typename F>
+    void solve_ode_symmetrical_scheme(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
+        std::string out_path;
+        out_path = this->output_folder + this->file_name + "_ode_symmetrical_scheme_output.csv";
+        ode_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+    }
+    
 
     /*
         Метод Рунге-Кутты 2 порядка с фиксированным шагом
@@ -139,6 +156,9 @@ public:
 
         out_path = this->output_folder + this->file_name + "_ode_implicit_Euler_output.csv";
         ode_implicit_Euler(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+
+        out_path = this->output_folder + this->file_name + "_ode_symmetrical_scheme_output.csv";
+        ode_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
 
         // -------------------EULER-------------------- //
 
