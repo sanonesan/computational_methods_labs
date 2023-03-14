@@ -18,6 +18,6 @@ int major_element(Matrix<T> &A);
 template <typename T>
 int remove_MatrixColumnElements_UnderLine(std::size_t &k, Matrix<T> &A, Vector<T> &b);
 
-#include "./implementation/method_gauss.ipp"  //iplementation of template functions
+#include "./implementation/method_gauss.ipp" 
 
 #endif

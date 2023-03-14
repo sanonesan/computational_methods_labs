@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SOLVER_SLE
 #define SOLVER_SLE
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MATRIX_N_VECTOR_HPP
 #define MATRIX_N_VECTOR_HPP
 
@@ -98,8 +100,7 @@ class Vector : public std::vector<T> {
     Vector<T>& operator/=(const T value);
 
     Vector<T>& check_vector_zero();
-    
-    // template <typename T1>
+
     friend std::ostream& operator<<(std::ostream& out, const Vector<T>& vec) {
         out << "( " << vec[0];
         for (std::size_t i = 1; i < vec.size() - 1; ++i) {
@@ -166,7 +167,6 @@ class Matrix {
     Matrix<T>& transpose_this();
 
     Matrix<T>& make_matrix_identity(const std::size_t n);
-    // Matrix<T> inv() const;
 
     // Value operations
 
@@ -221,10 +221,8 @@ class Matrix {
     Vector<T> dot(const Vector<T>& vector);
     Vector<T> dot(const std::vector<T>& vector);
 
-
     template <typename T1>
     friend void read_System(const std::string path, Matrix<T1>& matrix, Vector<T1>& vector);
-
 
     friend std::ostream& operator<<(std::ostream& out, Matrix<T>& matrix) {
         if (matrix.get_rows() == 0 || matrix.get_cols() == 0)
@@ -239,51 +237,9 @@ class Matrix {
 
         return out;
     };
-
-    
-
-
 };
 
-
-// template<class T>
-// std::ostream& operator<<(std::ostream& out, Matrix<T>& matrix); 
-
-
-
-
-// std::ostream& operator<<(std::ostream& out, Matrix<double>& matrix) {
-//     if (matrix.get_rows() == 0 || matrix.get_cols() == 0)
-//         throw std::invalid_argument("null matrix");
-
-//     for (std::size_t i = 0; i < matrix.get_rows(); ++i) {
-//         for (std::size_t j = 0; j < matrix.get_cols(); ++j)
-//             out << std::setw(15) << matrix.get_array()[i][j];
-//         out << "\n";
-//     }
-//     out << "\n";
-
-//     return out;
-// };
-
-// std::ostream& operator<<(std::ostream& out, Matrix<float>& matrix) {
-//     if (matrix.get_rows() == 0 || matrix.get_cols() == 0)
-//         throw std::invalid_argument("null matrix");
-
-//     for (std::size_t i = 0; i < matrix.get_rows(); ++i) {
-//         for (std::size_t j = 0; j < matrix.get_cols(); ++j)
-//             out << std::setw(15) << matrix.get_array()[i][j];
-//         out << "\n";
-//     }
-//     out << "\n";
-
-//     return out;
-// };
-
 #endif
-
-// template<typename T>
-// void read_System(const std::string path, Matrix<T>& matrix, Vector<T>& vector);
 
 //----------------------------------------//
 //----------------MATRIX------------------//
@@ -1484,7 +1440,7 @@ template <class T>
 Vector<T>& Vector<T>::check_vector_zero() {
     const T _eps = 1e-14;
     for (std::size_t i = 0; i < (*this).size(); ++i) {
-        if (fabs((*this)[i]) < _eps){
+        if (fabs((*this)[i]) < _eps) {
             (*this)[i] = 0.;
             (*this)[i] *= (1 / (*this)[i] > 0) ? (1) : (-1);
         }
@@ -1495,8 +1451,10 @@ Vector<T>& Vector<T>::check_vector_zero() {
 
 template <class T>
 Matrix<T> Matrix<T>::inv() const {
-
-    auto reverse_course = [](Matrix<T> & A, Vector<T> & b, Vector<T> & solution)->int {
+    auto reverse_course = [](
+                        Matrix<T>& A, 
+                        Vector<T>& b, 
+                        Vector<T>& solution) -> int {
         solution = b;
         std::size_t n = solution.size();
 
@@ -1520,6 +1478,7 @@ Matrix<T> Matrix<T>::inv() const {
                     T& c,
                     T& s,
                     Matrix<T>& A) -> int {
+
         std::size_t n = A.get_rows();
 
         if (k < n && l < n) {
@@ -1543,7 +1502,6 @@ Matrix<T> Matrix<T>::inv() const {
                                     const Matrix<T>& A,
                                     Matrix<T>& Q,
                                     Matrix<T>& R) -> int {
-        
         std::size_t n = A.get_rows();
 
         T c = 0., s = 0.;
@@ -1603,4 +1561,3 @@ Matrix<T> Matrix<T>::inv() const {
 
     return InvMatrix;
 }
-
