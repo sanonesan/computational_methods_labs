@@ -35,7 +35,7 @@ int main(int args, char **argv) {
     t = 0;
     t_final = 10;
 
-    tau = 0.01;
+    tau = 1e-2;
     solver.tol = 1e-6;
     solver.file_name = "test1";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
