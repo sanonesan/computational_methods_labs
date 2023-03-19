@@ -24,6 +24,7 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 	}
 
 	fout << std::scientific;
+	fout << std::setprecision(8);
 	fout << "time"; 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
@@ -106,6 +107,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 	}
 
 	fout << std::scientific;
+	fout << std::setprecision(8);
 	fout << "time"; 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;

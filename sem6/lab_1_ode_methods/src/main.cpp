@@ -1,4 +1,5 @@
 #include "./include/Solver_ODE.hpp"
+#include "./include/tests/Test0.hpp"
 #include "./include/tests/Test1.hpp"
 #include "./include/tests/Var_4.hpp"
 
@@ -11,17 +12,19 @@ int main(int args, char **argv) {
 
     T t, t_final, tau;
 
+    
     // ---------------solution_var_4--------------- //
 
-    // Var_4<T> var4;
+    Var_4<T> var4;
 
-    // t = 0;
-    // t_final = 50;
-    // tau = 0.001;
+    t = 0;
+    t_final = 50;
+    solver.tol = 1e-6;
 
-    // solver.tol = 0.001;
-    // solver.file_name = "var4";
-    // solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
+
+    tau = 0.01;
+    solver.file_name = "var4";
+    solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
 
     // ---------------solution_var_4--------------- //
 
@@ -30,26 +33,11 @@ int main(int args, char **argv) {
     Test1<T> test1;
 
     t = 0;
-    t_final = 5;
-
-    tau = 0.05;
-    solver.tol = 1e-6;
-    solver.file_name = "test1";
-    solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
+    t_final = 10;
 
     tau = 0.01;
     solver.tol = 1e-6;
-    solver.file_name = "test1_tau_1e-2";
-    solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
-
-    tau = 0.001;
-    solver.tol = 1e-6;
-    solver.file_name = "test1_tau_1e-3";
-    solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
-
-    tau = 0.0001;
-    solver.tol = 1e-6;
-    solver.file_name = "test1_tau_1e-4";
+    solver.file_name = "test1";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
     // -------------------Test1-------------------- //

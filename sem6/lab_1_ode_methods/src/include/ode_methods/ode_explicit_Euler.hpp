@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 #define eps 1e-16
@@ -20,6 +21,7 @@ void ode_explicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
     }
 
     fout << std::scientific;
+	fout << std::setprecision(8);
     fout << "time";
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;

@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
@@ -26,6 +27,7 @@ void ode_2_step_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<
     }
 
     fout << std::scientific;
+	fout << std::setprecision(8);
     fout << "time";
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;

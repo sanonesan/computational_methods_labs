@@ -90,7 +90,7 @@ public:
     void solve_ode_RK2_fix_step(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
         out_path = this->output_folder + this->file_name + "_ode_RK2_fix_step_output.csv";
-        ode_RK4_fix_step(t_start, t_final, tau, _x0, _ode_system, out_path);
+        ode_RK2_fix_step(t_start, t_final, tau, _x0, _ode_system, out_path);
     }
 
     /*
@@ -100,7 +100,7 @@ public:
     void solve_ode_RK2_vary_step(T t_start, T t_final, T tau, std::vector<T> &_x0, std::vector<F> &_ode_system) {
         std::string out_path;
         out_path = this->output_folder + this->file_name + "_ode_RK2_vary_step_output.csv";
-        ode_RK4_vary_step(t_start, t_final, tau, _x0, _ode_system, this->tol, out_path);
+        ode_RK2_vary_step(t_start, t_final, tau, _x0, _ode_system, this->tol, out_path);
     }
 
 
