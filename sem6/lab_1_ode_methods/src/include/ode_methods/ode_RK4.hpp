@@ -64,12 +64,12 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
 	}
-	fout << "\n";
+	fout << ",tau\n";
 	fout << start_time;
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << "," << x[i];
 	}
-	fout << "\n";
+	fout << "," << tau << "\n";
 	
 	std::vector<T> tmp(x);
 
@@ -81,7 +81,7 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
 			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
-		fout << "\n";
+		fout << "," << tau << "\n";
 		
 		tmp.assign(x.begin(), x.end());
 
@@ -111,12 +111,12 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
 	}
-	fout << "\n";
+	fout << ",tau\n";
 	fout << start_time;
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << "," << x[i];
 	}
-	fout << "\n";
+	fout << "," << tau << "\n";
 
 
 	std::vector<T> tmp(x);
@@ -137,7 +137,7 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 					x[i] += RK4_coef(start_time, tau, x_1, i, func[i]);
 					fout << "," << x[i];
 				}
-				fout << "\n";
+				fout << "," << tau << "\n";
 			}
 			break;
 		}
@@ -175,7 +175,7 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
 		for(std::size_t i = 0; i < func.size(); ++i){
 			fout << "," << x[i];
 		}
-		fout << "\n";
+		fout << "," << tau << "\n";
 
 	}
 

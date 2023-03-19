@@ -30,12 +30,12 @@ void ode_2_step_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;
     }
-    fout << "\n";
+    fout << ",tau\n";
     fout << start_time;
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << "," << x[i];
     }
-    fout << "\n";
+    fout << "," << tau << "\n";
 
     Vector<T> tmp(x);
     Vector<T> tmp1(x);
@@ -61,8 +61,7 @@ void ode_2_step_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<
             x[i] = x[i] + tau / 2 * (tmp_foo[i] + func[i](tmp, start_time));
             fout << "," << x[i];
         }
-
-        fout << "\n";
+        fout << "," << tau << "\n";
 
     }
 
@@ -85,12 +84,12 @@ void ode_symmetrical_scheme_nonlinear_eq(T start_time, T end_time, T tau, std::v
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;
     }
-    fout << "\n";
+    fout << ",tau\n";
     fout << start_time;
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << "," << x[i];
     }
-    fout << "\n";
+    fout << "," << tau << "\n";
 
     Vector<T> tmp(x);
 
@@ -125,7 +124,7 @@ void ode_symmetrical_scheme_nonlinear_eq(T start_time, T end_time, T tau, std::v
         for (std::size_t i = 0; i < x.size(); ++i) {
             fout << "," << x[i];
         }
-        fout << "\n";
+        fout << "," << tau << "\n";
 
         start_time += tau;
     }

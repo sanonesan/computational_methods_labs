@@ -24,12 +24,12 @@ void ode_explicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;
     }
-    fout << "\n";
+    fout << ",tau\n";
     fout << start_time;
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << "," << x[i];
     }
-    fout << "\n";
+    fout << "," << tau << "\n";
 
     std::vector<T> tmp(x);
 
@@ -39,7 +39,7 @@ void ode_explicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
             x[i] = tmp[i] + tau * func[i](tmp, start_time);
             fout << "," << x[i];
         }
-        fout << "\n";
+        fout << "," << tau << "\n";
         tmp.assign(x.begin(), x.end());
         start_time += tau;
     }

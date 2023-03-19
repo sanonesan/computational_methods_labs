@@ -29,12 +29,12 @@ void ode_implicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;
     }
-    fout << "\n";
+    fout << ",tau\n";
     fout << start_time;
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << "," << x[i];
     }
-    fout << "\n";
+    fout << "," << tau << "\n";
 
     Vector<T> tmp(x);
     Solver_SLE<T> solver;
@@ -62,7 +62,7 @@ void ode_implicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
         for (std::size_t i = 0; i < x.size(); ++i) {
             fout << "," << x[i];
         }
-        fout << "\n";
+        fout << "," << tau << "\n";
 
         start_time += tau;
     }

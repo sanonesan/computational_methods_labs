@@ -30,25 +30,25 @@ int main(int args, char **argv) {
     Test1<T> test1;
 
     t = 0;
-    t_final = 20;
+    t_final = 5;
 
-    tau = 0.01;
-    solver.tol = 0.01;
+    tau = 0.05;
+    solver.tol = 1e-6;
     solver.file_name = "test1";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
     tau = 0.01;
-    solver.tol = 0.000001;
+    solver.tol = 1e-6;
     solver.file_name = "test1_tau_1e-2";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
     tau = 0.001;
-    solver.tol = 0.000001;
+    solver.tol = 1e-6;
     solver.file_name = "test1_tau_1e-3";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
     tau = 0.0001;
-    solver.tol = 0.000001;
+    solver.tol = 1e-6;
     solver.file_name = "test1_tau_1e-4";
     solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 

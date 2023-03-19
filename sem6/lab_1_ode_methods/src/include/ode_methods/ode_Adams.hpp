@@ -28,12 +28,13 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
 	}
-	fout << "\n";
+	fout << ",tau\n";
 	fout << start_time;	
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << "," << x[i];
 	}
-	fout << "\n";
+	fout << "," << tau << "\n";
+
 
 
 	
@@ -55,7 +56,8 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
-		fout << "\n";
+		fout << "," << tau << "\n";
+
 
 		tmp.assign(x.begin(), x.end());
 		start_time += tau;
@@ -75,7 +77,8 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 			x[i] += tau * (2.29167 * func_value[i][3] - 2.45833 * func_value[i][2] + 1.54167 * func_value[i][1] - 0.375 * func_value[i][0]);
             fout << "," << x[i];
 		}
-        fout << "\n";
+		fout << "," << tau << "\n";
+
 
         for(std::size_t i = 0; i < func.size(); ++i){
             func_value[i].erase(func_value[i].begin());           
@@ -107,12 +110,13 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
 	}
-	fout << "\n";
+	fout << ",tau\n";
 	fout << start_time;
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << "," << x[i];
 	}
-	fout << "\n";
+	fout << "," << tau << "\n";
+	
 	
 	std::vector<T> tmp;
     std::vector<std::vector<T>> func_value;
@@ -132,7 +136,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 			x[i] += RK4_coef(start_time, tau, tmp, i, func[i]);
 			fout << "," << x[i];
 		}
-		fout << "\n";
+		fout << "," << tau << "\n";
 
 		tmp.assign(x.begin(), x.end());
 		start_time += tau;
@@ -162,8 +166,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 			x[i] += tau * (0.375 * func_value[i][3] + 0.791667 * func_value[i][2] - 0.208333 * func_value[i][1] + 0.0416667 * func_value[i][0]);
             fout << "," << x[i];
         }
-        fout << "\n";
-
+		fout << "," << tau << "\n";
 	}
 
 	fout.close();
