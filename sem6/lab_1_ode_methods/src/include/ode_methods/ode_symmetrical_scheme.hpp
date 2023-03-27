@@ -43,16 +43,35 @@ void ode_2_step_symmetrical_scheme(T start_time, T end_time, T tau, std::vector<
     Vector<T> tmp1(x);
 
     Vector<T> tmp_foo(func.size());
+    
+    Solver_SLE<T> solver;
+    Matrix<T> Jacobian;
+
 
     while (start_time <= end_time) {
-
-        
 
         //predictor (explicit Euler)
         for (std::size_t i = 0; i < x.size(); ++i) {
             tmp_foo[i] = func[i](x, start_time);
             tmp[i] = x[i] + tau * tmp_foo[i];
         }
+
+        // //predictor (implicit Euler)
+        // // J
+        // Jacobian = numerical_Jacobian_for_ode_sys_memorize(func, x, start_time, tmp_foo);
+        // // tau * J
+        // Jacobian *= -tau;
+        // // E - tau * J
+        // for (std::size_t i = 0; i < Jacobian.get_rows(); ++i)
+        //     Jacobian[i][i] += 1;
+
+        // /**
+        //  * Solving equation:
+        //  * (E - tau * J) * y_{n+1} = y_{n}
+        //  * for y_{n+1}
+        //  **/
+        // tmp = std::get<0>(solver.QR(Jacobian, x)); 
+        // // x.assign(tmp.begin(), tmp.end());
 
         start_time += tau;
 

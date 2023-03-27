@@ -24,7 +24,7 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 	}
 
 	fout << std::scientific;
-	fout << std::setprecision(8);
+	fout << std::setprecision(48);
 	fout << "time"; 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
@@ -75,7 +75,7 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
         
         fout << start_time;
         for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += tau * (2.29167 * func_value[i][3] - 2.45833 * func_value[i][2] + 1.54167 * func_value[i][1] - 0.375 * func_value[i][0]);
+			x[i] += tau * (2.2916666666666667 * func_value[i][3] - 2.4583333333333333 * func_value[i][2] + 1.5416666666666667 * func_value[i][1] - 0.375 * func_value[i][0]);
             fout << "," << x[i];
 		}
 		fout << "," << tau << "\n";
@@ -107,7 +107,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 	}
 
 	fout << std::scientific;
-	fout << std::setprecision(8);
+	fout << std::setprecision(48);
 	fout << "time"; 
 	for(std::size_t i = 0; i < func.size(); ++i){
 		fout << ",u" << i;
@@ -149,26 +149,33 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 
     }
 
+	
 	while (start_time <= end_time){
+
+		tmp.assign(x.begin(), x.end());
 		
         //prediction (AB4 step)
 		start_time += tau;
         for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += tau * (2.29167 * func_value[i][3] - 2.45833 * func_value[i][2] + 1.54167 * func_value[i][1] - 0.375 * func_value[i][0]);
+			tmp[i] += tau * (2.2916666666666667 * func_value[i][3] - 2.4583333333333333 * func_value[i][2] + 1.5416666666666667 * func_value[i][1] - 0.375 * func_value[i][0]);
 		}
 
         for(std::size_t i = 0; i < func.size(); ++i){
             func_value[i].erase(func_value[i].begin());           
-            func_value[i].push_back(func[i](x, start_time));
+            func_value[i].push_back(func[i](tmp, start_time));
         }
 
         //correction
         fout << start_time;
         for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += tau * (0.375 * func_value[i][3] + 0.791667 * func_value[i][2] - 0.208333 * func_value[i][1] + 0.0416667 * func_value[i][0]);
+			x[i] += tau * (0.375 * func_value[i][3] + 0.791666666666667 * func_value[i][2] - 0.2083333333333333 * func_value[i][1] + 0.04166666666666667 * func_value[i][0]);
             fout << "," << x[i];
         }
 		fout << "," << tau << "\n";
+
+		for(std::size_t i = 0; i < func.size(); ++i){
+            func_value[i][3] = func[i](x, start_time);
+        }
 	}
 
 	fout.close();

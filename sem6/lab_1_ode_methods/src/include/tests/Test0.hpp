@@ -20,12 +20,12 @@ class Test0{
             
             // dx/dt
             auto func_1 = [](const std::vector<T>& x, const T t) -> T{
-                return cos(t) - x[0];
+                return exp(sin(t)) * cos(t) + sin(t);
             };
-
 
             _ode_system.push_back(func_1);
             // _ode_system.push_back(func_2);
         }
+
 
 };

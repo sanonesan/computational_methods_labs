@@ -1,5 +1,6 @@
 #include "./include/Solver_ODE.hpp"
 #include "./include/tests/Test0.hpp"
+#include "./include/tests/Test01.hpp"
 #include "./include/tests/Test1.hpp"
 #include "./include/tests/Var_4.hpp"
 
@@ -12,33 +13,88 @@ int main(int args, char **argv) {
 
     T t, t_final, tau;
 
+    Test0<T> test0;
+
+    solver.output_folder = "../output/test0_for_approximation_order/";
+
+    t = 0;
+    t_final = 5;
+    solver.tol = 1e-8;
+
+    //q = 0.25;
+    tau = 0.01;
+    solver.file_name = "test0_tau_1e-2";
+
+    solver.solve_ode_explicit_Euler(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_2_step_symmetrical_scheme(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK2_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK4_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_AB4(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_Predictor_Corrector(t, t_final, tau, test0._x0, test0._ode_system);
+
+    tau = 0.0025;
+    solver.file_name = "test0_tau_1e-3";
+
+    solver.solve_ode_explicit_Euler(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_2_step_symmetrical_scheme(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK2_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK4_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_AB4(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_Predictor_Corrector(t, t_final, tau, test0._x0, test0._ode_system);
+
+    tau = 0.000625;
+    solver.file_name = "test0_tau_1e-4";
+
+    solver.solve_ode_explicit_Euler(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_2_step_symmetrical_scheme(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK2_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_RK4_fix_step(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_AB4(t, t_final, tau, test0._x0, test0._ode_system);
+    solver.solve_ode_Predictor_Corrector(t, t_final, tau, test0._x0, test0._ode_system);
+
+    
+    Test01<T> test01;
+    
+    tau = 0.01;
+    solver.file_name = "test0_tau_1e-2";
+    solver.solve_ode_implicit_Euler(t, t_final, tau, test01._x0, test01._ode_system);
+
+    tau = 0.0025;
+    solver.file_name = "test0_tau_1e-3";
+    solver.solve_ode_implicit_Euler(t, t_final, tau, test01._x0, test01._ode_system);
+
+    tau = 0.000625;
+    solver.file_name = "test0_tau_1e-4";
+    solver.solve_ode_implicit_Euler(t, t_final, tau, test01._x0, test01._ode_system);
+
+
     
     // ---------------solution_var_4--------------- //
 
-    Var_4<T> var4;
+    // Var_4<T> var4;
 
-    t = 0;
-    t_final = 50;
-    solver.tol = 1e-6;
+    // t = 0;
+    // t_final = 50;
+    // solver.tol = 1e-6;
 
 
-    tau = 0.01;
-    solver.file_name = "var4";
-    solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
+    // tau = 0.01;
+    // solver.file_name = "var4";
+    // solver.solve_eq_with_all_methods(t, t_final, tau, var4._x0, var4._ode_system);
 
     // ---------------solution_var_4--------------- //
 
     // -------------------Test1-------------------- //
 
-    Test1<T> test1;
+    // Test1<T> test1;
 
-    t = 0;
-    t_final = 10;
+    // t = 0;
+    // t_final = 10;
 
-    tau = 1e-2;
-    solver.tol = 1e-6;
-    solver.file_name = "test1";
-    solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
+    // tau = 1e-2;
+    // solver.tol = 1e-6;
+    // solver.file_name = "test1";
+    // solver.solve_eq_with_all_methods(t, t_final, tau, test1._x0, test1._ode_system);
 
     // -------------------Test1-------------------- //
 

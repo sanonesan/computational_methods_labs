@@ -169,7 +169,7 @@ public:
         ode_implicit_Euler(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
 
         out_path = this->output_folder + this->file_name + "_ode_2_step_symmetrical_scheme_output.csv";
-        ode_2_step_symmetrical_scheme(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
+        ode_symmetrical_scheme_nonlinear_eq(t_start, t_final, tau, _x0, _ode_system, out_path, this->tol);
 
         // -------------------EULER-------------------- //
 

@@ -30,17 +30,17 @@ T RK4_coef(const T t, const T tau, const std::vector<T> &x, const std::size_t k,
     T k1, k2, k3, k4;
 
     k1 = tau * func(tmp, t);
+
     tmp[k] = x[k] + 0.5 * k1;
-
     k2 = tau * func(tmp, t + 0.5 * tau);
+    
     tmp[k] = x[k] + 0.5 * k2;
-
     k3 = tau * func(tmp, t + 0.5 * tau);
+    
     tmp[k] = x[k] + k3;
-
     k4 = tau * func(tmp, t + tau);
 
-    return 0.166667 * (k1 + k4) + 0.333333 * (k2 + k3);
+    return 0.166666666666667 * (k1 + k4) + 0.333333333333333 * (k2 + k3);
 }
 
 /*
@@ -55,7 +55,7 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
     }
 
     fout << std::scientific;
-    fout << std::setprecision(8);
+    fout << std::setprecision(48);
     fout << "time";
     for (std::size_t i = 0; i < func.size(); ++i) {
         fout << ",u" << i;

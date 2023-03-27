@@ -10,6 +10,7 @@
 #include "../../../../../sem5/lab_1_SLE_methods/src/include/Solver_SLE.hpp"
 #include "../../../../../structures/linalg/Matrix_n_Vector.hpp"
 #include "./numerical_Jacobian_for_ode_sys.hpp"
+#include "./numerical_derivative_for_ode_sys.hpp"
 
 #define eps 1e-16
 
@@ -39,34 +40,53 @@ void ode_implicit_Euler(T start_time, T end_time, T tau, std::vector<T> x, const
     fout << "," << tau << "\n";
 
     Vector<T> tmp(x);
-    Solver_SLE<T> solver;
-    Matrix<T> Jacobian;
 
-    while (start_time <= end_time) {
-        fout << start_time + tau;
+    if (func.size() > 1){
+        
+        Solver_SLE<T> solver;
+        Matrix<T> Jacobian;
 
-        // J
-        Jacobian = numerical_Jacobian_for_ode_sys(func, x, start_time);
-        // tau * J
-        Jacobian *= -tau;
-        // E - tau * J
-        for (std::size_t i = 0; i < Jacobian.get_rows(); ++i)
-            Jacobian[i][i] = 1 + Jacobian[i][i];
+        while (start_time <= end_time) {
+            fout << start_time + tau;
 
-        /**
-         * Solving equation:
-         * (E - tau * J) * y_{n+1} = y_{n}
-         * for y_{n+1}
-         **/
-        tmp = std::get<0>(solver.QR(Jacobian, x)); 
-        x.assign(tmp.begin(), tmp.end());
+            // J
+            Jacobian = numerical_Jacobian_for_ode_sys(func, x, start_time);
+            // tau * J
+            Jacobian *= -tau;
+            // E - tau * J
+            for (std::size_t i = 0; i < Jacobian.get_rows(); ++i)
+                Jacobian[i][i] += 1;
 
-        for (std::size_t i = 0; i < x.size(); ++i) {
-            fout << "," << x[i];
+            /**
+             * Solving equation:
+             * (E - tau * J) * y_{n+1} = y_{n}
+             * for y_{n+1}
+             **/
+            tmp = std::get<0>(solver.QR(Jacobian, x)); 
+            x.assign(tmp.begin(), tmp.end());
+
+            for (std::size_t i = 0; i < x.size(); ++i) {
+                fout << "," << x[i];
+            }
+            fout << "," << tau << "\n";
+
+            start_time += tau;
         }
-        fout << "," << tau << "\n";
+    }
+    else if (func.size() == 1){
+        while (start_time <= end_time) {
+            fout << start_time + tau;
 
-        start_time += tau;
+            x[0] /= 1 - tau * numerical_derivative_for_ode_sys(func, x, start_time, 0);
+            
+            for (std::size_t i = 0; i < x.size(); ++i) {
+                fout << "," << x[i];
+            }
+            fout << "," << tau << "\n";
+
+            start_time += tau;
+        }
+
     }
 
     return;
