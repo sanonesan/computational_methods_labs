@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ODE_RK2_HPP
+#define ODE_RK2_HPP
 
 #include <cmath>
 #include <fstream>
@@ -112,7 +113,7 @@ void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
     std::vector<T> x_1(x);
     std::vector<T> x_2(x);
     T breaker;
-    T coef_tol = tol / 5 / 10000;
+    // T coef_tol = tol / 5 / 10000;
 
     while (true) {
         if (start_time + tau > end_time) {
@@ -138,7 +139,7 @@ void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
                 tmp[i] = x[i] + RK2_coef(start_time, tau / 2, x, i, func[i]);
             }
             for (std::size_t i = 0; i < func.size(); ++i)
-                x_2[i] = tmp[i] + RK2_coef(start_time, tau / 2, tmp, i, func[i]);
+                x_2[i] = tmp[i] + RK2_coef(start_time + tau / 2, tau / 2, tmp, i, func[i]);
 
             for (std::size_t i = 0; i < func.size(); ++i) {
                 tmp[i] = x_1[i] - x_2[i];
@@ -149,23 +150,26 @@ void ode_RK2_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
                 tau /= 2;
             } else {
                 x.assign(x_1.begin(), x_1.end());
+
+                start_time += tau;
+
+                fout << start_time;
+                for (std::size_t i = 0; i < func.size(); ++i) {
+                    fout << "," << x[i];
+                }
+                fout << "," << tau << "\n";
+
+                tau *= 2;
+
                 break;
             }
         }
 
-        start_time += tau;
-
-        if (breaker < coef_tol)
-            tau *= 2;
-
-        fout << start_time;
-        for (std::size_t i = 0; i < func.size(); ++i) {
-            fout << "," << x[i];
-        }
-        fout << "," << tau << "\n";
     }
 
     fout.close();
 
     return;
 }
+
+#endif

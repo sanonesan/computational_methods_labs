@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ODE_VECTOR_NORMS_FOR_METHODS_HPP
+#define ODE_VECTOR_NORMS_FOR_METHODS_HPP
 
 #include<iostream>
 #include<vector>
@@ -68,3 +69,5 @@ T norm_euclid(const std::vector<T> &vec){
 
 	return res < eps ? 0. : sqrt(res);
 }
+
+#endif

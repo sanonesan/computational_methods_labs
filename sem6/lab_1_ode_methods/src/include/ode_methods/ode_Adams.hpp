@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ODE_ADAMS_HPP
+#define ODE_ADAMS_HPP
 
 #include<iostream>
 #include<fstream>
@@ -205,3 +206,5 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 
     return;
 }
+
+#endif

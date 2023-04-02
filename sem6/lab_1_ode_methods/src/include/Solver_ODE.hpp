@@ -190,12 +190,12 @@ public:
 
         // ----------------RUNGE-KUTTA----------------- //
 
-        // --------------ADAMS-BASHFORT---------------- //
+        // --------------ADAMS-BASHFORTH---------------- //
 
         out_path = this->output_folder + this->file_name + "_ode_AB4_output.csv";
         ode_AB4(t_start, t_final, tau, _x0, _ode_system, out_path);
 
-        // --------------ADAMS-BASHFORT---------------- //
+        // --------------ADAMS-BASHFORTH---------------- //
 
         // ------------PREDICTOR-CORRECTOR------------- //
 
