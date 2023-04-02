@@ -5,7 +5,6 @@
 #include "./include/tests/Test1.hpp"
 #include "./include/tests/Var_4.hpp"
 
-
 int main(int args, char **argv) {
     typedef long double T;
     Solver_ODE<T> solver;
@@ -15,7 +14,6 @@ int main(int args, char **argv) {
     t = 0;
     t_final = 50;
     solver.tol = 1e-6;
-
 
     // APPROXIMATION ORDER TEST
 
