@@ -69,13 +69,22 @@ void ode_AB4(T start_time, T end_time, T tau, std::vector<T> x, const std::vecto
 
     }
 
+	T c1 = 55;
+	T c2 = 59;
+	T c3 = 37;
+	T c4 = 0.375;
+
+	c1 /= 24;
+	c2 /= 24;
+	c3 /= 24;
+	
 	while (start_time <= end_time){
 		
 		start_time += tau;
         
         fout << start_time;
         for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += tau * (2.2916666666666667 * func_value[i][3] - 2.4583333333333333 * func_value[i][2] + 1.5416666666666667 * func_value[i][1] - 0.375 * func_value[i][0]);
+			x[i] += tau * (c1 * func_value[i][3] - c2 * func_value[i][2] + c3 * func_value[i][1] - c4 * func_value[i][0]);
             fout << "," << x[i];
 		}
 		fout << "," << tau << "\n";
@@ -149,7 +158,21 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
 
     }
 
-	
+	T c1 = 55;
+	T c2 = 59;
+	T c3 = 37;
+	T c4 = 0.375;
+	T c5 = 19;
+	T c6 = 5;
+
+	c1 /= 24;
+	c2 /= 24;
+	c3 /= 24;
+	c5 /= 24;
+	c6 /= 24;
+
+
+
 	while (start_time <= end_time){
 
 		tmp.assign(x.begin(), x.end());
@@ -157,7 +180,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
         //prediction (AB4 step)
 		start_time += tau;
         for(std::size_t i = 0; i < func.size(); ++i){
-			tmp[i] += tau * (2.2916666666666667 * func_value[i][3] - 2.4583333333333333 * func_value[i][2] + 1.5416666666666667 * func_value[i][1] - 0.375 * func_value[i][0]);
+			tmp[i]  += tau * (c1 * func_value[i][3] - c2 * func_value[i][2] + c3 * func_value[i][1] - c4 * func_value[i][0]);
 		}
 
         for(std::size_t i = 0; i < func.size(); ++i){
@@ -168,7 +191,7 @@ void ode_Predictor_Corrector(T start_time, T end_time, T tau, std::vector<T> x, 
         //correction
         fout << start_time;
         for(std::size_t i = 0; i < func.size(); ++i){
-			x[i] += tau * (0.375 * func_value[i][3] + 0.791666666666667 * func_value[i][2] - 0.2083333333333333 * func_value[i][1] + 0.04166666666666667 * func_value[i][0]);
+			x[i] += tau * (c4 * func_value[i][3] + c5 * func_value[i][2] - c6 * func_value[i][1] + func_value[i][0] / 24);
             fout << "," << x[i];
         }
 		fout << "," << tau << "\n";

@@ -34,7 +34,7 @@ T RK2_coef(const T t, const T tau, const std::vector<T> &x, const std::size_t k,
 
     k2 = tau * func(tmp, t + tau);
 
-    return 0.5 * (k1 + k2);
+    return (k1 + k2) / 2;
 }
 
 /*

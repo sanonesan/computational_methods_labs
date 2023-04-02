@@ -21,6 +21,7 @@
     void RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const std::vector<F> &func, const T tol, const string &out_path);
 */
 
+
 /*
         Вычисление коэффициентов метода Рунге-Кутты
 */
@@ -31,16 +32,16 @@ T RK4_coef(const T t, const T tau, const std::vector<T> &x, const std::size_t k,
 
     k1 = tau * func(tmp, t);
 
-    tmp[k] = x[k] + 0.5 * k1;
-    k2 = tau * func(tmp, t + 0.5 * tau);
+    tmp[k] = x[k] + k1 / 2;
+    k2 = tau * func(tmp, t + tau / 2);
     
-    tmp[k] = x[k] + 0.5 * k2;
-    k3 = tau * func(tmp, t + 0.5 * tau);
+    tmp[k] = x[k] + k2 / 2;
+    k3 = tau * func(tmp, t + tau / 2);
     
     tmp[k] = x[k] + k3;
     k4 = tau * func(tmp, t + tau);
 
-    return 0.166666666666667 * (k1 + k4) + 0.333333333333333 * (k2 + k3);
+    return (k1 + k4) / 6 + (k2 + k3) / 3;
 }
 
 /*
@@ -81,6 +82,11 @@ void ode_RK4_fix_step(T start_time, T end_time, T tau, std::vector<T> x, const s
         tmp.assign(x.begin(), x.end());
 
         start_time += tau;
+        if(fabs(start_time - end_time) < 1e-8){
+            std::cout.precision(17);
+            std::cout << start_time << " " << end_time << "\n";
+
+        }
     }
 
     fout.close();
