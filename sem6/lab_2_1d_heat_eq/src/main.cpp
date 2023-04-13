@@ -11,16 +11,17 @@ int main(int args, char **argv){
     T t, t_final, tau, x, end_x, h;
     
     t = 0.;
-    t_final = 5.;
-    tau = 0.1;
+    t_final = 1.;
+    tau = 0.01;
 
-    x = 0.;
-    end_x = 5.;
-    h = 0.1;
+    x = 0;
+    end_x = 1.;
+    h = 0.02;
+
 
     Test1<T> test;
     
-    solver.solve_eq(t, t_final, tau, x, end_x, h, test._system);
+    solver.solve_eq(t, t_final, tau, test.x0, test.xl, h, test._system);
 
 
     return 0;
