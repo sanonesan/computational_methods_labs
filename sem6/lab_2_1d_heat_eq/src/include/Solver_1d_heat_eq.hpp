@@ -1,7 +1,7 @@
 #pragma once
 
-#include<vector>
-
+#include <vector>
+#include "./1d_heat_equation/scheme_1.hpp"
 
 template<class T>
 class Solver_1d_heat_eq{
@@ -27,12 +27,12 @@ class Solver_1d_heat_eq{
         }
 
         template<typename F>
-        void solve_eq(){
-            
-            std::string out_path;
-            out_path = this->output_folder + this->file_name + "_ode_Euler_output.csv";     
-        }
+        void solve_eq(T start_time, T end_time, T tau, T start_x, T end_x, T h, const std::vector<F> &func){
 
+            std::string out_path;
+            out_path = this->output_folder + this->file_name + "_1d_heat_eq_output.csv";
+            scheme1(start_time, end_time, tau, start_x, end_x, h, func, out_path);
+        }
 
 
 };
