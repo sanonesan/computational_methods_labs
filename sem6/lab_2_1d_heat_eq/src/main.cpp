@@ -8,17 +8,6 @@ int main(int args, char **argv){
     
     Solver_1d_heat_eq<T> solver;
 
-    T t, t_final, tau, x, end_x, h;
-    
-    t = 0.;
-    t_final = 1.;
-    tau = 0.01;
-
-    x = 0;
-    end_x = 1.;
-    h = 0.02;
-
-
     Test1<T> test;
 
     solver.solve_eq(test);

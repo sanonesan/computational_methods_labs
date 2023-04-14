@@ -14,9 +14,28 @@
 template<class T>
 class Solver_1d_heat_eq{
 
+    private:
+
+        void check_folder(const std::string& str){
+
+            std::ifstream dir_stream(str.c_str());
+
+            if (!dir_stream) {
+                std::cout << "Folder created!\n" << "path:\t" << str << "\n\n";
+                const int dir_err = mkdir(str.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+                if (dir_err == -1)
+                {
+                    std::cout << ("Error creating directory!\n");
+                    exit(1);
+                }               
+                
+            }
+
+        }
+
     public:
 
-        T tol = 1e-3;
+        T tol = 1e-6;
         std::string file_name = "";
         std::string output_folder = "../output/";
 
@@ -37,25 +56,11 @@ class Solver_1d_heat_eq{
         //template<typename F>
         void solve_eq(Class_1d_heat_equation<T>& heat_equation){
 
-
-            //const std::string dir("diag/curr/rq");
-
-            std::ifstream dir_stream(this->output_folder.c_str());
-
-            if (!dir_stream) {
-                std::cout << "Folder created!\n" << "path:\t" << this->output_folder << "\n\n";
-                const int dir_err = mkdir(this->output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-                if (dir_err == -1)
-                {
-                    std::cout << ("Error creating directory!\n");
-                    exit(1);
-                }               
-                
-            }
-
+            this->check_folder(this->output_folder);
             std::string out_path;
             out_path = this->output_folder + this->file_name + "_1d_heat_eq_output";
             implicit_2_layer_difference_scheme(heat_equation, out_path);
+
         }
 
 
