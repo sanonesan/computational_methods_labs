@@ -179,5 +179,4 @@ void ode_RK4_vary_step(T start_time, T end_time, T tau, std::vector<T> x, const 
     return;
 }
 
-
 #endif

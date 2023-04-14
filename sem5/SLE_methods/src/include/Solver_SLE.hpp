@@ -9,6 +9,7 @@
 #include "../../../../structures/linalg/Matrix_n_Vector.hpp"
 #include "./SLE_methods/QR_method.hpp"
 #include "./SLE_methods/method_gauss.hpp"
+#include "./SLE_methods/banded_sle.hpp"
 
 /**
  * Решение СЛАУ:
@@ -91,6 +92,37 @@ public:
 
         return result;
     }
+
+    /**   Ax = b
+    *
+    *    Regular matrix A: 
+    *    [b, c, 0,........]   [d]
+    *    [a, b, c,........]   [d]
+    *    [0, a, b, c,.....]   [d]
+    *    .................. = ...
+    *    [......., a, b, c]   [d]
+    *    [.........., a, b]   [d]  
+    * 
+    *    Vector b:
+    * 
+    *    b = [d, d, d, d, d]
+    * 
+    * 
+    *   Banded matrix from A:
+    * 
+    *    banded_matrix = [
+    *        [c, c, c, c, *],
+    *        [b, b, b, b, b],
+    *        [*, a, a, a, a],
+    *    ]
+    *    
+    */
+    Vector<T> solve_banded(const std::size_t l, const std::size_t u, Matrix<T>& banded_matrix, Vector<T>& b){
+        
+        Vector<T> solution = banded_sle(l, u, banded_matrix, b);
+
+        return solution;
+    };
 
 };
 

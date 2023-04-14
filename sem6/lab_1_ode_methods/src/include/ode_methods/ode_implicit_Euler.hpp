@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../../../../../sem5/lab_1_SLE_methods/src/include/Solver_SLE.hpp"
+#include "../../../../../sem5/SLE_methods/src/include/Solver_SLE.hpp"
 #include "../../../../../structures/linalg/Matrix_n_Vector.hpp"
 #include "./numerical_Jacobian_for_ode_sys.hpp"
 #include "./numerical_derivative_for_ode_sys.hpp"
