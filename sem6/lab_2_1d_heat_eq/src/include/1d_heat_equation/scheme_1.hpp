@@ -5,11 +5,32 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include "../Class_1d_heat_equation.hpp"
 
-template <typename T, typename F>
-void scheme1(T start_time, T end_time, T tau, T start_x, T end_x, T h, const std::vector<F> &func, const std::string &out_path) {
 
-    std::ofstream fout(out_path);
+template <typename T>
+void scheme_1(Class_1d_heat_equation<T>& heat_equation, const std::string &out_path) {
+    
+    std::ofstream fout(out_path + "_t.csv");
+    if (!fout) {
+        std::cout << "\n error \n";
+        return;
+    }
+
+    fout << std::scientific;
+	fout << std::setprecision(8);
+    
+    std::vector<T> time;
+    time.push_back(heat_equation._start_time);
+    fout << time[time.size() - 1] << "\n";
+    while(time[time.size() - 1] <= heat_equation._end_time){
+        time.push_back(time[time.size() - 1] + heat_equation._tau);
+        fout << time[time.size() - 1] << "\n";
+    }
+
+    fout.close();
+
+    fout.open(out_path + "_x.csv");
     if (!fout) {
         std::cout << "\n error \n";
         return;
@@ -18,70 +39,65 @@ void scheme1(T start_time, T end_time, T tau, T start_x, T end_x, T h, const std
     fout << std::scientific;
 	fout << std::setprecision(8);
 
-    fout << "time";
-
     std::vector<T> x;
+    x.push_back(heat_equation._x0);
+    fout << x[x.size() - 1] << "\n";
+    while(x[x.size() - 1] + heat_equation._h <= heat_equation._xL){
+        x.push_back(x[x.size() - 1] + heat_equation._h);
+        fout << x[x.size() - 1] << "\n";
+    }
+
+    fout.close();
+
+    fout.open(out_path + "_y.csv");
+    if (!fout) {
+        std::cout << "\n error \n";
+        return;
+    }
+
+    fout << std::scientific;
+	fout << std::setprecision(8);
+
     std::vector<T> y;
+    y.assign(x.begin(), x.end());
 
-    x.push_back(start_x);
-    fout << ",u" << x.size() - 1;
-
-    while (x[x.size() - 1] < end_x)
-    {   
-        x.push_back(x[x.size() - 1] + h);
-        fout << ",u" << x.size() - 1;
-
-        // if (x[x.size() - 1] + h > end_x){
-        //     break;
-        // }
-
-    }
-    
-    fout << "\n" << start_time;
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        fout << "," << x[i];
-    }
-    fout << "\n" << start_time;
-    y.push_back(func[1](x[0], start_time));
-    fout << "," << y[0];
-    for (std::size_t i = 1; i < x.size()-1; ++i) {
-        y.push_back(func[0](x[i], start_time));
+    y[0] = heat_equation._boundary_conditions[0](x[0], time[0]);
+    fout << y[0];
+    for(std::size_t i = 1; i < x.size()-1; ++i){
+        y[i] = heat_equation._initial_conditions(x[i], time[0]);
         fout << "," << y[i];
+
     }
-    y.push_back(func[2](x[x.size()-1], start_time));
-    fout << "," << y[x.size()-1];
+    y[y.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[0]);
+    fout << "," << y[y.size() - 1] << "\n";
+    
+    std::vector<T> y_prev;
+    y_prev.assign(y.begin(), y.end());
 
-    std::vector<T> tmp(y);
-    std::size_t counter = 0;
+    std::vector<T> a_i;
+    a_i.assign(x.begin(), x.end());
+    for(std::size_t i = 1; i < x.size(); ++i){
+        a_i[i] = heat_equation._K(x[i] - heat_equation._h / 2);
+    }
 
-    T C = 0;
-    C = tau / (h * h);
-    T ai, ai1;
-    while (start_time + tau <= end_time){
-        start_time += tau;
-        ++counter;
-        if(counter > y.size() / 2){
-            break;
-        }
-        for(std::size_t i = counter; i < tmp.size() - counter; ++i){
-            ai1 = func[3](tmp[i+1] - h / 2, start_time);
-            ai = func[3](tmp[i] - h / 2, start_time);
-            y[i] = C * ( ai1 * (tmp[i + 1] - tmp[i]) - ai * (tmp[i] - tmp[i - 1])) + tmp[i];
-        }
-        
-        // for(std::size_t i = 1; i < y.size()-1; ++i){
-        //     ai1 = func[3](tmp[i+1] - h / 2, start_time);
-        //     ai = func[3](tmp[i] - h / 2, start_time);
-        //     y[i] = C * ( ai1 * (tmp[i + 1] - tmp[i]) - ai * (tmp[i] - tmp[i - 1])) + tmp[i];
-        // }
+    T C = 0.;
+    C = heat_equation._tau / ( pow(heat_equation._h, 2) * heat_equation._c * heat_equation._rho );
 
-        y[0] = func[1](x[0], start_time);
-        y[y.size()-1] = func[2](x[x.size()-1], start_time);
+    for(std::size_t j = 1; j < time.size(); ++j){
 
-        fout << "\n" << start_time;
-        for (std::size_t i = 0; i < y.size(); ++i) {
+        y[0] = heat_equation._boundary_conditions[0](x[0], time[j]);
+        fout << y[0];
+        for(std::size_t i = 1; i < y.size() - 1; ++i){
+            y[i] = C * ( a_i[i + 1] * (y_prev[i+1] - y_prev[i]) - a_i[i] * (y_prev[i] - y_prev[i-1])) + y_prev[i];
             fout << "," << y[i];
         }
-        tmp.assign(y.begin(), y.end());
+        y[y.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[j]);
+        fout << "," << y[y.size() - 1] << "\n";
+        y_prev.assign(y.begin(), y.end());
+
     }
+
+
+    fout.close();
+
 };

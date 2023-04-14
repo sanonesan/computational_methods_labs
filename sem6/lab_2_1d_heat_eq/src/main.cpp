@@ -20,8 +20,8 @@ int main(int args, char **argv){
 
 
     Test1<T> test;
-    
-    solver.solve_eq(t, t_final, tau, test.x0, test.xl, h, test._system);
+
+    solver.solve_eq(test);
 
 
     return 0;

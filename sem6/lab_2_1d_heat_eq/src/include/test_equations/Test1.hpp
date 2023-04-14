@@ -4,46 +4,61 @@
 #include<cmath>
 #include<functional> 
 
+#include "../Class_1d_heat_equation.hpp"
+
 /*
-// ...........Тест..K = const.............. //
+// ...........Тест..1..из..методички.............. //
 */
 template<class T>
-class Test1{
+class Test1: virtual public Class_1d_heat_equation<T>{
 
     public:
 
-        // std::vector<T> _x0 = {1.,0};
-        std::vector<std::function<T (const T x, const T t)>> _system;
-        T x0 = 0.;
-        T xl = 1.;
-        T u0 = 0.;
-
         Test1(){
 
-            T 
-                c = 500., 
-                p = 7800.;
+            //material parameters
+            this->_c = 1.;
+            this->_rho = 1.;
             
-            auto K = [](T x, const T t) -> T{
+            //Space
+            this->_x0 = 0.;
+            this->_xL = 1.;
+            this->_h = 0.1;
+
+            //Time
+            this->_start_time = 0.;
+            this->_end_time = 0.1;
+            this->_tau = 0.005;
+
+            //initial temperature
+            this->_u0 = 1.61;
+
+
+            // Initial K(u, x)
+            auto K = [](T x) -> T{
                 return 1.;
             };
+            this->_K = K;
 
-            auto u_x_0 = [this](const T x, const T t) -> T{
-                return this->u0 + x * (this->xl - x);
-            };
 
+            // Boundary {u(x0, t), u(xL, t)}
             auto u_0_t = [this](const T x, const T t) -> T{
-                return this->u0;
+                return this->_u0;
             };
 
             auto u_L_t = [this](const T x, const T t) -> T{
-                return this->u0;
+                return this->_u0;
             };
 
-            _system.push_back(u_x_0);
-            _system.push_back(u_0_t);
-            _system.push_back(u_L_t);
-            _system.push_back(K);
+            this->_boundary_conditions.push_back(u_0_t);
+            this->_boundary_conditions.push_back(u_L_t);
+
+            // Initial u(x, 0)
+            auto u_x_0 = [this](const T x, const T t) -> T{
+                return this->_u0 + x * (this->_xL - x);
+            };
+
+            this->_initial_conditions = u_x_0;
             
         }
 
