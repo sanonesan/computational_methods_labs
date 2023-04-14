@@ -8,7 +8,7 @@
 
 
 template <typename T>
-void implicit_2_layer_difference_scheme(const Class_1d_heat_equation<T>& heat_equation, const std::string &out_path) {
+void explicit_2_layer_difference_scheme(const Class_1d_heat_equation<T>& heat_equation, const std::string &out_path) {
     
     //time steps + output
 

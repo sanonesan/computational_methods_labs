@@ -7,7 +7,7 @@
 
 #include <vector>
 #include "Class_1d_heat_equation.hpp"
-#include "./1d_heat_equation/implicit_2_layer_difference_scheme.hpp"
+#include "./1d_heat_equation/explicit_2_layer_difference_scheme.hpp"
 
 
 
@@ -59,7 +59,7 @@ class Solver_1d_heat_eq{
             this->check_folder(this->output_folder);
             std::string out_path;
             out_path = this->output_folder + this->file_name + "_1d_heat_eq_output";
-            implicit_2_layer_difference_scheme(heat_equation, out_path);
+            explicit_2_layer_difference_scheme(heat_equation, out_path);
 
         }
 
