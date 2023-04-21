@@ -9,6 +9,7 @@
 #include "Class_1d_heat_equation.hpp"
 #include "./1d_heat_equation/explicit_2_layer_difference_scheme.hpp"
 #include "./1d_heat_equation/implicit_2_layer_difference_scheme.hpp"
+#include "./1d_heat_equation/templated_2_layer_difference_scheme.hpp"
 
 
 
@@ -59,11 +60,13 @@ class Solver_1d_heat_eq{
 
             this->check_folder(this->output_folder);
             std::string out_path;
-            out_path = this->output_folder + this->file_name + "explicit_1d_heat_eq_output";
-            explicit_2_layer_difference_scheme(heat_equation, out_path);
-            out_path = this->output_folder + this->file_name + "implicit_1d_heat_eq_output";
-            implicit_2_layer_difference_scheme(heat_equation, out_path);
-
+            // out_path = this->output_folder + this->file_name + "explicit_1d_heat_eq_output";
+            // explicit_2_layer_difference_scheme(heat_equation, out_path);
+            // out_path = this->output_folder + this->file_name + "implicit_1d_heat_eq_output";
+            // implicit_2_layer_difference_scheme(heat_equation, out_path);
+            out_path = this->output_folder + this->file_name + "_1d_heat_eq_output";
+            templated_2_layer_difference_scheme(heat_equation, (T)0.5, out_path);
+            
         }
 
 

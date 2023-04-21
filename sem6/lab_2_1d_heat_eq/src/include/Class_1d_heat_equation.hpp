@@ -15,7 +15,7 @@ class Class_1d_heat_equation{
         //material parameters
         T _c = 1.;
         T _rho = 1.;
-        std::function<T (const T x)> _K;
+        std::function<T (const T u, const T x)> _K;
 
 
         //Space
@@ -33,6 +33,11 @@ class Class_1d_heat_equation{
 
         //vector = {u(x0, t), u(xL, t)}
         std::vector<std::function<T (const T x, const T t)>> _boundary_conditions;
+        // 0 -- first type BC
+        // 1 -- second type BC
+        std::size_t _left_boundary_condition_type = 0;
+        std::size_t _right_boundary_condition_type = 0;
+
         
         //u(x, start_time)
         std::function<T (const T x, const T t)> _initial_conditions;
