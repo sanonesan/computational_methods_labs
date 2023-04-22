@@ -174,6 +174,7 @@ class Matrix {
     Matrix<T>& subtract_this(const T value);
     Matrix<T>& multiply_this(const T value);
     Matrix<T>& divide_this(const T value);
+    Matrix<T>& nullify();
 
     // matrix norms
 
@@ -748,6 +749,24 @@ Matrix<T>& Matrix<T>::divide_this(const T value) {
             this->_array[i][j] = tmp;
         }
     }
+
+    return *this;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::nullify() {
+
+    if (this->_rows == 0 || this->_cols == 0)
+        throw std::invalid_argument("null matrix");
+
+    std::vector<T> tmp;
+
+    for(std::size_t i = 0; i < this->_cols; ++i)
+        tmp.push_back(0.);
+
+    for (std::size_t i = 0; i < this->_rows; ++i)
+        this->_array[i].assign(tmp.begin(), tmp.end());
+    
 
     return *this;
 }
