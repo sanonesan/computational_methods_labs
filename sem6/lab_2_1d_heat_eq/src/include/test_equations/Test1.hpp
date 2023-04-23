@@ -8,8 +8,8 @@
 
 /**
  * Линейная среда
- * 
- * 
+ * Постоянная температура на границах
+ * K(u, x) = const
  * 
 */
 template<class T>
@@ -34,7 +34,7 @@ class Test1: virtual public Class_1d_heat_equation<T>{
             this->_tau = 0.005;
 
             //initial temperature
-            this->_u0 = 1.61;
+            this->_u0 = 10.;
 
 
             // Initial K(u, x)
@@ -52,6 +52,9 @@ class Test1: virtual public Class_1d_heat_equation<T>{
             auto u_L_t = [this](const T x, const T t) -> T{
                 return this->_u0;
             };
+
+            this->_left_boundary_condition_type = 0;
+            this->_right_boundary_condition_type = 0;
 
             this->_boundary_conditions.push_back(u_0_t);
             this->_boundary_conditions.push_back(u_L_t);

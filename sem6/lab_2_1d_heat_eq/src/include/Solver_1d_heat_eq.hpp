@@ -64,8 +64,16 @@ class Solver_1d_heat_eq{
             if(sigma < 0. || sigma > 1.)
                 throw std::invalid_argument("sigma should be: 0 <= sigma <= 1");
 
+            out_path = this->output_folder + this->file_name;
 
-            out_path = this->output_folder + this->file_name + "_1d_heat_eq_output";
+            if (fabs(sigma) < 1e-16) {
+                out_path += "_1d_heat_eq_explicit_scheme_output";             
+            } else if (fabs(sigma - 1.) < 1e-16) {
+                out_path += "_1d_heat_eq_implicit_scheme_output";                
+            } else {
+                out_path += "_1d_heat_eq_mixed_scheme_output";                
+            }
+            
             templated_2_layer_difference_scheme(heat_equation, sigma, out_path);
             
         }

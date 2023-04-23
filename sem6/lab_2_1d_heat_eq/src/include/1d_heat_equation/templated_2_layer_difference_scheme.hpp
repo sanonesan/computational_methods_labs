@@ -13,7 +13,10 @@
 #include "./mixed_2_layer_difference_scheme.hpp"
 
 template <typename T, typename sigma_type>
-void templated_2_layer_difference_scheme(const Class_1d_heat_equation<T>& heat_equation, const sigma_type& sigma, const std::string& out_path) {
+void templated_2_layer_difference_scheme(
+    const Class_1d_heat_equation<T>& heat_equation,
+    const sigma_type& sigma,
+    const std::string& out_path) {
     /**
      *
      *
@@ -123,15 +126,15 @@ void templated_2_layer_difference_scheme(const Class_1d_heat_equation<T>& heat_e
      */
 
     if (fabs(sigma) < 1e-16) {
-        std::cout << "explicit scheme \n";
-        explicit_2_layer_difference_scheme(heat_equation, x, time, y, fout);
+        // std::cout << "explicit scheme \n";
+        explicit_2_layer_difference_scheme(heat_equation, time, x, y, fout);
 
     } else if (fabs(sigma - 1.) < 1e-16) {
-        std::cout << "implicit scheme \n";
-        implicit_2_layer_difference_scheme(heat_equation, x, time, y, fout);
+        // std::cout << "implicit scheme \n";
+        implicit_2_layer_difference_scheme(heat_equation, time, x, y, fout);
     } else {
-        std::cout << "mixed scheme \n";
-        mixed_2_layer_difference_scheme(heat_equation, x, time, y, sigma, fout);
+        // std::cout << "mixed scheme \n";
+        mixed_2_layer_difference_scheme(heat_equation, time, x, y, sigma, fout);
     }
 
     /**

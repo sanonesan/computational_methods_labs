@@ -15,8 +15,8 @@ template <typename T, typename sigma_type>
 void mixed_2_layer_difference_scheme(
 
     const Class_1d_heat_equation<T> &heat_equation,
-    const std::vector<T> &x,
     const std::vector<T> &time,
+    const std::vector<T> &x,
     std::vector<T> &y,
     const sigma_type &sigma,
     std::ofstream &fout){
@@ -45,19 +45,17 @@ void mixed_2_layer_difference_scheme(
     T mu = 0.;
 
     for (std::size_t j = 1; j < time.size(); ++j) {
-        b.assign(y.begin(), y.end());
-
+        
         banded_matrix[0][0] = 1;
 
-        if (heat_equation._left_boundary_condition_type == 1) {
+        if (heat_equation._left_boundary_condition_type == 0) {
+            b[0] = y[0];
+        } else if (heat_equation._left_boundary_condition_type == 1) {
+            a_i = _K_approximation(1);
 
             mu = c_rho_h_tau / 2 * y[0];
             mu -= sigma * heat_equation._boundary_conditions[0](x[0], time[j]);
-
-            a_i = _K_approximation(1);
-
             mu -= (1 - sigma) * (heat_equation._boundary_conditions[0](x[0], time[j-1]) - a_i * (y[1] - y[0]) / heat_equation._h );
-            
             mu /= c_rho_h_tau / 2 + sigma_h * a_i;
             b[0] = mu;        
             
@@ -73,28 +71,27 @@ void mixed_2_layer_difference_scheme(
             a_i_1 = _K_approximation(i + 1);
 
             // upper (B_i)
-            if (i < y.size() - 1)
-                banded_matrix[1][i] = sigma_h * a_i_1;
+            banded_matrix[1][i] = sigma_h * a_i_1;
 
             // diag (-C_i)
             banded_matrix[0][i] = -(sigma_h * (a_i + a_i_1) + c_rho_h_tau);
 
             // lower (A_i)
-            if (i > 0)
-                banded_matrix[2][i] = sigma_h * a_i;
+            banded_matrix[2][i] = sigma_h * a_i;
 
             b[i] = -(c_rho_h_tau * y[i] + (1 - sigma) * (a_i_1 * (y[i + 1] - y[i]) - a_i * (y[i] - y[i - 1])) / heat_equation._h);
         }
 
         banded_matrix[0][banded_matrix[0].size() - 1] = 1;
 
-        if (heat_equation._right_boundary_condition_type == 1) {
+        if (heat_equation._right_boundary_condition_type == 0) {
+            b[b.size() - 1] = y[y.size() - 1];
+        } else if (heat_equation._right_boundary_condition_type == 1) {
+            a_i = _K_approximation(y.size() - 1);
+
 
             mu = c_rho_h_tau / 2 * y[y.size() - 1];
             mu += sigma * heat_equation._boundary_conditions[1](x[x.size() - 1], time[j]);
-
-            a_i = _K_approximation(y.size() - 1);
-
             mu += (1 - sigma) * (heat_equation._boundary_conditions[1](x[x.size() - 1], time[j-1]) - a_i * (y[y.size() - 1] - y[y.size() - 2]) / heat_equation._h);
             mu /= c_rho_h_tau / 2 + sigma_h * a_i;
             b[b.size() - 1] = mu;        
@@ -107,9 +104,7 @@ void mixed_2_layer_difference_scheme(
 
         solution = solver_SLE.solve_banded(1, 1, banded_matrix, b);
 
-        for (std::size_t i = 0; i < solution.size(); ++i) {
-            y[i] = solution[i];
-        }
+        y.assign(solution.begin(), solution.end());
 
         fout << y[0];
         for (std::size_t i = 1; i < x.size() - 1; ++i) {
