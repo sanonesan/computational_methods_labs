@@ -31,7 +31,7 @@ class Test3: virtual public Class_1d_heat_equation<T>{
             //Time
             this->_start_time = 0.;
             this->_tau = 0.0002;
-            this->_end_time = 0.1;
+            this->_end_time = 1.;
             
 
             //initial temperature
@@ -46,11 +46,11 @@ class Test3: virtual public Class_1d_heat_equation<T>{
 
             // Boundary {u(x0, t), u(xL, t)}
             auto u_0_t = [this](const T x, const T t) -> T{
-                return this->_u0;
+                return this->_u0 * pow(t, 0.5);
             };
 
             auto u_L_t = [this](const T x, const T t) -> T{
-                return this->_u0 * pow(t, 0.5);
+                return 0.;
             };
 
             // 0 -- first type BC

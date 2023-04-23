@@ -49,7 +49,7 @@ void mixed_2_layer_difference_scheme(
         banded_matrix[0][0] = 1;
 
         if (heat_equation._left_boundary_condition_type == 0) {
-            b[0] = y[0];
+            b[0] = heat_equation._boundary_conditions[0](x[0], time[j - 1]);
         } else if (heat_equation._left_boundary_condition_type == 1) {
             a_i = _K_approximation(1);
 
@@ -85,7 +85,7 @@ void mixed_2_layer_difference_scheme(
         banded_matrix[0][banded_matrix[0].size() - 1] = 1;
 
         if (heat_equation._right_boundary_condition_type == 0) {
-            b[b.size() - 1] = y[y.size() - 1];
+            b[b.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[j - 1]);
         } else if (heat_equation._right_boundary_condition_type == 1) {
             a_i = _K_approximation(y.size() - 1);
 

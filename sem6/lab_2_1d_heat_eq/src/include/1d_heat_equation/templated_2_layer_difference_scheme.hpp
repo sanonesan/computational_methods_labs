@@ -104,13 +104,21 @@ void templated_2_layer_difference_scheme(
     fout << "\n";
 
     // get initial values for solution vector + output
-    y[0] = heat_equation._initial_conditions(x[0], time[0]);
+    if (heat_equation._left_boundary_condition_type == 0){
+        y[0] = heat_equation._boundary_conditions[0](x[0], time[0]);
+    } else {
+        y[0] = heat_equation._initial_conditions(x[0], time[0]);
+    }
     fout << y[0];
     for (std::size_t i = 1; i < x.size() - 1; ++i) {
         y[i] = heat_equation._initial_conditions(x[i], time[0]);
         fout << "," << y[i];
     }
-    y[y.size() - 1] = heat_equation._initial_conditions(x[x.size() - 1], time[0]);
+    if (heat_equation._right_boundary_condition_type == 0){
+        y[y.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[0]);
+    } else {
+        y[y.size() - 1] = heat_equation._initial_conditions(x[x.size() - 1], time[0]);
+    }
     fout << "," << y[y.size() - 1] << "\n";
 
     /**
