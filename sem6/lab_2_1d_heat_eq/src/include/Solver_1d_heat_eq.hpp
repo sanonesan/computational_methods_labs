@@ -55,17 +55,18 @@ class Solver_1d_heat_eq{
             this->file_name = file_name;
         }
 
-        //template<typename F>
-        void solve_eq(Class_1d_heat_equation<T>& heat_equation){
+        template <typename sigma_type>
+        void solve_eq(Class_1d_heat_equation<T>& heat_equation, const sigma_type sigma){
 
             this->check_folder(this->output_folder);
             std::string out_path;
-            // out_path = this->output_folder + this->file_name + "explicit_1d_heat_eq_output";
-            // explicit_2_layer_difference_scheme(heat_equation, out_path);
-            // out_path = this->output_folder + this->file_name + "implicit_1d_heat_eq_output";
-            // implicit_2_layer_difference_scheme(heat_equation, out_path);
+
+            if(sigma < 0. || sigma > 1.)
+                throw std::invalid_argument("sigma should be: 0 <= sigma <= 1");
+
+
             out_path = this->output_folder + this->file_name + "_1d_heat_eq_output";
-            templated_2_layer_difference_scheme(heat_equation, (T)0.5, out_path);
+            templated_2_layer_difference_scheme(heat_equation, sigma, out_path);
             
         }
 

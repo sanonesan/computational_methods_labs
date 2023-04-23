@@ -6,8 +6,10 @@
 
 #include "../Class_1d_heat_equation.hpp"
 
-/*
-// ...........Тест..2..из..методички.............. //
+/**
+ * Тест 2 из методички
+ * Линейная среда
+ * Теплоизолированные концы
 */
 template<class T>
 class Test2: virtual public Class_1d_heat_equation<T>{
@@ -44,11 +46,11 @@ class Test2: virtual public Class_1d_heat_equation<T>{
             // Boundary {u(x0, t), u(xL, t)}
             auto u_0_t = [this](const T x, const T t) -> T{
                 //return this->_u0; //;
-                return - this->_u0 * pow(2, t);
+                return 0.;
             };
 
             auto u_L_t = [this](const T x, const T t) -> T{
-                return this->_u0 * pow(2, t);
+                return 0.;
             };
 
             // 0 -- first type BC
@@ -61,7 +63,7 @@ class Test2: virtual public Class_1d_heat_equation<T>{
 
             // Initial u(x, 0)
             auto u_x_0 = [this](const T x, const T t) -> T{
-                return this->_u0 ; //+ x * (this->_xL - x);
+                return this->_u0 + x * (this->_xL - x);
             };
 
             this->_initial_conditions = u_x_0;

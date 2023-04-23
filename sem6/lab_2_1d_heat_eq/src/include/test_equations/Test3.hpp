@@ -6,8 +6,11 @@
 
 #include "../Class_1d_heat_equation.hpp"
 
-/*
-// ...........Тест..3..из..методички.............. //
+/**
+ * Тест 3 из методички
+ * Нелинейная среда
+ * Постоянная температура на левой границе
+ * Поток на правой границе
 */
 template<class T>
 class Test3: virtual public Class_1d_heat_equation<T>{
