@@ -11,6 +11,9 @@
 #include "./SLE_methods/method_gauss.hpp"
 #include "./SLE_methods/banded_sle.hpp"
 
+
+#include "./SLE_methods/Jacoby_method.hpp"
+
 /**
  * Решение СЛАУ:
  * - метод Гаусса;
@@ -20,20 +23,20 @@ template <class T>
 class Solver_SLE {
 
 public:
-    double tol = 1e-3;
+    double tolerance = 1e-9;
     std::string file_name = "";
     std::string output_folder = "../output/";
 
     // Default constructor
     Solver_SLE() {
-        this->tol = 1e-9;
+        this->tolerance = 1e-9;
         this->output_folder = "../output/";
         this->file_name = "";
     }
 
     // Alt constructor
-    Solver_SLE(T tol, std::string output_folder, std::string file_name) {
-        this->tol = tol;
+    Solver_SLE(T tolerance, std::string output_folder, std::string file_name) {
+        this->tolerance = tolerance;
         this->output_folder = "../output/";
         this->file_name = file_name;
     }
@@ -48,6 +51,7 @@ public:
         // out_path = this->output_folder + this->file_name + ".csv";
 
         Vector<T> result;
+
         method_gauss(A, b, result);
 
         return result;
@@ -120,6 +124,14 @@ public:
     Vector<T> solve_banded(const std::size_t l, const std::size_t u, Matrix<T>& banded_matrix, Vector<T>& b){
         
         Vector<T> solution = banded_sle(l, u, banded_matrix, b);
+
+        return solution;
+    };
+
+
+    Vector<T> solve_Jacoby(Matrix<T>& A, Vector<T>& b, Vector<T>& x0){
+        
+        Vector<T> solution = Jacoby_method(A, b, x0, this->tolerance);
 
         return solution;
     };
