@@ -51,6 +51,7 @@ int main(int args, char **argv){
     solver.solve_eq(test3, 1);
     solver.solve_eq(test3, 0.5);
     std::cout << "\n";
+    
 
     Test4<T> test4;
     solver.output_folder = "../output/Test4/";

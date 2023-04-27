@@ -32,7 +32,7 @@ void explicit_2_layer_difference_scheme(
     Vector<T> solution(y);
     Vector<T> y_tmp(y);
     Vector<T> b(y.size());
-    Matrix<T> banded_matrix(3, y.size());
+    Matrix<T> banded_matrix(1, y.size());
 
     T c_rho_h_tau = 0.;
 
