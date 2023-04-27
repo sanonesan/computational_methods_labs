@@ -42,7 +42,7 @@ void templated_2_layer_difference_scheme(
     std::vector<T> time;
 
     fout << "time\n";
-    time.resize(std::size_t((heat_equation._end_time - heat_equation._start_time) / heat_equation._tau + 1));
+    time.resize(std::size_t( floor((heat_equation._end_time - heat_equation._start_time) / heat_equation._tau) + 1));
     time[0] = heat_equation._start_time;
     fout << time[0] << "\n";
     for (std::size_t i = 1; i < time.size() - 1; ++i) {
