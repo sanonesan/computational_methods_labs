@@ -16,7 +16,9 @@ class Class_1d_heat_equation{
         T _c = 1.;
         T _rho = 1.;
         std::function<T (const T u, const T x)> _K;
-
+        // 0 -- linear K (K = const || K = K(x))
+        // 1 -- nonlinear K (K = K(u) || K = K(u, x))
+        std::size_t _K_type = 0;
 
         //Space
         T _x0 = 0.;

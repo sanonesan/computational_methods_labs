@@ -42,7 +42,8 @@ class Test2: virtual public Class_1d_heat_equation<T>{
                 return x * (this->_xL - x);
             };
             this->_K = K;
-
+            this->_K_type = 0;
+            
             // Boundary {u(x0, t), u(xL, t)}
             auto u_0_t = [this](const T x, const T t) -> T{
                 //return this->_u0; //;

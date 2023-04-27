@@ -19,17 +19,20 @@ void mixed_2_layer_difference_scheme(
     const std::vector<T> &x,
     std::vector<T> &y,
     const sigma_type &sigma,
+    const std::size_t& inner_iteration_threshold,
+    const T& tolerance,
     std::ofstream &fout){
 
-    auto _K_approximation = [heat_equation, y, x](const std::size_t i) -> T{
-        if(i == 0){
+    auto _K_approximation = [heat_equation, x](const std::vector<T>& y, const std::size_t i) -> T {
+        if (i == 0) {
             throw std::invalid_argument("0 < i < y.size()");
         }
-        return (heat_equation._K(y[i], x[i]) + heat_equation._K(y[i-1], x[i-1])) / 2;
+        return (heat_equation._K(y[i], x[i]) + heat_equation._K(y[i - 1], x[i - 1])) / 2;
     };
 
     Solver_SLE<T> solver_SLE;
-    Vector<T> solution(y.size());
+    Vector<T> solution(y);
+    Vector<T> y_tmp(y);
     Vector<T> b(y.size());
     Matrix<T> banded_matrix(3, y.size());
 
@@ -44,65 +47,81 @@ void mixed_2_layer_difference_scheme(
     T kappa = 0.;
     T mu = 0.;
 
+    std::size_t iter = 0;
+
     for (std::size_t j = 1; j < time.size(); ++j) {
-        
-        banded_matrix[0][0] = 1;
 
-        if (heat_equation._left_boundary_condition_type == 0) {
-            b[0] = heat_equation._boundary_conditions[0](x[0], time[j - 1]);
-        } else if (heat_equation._left_boundary_condition_type == 1) {
-            a_i = _K_approximation(1);
+        do {
+            ++iter;
 
-            mu = c_rho_h_tau / 2 * y[0];
-            mu -= sigma * heat_equation._boundary_conditions[0](x[0], time[j]);
-            mu -= (1 - sigma) * (heat_equation._boundary_conditions[0](x[0], time[j-1]) - a_i * (y[1] - y[0]) / heat_equation._h );
-            mu /= c_rho_h_tau / 2 + sigma_h * a_i;
-            b[0] = mu;        
-            
-            kappa = sigma_h * a_i;
-            kappa /= c_rho_h_tau / 2 + sigma_h * a_i;
-            banded_matrix[1][0] = -kappa;
+            y_tmp.assign(solution.begin(), solution.end());
 
-        }
+            banded_matrix[0][0] = 1;
 
-        for (std::size_t i = 1; i < b.size() - 1; ++i) {
+            if (heat_equation._left_boundary_condition_type == 0) {
+                b[0] = heat_equation._boundary_conditions[0](x[0], time[j - 1]);
+            } else if (heat_equation._left_boundary_condition_type == 1) {
+                a_i = _K_approximation(y_tmp, 1);
 
-            a_i = _K_approximation(i);
-            a_i_1 = _K_approximation(i + 1);
+                mu = c_rho_h_tau / 2 * y[0];
+                mu -= sigma * heat_equation._boundary_conditions[0](x[0], time[j]);
+                mu -= (1 - sigma) * (heat_equation._boundary_conditions[0](x[0], time[j-1]) - a_i * (y[1] - y[0]) / heat_equation._h );
+                mu /= c_rho_h_tau / 2 + sigma_h * a_i;
+                b[0] = mu;        
+                
+                kappa = sigma_h * a_i;
+                kappa /= c_rho_h_tau / 2 + sigma_h * a_i;
+                banded_matrix[1][0] = -kappa;
 
-            // upper (B_i)
-            banded_matrix[1][i] = sigma_h * a_i_1;
+            }
 
-            // diag (-C_i)
-            banded_matrix[0][i] = -(sigma_h * (a_i + a_i_1) + c_rho_h_tau);
+            for (std::size_t i = 1; i < b.size() - 1; ++i) {
 
-            // lower (A_i)
-            banded_matrix[2][i] = sigma_h * a_i;
+                a_i = _K_approximation(y_tmp, i);
+                a_i_1 = _K_approximation(y_tmp, i + 1);
 
-            b[i] = -(c_rho_h_tau * y[i] + (1 - sigma) * (a_i_1 * (y[i + 1] - y[i]) - a_i * (y[i] - y[i - 1])) / heat_equation._h);
-        }
+                // upper (B_i)
+                banded_matrix[1][i] = sigma_h * a_i_1;
 
-        banded_matrix[0][banded_matrix[0].size() - 1] = 1;
+                // diag (-C_i)
+                banded_matrix[0][i] = -(sigma_h * (a_i + a_i_1) + c_rho_h_tau);
 
-        if (heat_equation._right_boundary_condition_type == 0) {
-            b[b.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[j - 1]);
-        } else if (heat_equation._right_boundary_condition_type == 1) {
-            a_i = _K_approximation(y.size() - 1);
+                // lower (A_i)
+                banded_matrix[2][i] = sigma_h * a_i;
 
+                b[i] = -(c_rho_h_tau * y[i] + (1 - sigma) * (a_i_1 * (y[i + 1] - y[i]) - a_i * (y[i] - y[i - 1])) / heat_equation._h);
+            }
 
-            mu = c_rho_h_tau / 2 * y[y.size() - 1];
-            mu += sigma * heat_equation._boundary_conditions[1](x[x.size() - 1], time[j]);
-            mu += (1 - sigma) * (heat_equation._boundary_conditions[1](x[x.size() - 1], time[j-1]) - a_i * (y[y.size() - 1] - y[y.size() - 2]) / heat_equation._h);
-            mu /= c_rho_h_tau / 2 + sigma_h * a_i;
-            b[b.size() - 1] = mu;        
-            
-            kappa = sigma_h * a_i;
-            kappa /= c_rho_h_tau / 2 + sigma_h * a_i;
-            banded_matrix[2][banded_matrix[2].size() - 1] = -kappa;
+            banded_matrix[0][banded_matrix[0].size() - 1] = 1;
 
-        }
+            if (heat_equation._right_boundary_condition_type == 0) {
+                b[b.size() - 1] = heat_equation._boundary_conditions[1](x[x.size() - 1], time[j - 1]);
+            } else if (heat_equation._right_boundary_condition_type == 1) {
+                a_i = _K_approximation(y_tmp, y.size() - 1);
 
-        solution = solver_SLE.solve_banded(1, 1, banded_matrix, b);
+                mu = c_rho_h_tau / 2 * y[y.size() - 1];
+                mu += sigma * heat_equation._boundary_conditions[1](x[x.size() - 1], time[j]);
+                mu += (1 - sigma) * (heat_equation._boundary_conditions[1](x[x.size() - 1], time[j-1]) - a_i * (y[y.size() - 1] - y[y.size() - 2]) / heat_equation._h);
+                mu /= c_rho_h_tau / 2 + sigma_h * a_i;
+                b[b.size() - 1] = mu;        
+                
+                kappa = sigma_h * a_i;
+                kappa /= c_rho_h_tau / 2 + sigma_h * a_i;
+                banded_matrix[2][banded_matrix[2].size() - 1] = -kappa;
+
+            }
+
+            solution = solver_SLE.solve_banded(1, 1, banded_matrix, b);
+
+            if (inner_iteration_threshold != 0 
+                && iter == inner_iteration_threshold){
+                break;
+            }
+
+        } while (heat_equation._K_type == 1 && (solution - y_tmp).norm_inf() > tolerance);
+
+        // std::cout << iter << "\n";
+        // iter = 0;
 
         y.assign(solution.begin(), solution.end());
 

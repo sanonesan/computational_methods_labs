@@ -16,6 +16,8 @@ template <typename T, typename sigma_type>
 void templated_2_layer_difference_scheme(
     const Class_1d_heat_equation<T>& heat_equation,
     const sigma_type& sigma,
+    const std::size_t& inner_iteration_threshold,
+    const T& tolerance,
     const std::string& out_path) {
     /**
      *
@@ -134,17 +136,13 @@ void templated_2_layer_difference_scheme(
      */
 
     if (fabs(sigma) < 1e-16) {
-        // std::cout << "explicit scheme \n";
-        explicit_2_layer_difference_scheme(heat_equation, time, x, y, fout);
-
+        explicit_2_layer_difference_scheme(heat_equation, time, x, y, inner_iteration_threshold, tolerance, fout);
     } else if (fabs(sigma - 1.) < 1e-16) {
-        // std::cout << "implicit scheme \n";
-        implicit_2_layer_difference_scheme(heat_equation, time, x, y, fout);
+        implicit_2_layer_difference_scheme(heat_equation, time, x, y, inner_iteration_threshold, tolerance, fout);
     } else {
-        // std::cout << "mixed scheme \n";
-        mixed_2_layer_difference_scheme(heat_equation, time, x, y, sigma, fout);
+        mixed_2_layer_difference_scheme(heat_equation, time, x, y, sigma, inner_iteration_threshold, tolerance, fout);
     }
-
+    
     /**
      * -------------------------------------------------- *
      */

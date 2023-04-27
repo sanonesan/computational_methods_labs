@@ -42,6 +42,7 @@ class Test1: virtual public Class_1d_heat_equation<T>{
                 return 1.;
             };
             this->_K = K;
+            this->_K_type = 0;
 
 
             // Boundary {u(x0, t), u(xL, t)}
