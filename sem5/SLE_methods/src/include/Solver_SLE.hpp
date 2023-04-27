@@ -13,6 +13,7 @@
 
 
 #include "./SLE_methods/Jacoby_method.hpp"
+#include "./SLE_methods/simple_iter_method.hpp"
 
 /**
  * Решение СЛАУ:
@@ -23,7 +24,7 @@ template <class T>
 class Solver_SLE {
 
 public:
-    double tolerance = 1e-9;
+    T tolerance = 1e-9;
     std::string file_name = "";
     std::string output_folder = "../output/";
 
@@ -132,6 +133,13 @@ public:
     Vector<T> solve_Jacoby(Matrix<T>& A, Vector<T>& b, Vector<T>& x0){
         
         Vector<T> solution = Jacoby_method(A, b, x0, this->tolerance);
+
+        return solution;
+    };
+
+    Vector<T> solve_simple_iter(Matrix<T>& A, Vector<T>& b, Vector<T>& x0, const T tau, const std::size_t M){
+        
+        Vector<T> solution = simple_iter_method(A, b, x0, tau, M, this->tolerance);
 
         return solution;
     };

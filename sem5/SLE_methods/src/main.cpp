@@ -27,7 +27,8 @@ int main(int args, char** argv) {
     // std::cout << std::get<2>(xQR) << "\n";
     
     Vector<double> x0(4);
-    std::cout << solver.solve_Jacoby(K, r, x0);
+    std::cout << solver.solve_Jacoby(K, r, x0) << "\n";
+    std::cout << solver.solve_simple_iter(K, r, x0, 0.005, 10);
     
     
 

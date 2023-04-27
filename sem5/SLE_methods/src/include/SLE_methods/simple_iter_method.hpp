@@ -1,22 +1,20 @@
-#ifndef JACOBY_METHOD_SLE_HPP
-#define JACOBY_METHOD_SLE_HPP
+#ifndef SIMPLE_ITER_METHOD_SLE_HPP
+#define SIMPLE_ITER_METHOD_SLE_HPP
 
 #include "../../../../../structures/linalg/Matrix_n_Vector.hpp"
 
 template<typename T>
 
-Vector<T> Jacoby_method(Matrix<T>& A, Vector<T> b, Vector<T> x, const T& tol){
+Vector<T> simple_iter_method(Matrix<T>& A, Vector<T> b, Vector<T> x, const T& tau, const std::size_t& M, const T& tol){
 
     std::size_t n = A.get_rows();
     Matrix<T> C(A);
 
+    C *= - tau;
+
     for (std::size_t i = 0; i < n; ++i){
-        for (std::size_t j = 0; j < n; ++ j){
-            if (i != j)
-                C[i][j] /= - C[i][i];
-        }
-        b[i] /= C[i][i];
-        C[i][i] = 0.;
+        C[i][i] += 1.;
+        b[i] *= tau;
     }
 
     T dC = C.norm_inf();
@@ -34,8 +32,8 @@ Vector<T> Jacoby_method(Matrix<T>& A, Vector<T> b, Vector<T> x, const T& tol){
             break;
         }
 
-        // if (iter == 1)
-        //     break;
+        if (iter == M && M != 0)
+            break;
 
         xk = x;
     }
