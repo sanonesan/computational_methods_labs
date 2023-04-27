@@ -7,10 +7,10 @@
 #include "../Class_1d_heat_equation.hpp"
 
 /**
- * Тест 3 из методички
- * Нелинейная среда
- * Постоянная температура на левой границе
- * Поток на правой границе
+ * Тест 3 из методички:
+ * Нелинейная среда;
+ * Постоянная температура на левой границе;
+ * Поток на правой границе (теплоизолированный конец);
 */
 template<class T>
 class Test3: virtual public Class_1d_heat_equation<T>{
@@ -18,6 +18,9 @@ class Test3: virtual public Class_1d_heat_equation<T>{
     public:
 
         Test3(){
+
+            //test name
+            this->_name = std::string (__func__);
 
             //material parameters
             this->_c = 5.;
@@ -43,6 +46,8 @@ class Test3: virtual public Class_1d_heat_equation<T>{
                 return 0.5 * pow(u, 2);
             };
             this->_K = K;
+            // 0 -- linear K (K = const || K = K(x))
+            // 1 -- nonlinear K (K = K(u) || K = K(u, x))
             this->_K_type = 1;
 
             // Boundary {u(x0, t), u(xL, t)}

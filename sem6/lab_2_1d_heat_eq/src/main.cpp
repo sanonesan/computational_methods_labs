@@ -12,62 +12,64 @@ int main(int args, char **argv){
     typedef double T;
     
     Solver_1d_heat_eq<T> solver;
+    solver.notifications = true;
 
-    // Test1<T> test1;
-    // solver.output_folder = "../output/Test1/";
-    // solver.file_name = "Test1";
+    Test1<T> test1;
+    solver.output_folder = "../output/Test1/";
+    solver.file_name = test1._name;
 
-    // solver.solve_eq(test1, 0);
-    // solver.solve_eq(test1, 1);
-    // solver.solve_eq(test1, 0.5);
+    solver.solve_eq(test1, 0);
+    solver.solve_eq(test1, 1);
+    solver.solve_eq(test1, 0.5);
+    std::cout << "\n";
 
-    // solver.output_folder = "../output/Test1/";
-    // solver.file_name = "Test1_not_mono";
+    solver.output_folder = "../output/Test1/";
+    solver.file_name = test1._name + "_not_mono";
     
-    // test1._tau = 0.01;
-    // test1._h;
-    // solver.solve_eq(test1, 0);
-    // solver.solve_eq(test1, 1);
-    // solver.solve_eq(test1, 0.5);
+    test1._tau = 0.01;
+    test1._h;
+    solver.solve_eq(test1, 0);
+    solver.solve_eq(test1, 1);
+    solver.solve_eq(test1, 0.5);
+    std::cout << "\n";
 
 
-    // Test2<T> test2;
-    // solver.output_folder = "../output/Test2/";
-    // solver.file_name = "Test2";
+    Test2<T> test2;
+    solver.output_folder = "../output/Test2/";
+    solver.file_name = test2._name;
 
-    // solver.solve_eq(test2, 0);
-    // solver.solve_eq(test2, 1);
-    // solver.solve_eq(test2, 0.5);
-
+    solver.solve_eq(test2, 0);
+    solver.solve_eq(test2, 1);
+    solver.solve_eq(test2, 0.5);
+    std::cout << "\n";
 
 
     Test3<T> test3;
     solver.output_folder = "../output/Test3/";
-    solver.file_name = "Test3";
-    solver.notifications = true;
-    test3._K_type = 1;
+    solver.file_name = test3._name;
     solver.solve_eq(test3, 0);
     solver.solve_eq(test3, 1);
     solver.solve_eq(test3, 0.5);
+    std::cout << "\n";
+
+    Test4<T> test4;
+    solver.output_folder = "../output/Test4/";
+    solver.file_name = test4._name;
+
+    solver.solve_eq(test4, 0);
+    solver.solve_eq(test4, 1);
+    solver.solve_eq(test4, 0.5);
+    std::cout << "\n";
 
 
+    Test5<T> test5;
+    solver.output_folder = "../output/Test5/";
+    solver.file_name = test5._name;
 
-    // Test4<T> test4;
-    // solver.output_folder = "../output/Test4/";
-    // solver.file_name = "Test4";
-
-    // solver.solve_eq(test4, 0);
-    // solver.solve_eq(test4, 1);
-    // solver.solve_eq(test4, 0.5);
-
-
-    // Test5<T> test5;
-    // solver.output_folder = "../output/Test5/";
-    // solver.file_name = "Test5";
-
-    // solver.solve_eq(test5, 0);
-    // solver.solve_eq(test5, 1);
-    // solver.solve_eq(test5, 0.5);
+    solver.solve_eq(test5, 0);
+    solver.solve_eq(test5, 1);
+    solver.solve_eq(test5, 0.5);
+    std::cout << "\n";
 
     return 0;
 }

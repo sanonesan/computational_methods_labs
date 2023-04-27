@@ -7,9 +7,9 @@
 #include "../Class_1d_heat_equation.hpp"
 
 /**
- * Тест 2 из методички
- * Линейная среда
- * Теплоизолированные концы
+ * Тест 2 из методички:
+ * Линейная среда;
+ * Теплоизолированные концы;
 */
 template<class T>
 class Test2: virtual public Class_1d_heat_equation<T>{
@@ -17,6 +17,10 @@ class Test2: virtual public Class_1d_heat_equation<T>{
     public:
 
         Test2(){
+
+            //test name
+            this->_name = std::string (__func__);
+
 
             //material parameters
             this->_c = 1.;
@@ -42,11 +46,12 @@ class Test2: virtual public Class_1d_heat_equation<T>{
                 return x * (this->_xL - x);
             };
             this->_K = K;
+            // 0 -- linear K (K = const || K = K(x))
+            // 1 -- nonlinear K (K = K(u) || K = K(u, x))
             this->_K_type = 0;
             
             // Boundary {u(x0, t), u(xL, t)}
             auto u_0_t = [this](const T x, const T t) -> T{
-                //return this->_u0; //;
                 return 0.;
             };
 

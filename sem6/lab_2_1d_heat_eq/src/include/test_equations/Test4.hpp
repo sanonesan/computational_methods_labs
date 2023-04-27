@@ -7,10 +7,9 @@
 #include "../Class_1d_heat_equation.hpp"
 
 /**
- * Тест 4
- * Потоки на левой и правой границах
- * Левая --- охлаждение
- * Правая --- нагрев
+ * Тест 4:
+ * Потоки на левой и правой границах:
+ * левая -- охлаждение, правая -- нагрев;
 */
 template<class T>
 class Test4: virtual public Class_1d_heat_equation<T>{
@@ -18,6 +17,10 @@ class Test4: virtual public Class_1d_heat_equation<T>{
     public:
 
         Test4(){
+
+            //test name
+            this->_name = std::string (__func__);
+
 
             //material parameters
             this->_c = 1.;
@@ -43,6 +46,8 @@ class Test4: virtual public Class_1d_heat_equation<T>{
                 return x * (this->_xL - x);
             };
             this->_K = K;
+            // 0 -- linear K (K = const || K = K(x))
+            // 1 -- nonlinear K (K = K(u) || K = K(u, x))
             this->_K_type = 0;
 
             // Boundary {u(x0, t), u(xL, t)}

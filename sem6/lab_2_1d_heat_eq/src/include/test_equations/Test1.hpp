@@ -7,9 +7,9 @@
 #include "../Class_1d_heat_equation.hpp"
 
 /**
- * Линейная среда
- * Постоянная температура на границах
- * K(u, x) = const
+ * Тест 1:
+ * Линейная среда;
+ * Постоянная температура на границах;
  * 
 */
 template<class T>
@@ -18,6 +18,10 @@ class Test1: virtual public Class_1d_heat_equation<T>{
     public:
 
         Test1(){
+
+            //test name
+            this->_name = std::string (__func__);
+
 
             //material parameters
             this->_c = 1.;
@@ -42,6 +46,8 @@ class Test1: virtual public Class_1d_heat_equation<T>{
                 return 1.;
             };
             this->_K = K;
+            // 0 -- linear K (K = const || K = K(x))
+            // 1 -- nonlinear K (K = K(u) || K = K(u, x))
             this->_K_type = 0;
 
 
