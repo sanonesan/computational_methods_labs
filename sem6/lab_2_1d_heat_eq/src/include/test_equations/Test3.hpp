@@ -23,7 +23,7 @@ class Test3: virtual public Class_1d_heat_equation<T>{
             this->_name = std::string (__func__);
 
             //material parameters
-            this->_c = 5.;
+            this->_c = 1.;
             this->_rho = 1.;
             
             //Space
@@ -38,7 +38,7 @@ class Test3: virtual public Class_1d_heat_equation<T>{
             
 
             //initial temperature
-            this->_u0 = pow(2 * this->_c * this->_c / 0.5, 0.5);
+            this->_u0 = pow(2. * 5. * 5. / 0.5, 0.5);
 
 
             // Initial K(u, x)
@@ -62,14 +62,14 @@ class Test3: virtual public Class_1d_heat_equation<T>{
             // 0 -- first type BC
             // 1 -- second type BC
             this->_left_boundary_condition_type = 0;
-            this->_right_boundary_condition_type = 1;
+            this->_right_boundary_condition_type = 0;
 
             this->_boundary_conditions.push_back(u_0_t);
             this->_boundary_conditions.push_back(u_L_t);
 
             // Initial u(x, 0)
             auto u_x_0 = [this](const T x, const T t) -> T{
-                return this->_u0;
+                return 0.;
             };
 
             this->_initial_conditions = u_x_0;

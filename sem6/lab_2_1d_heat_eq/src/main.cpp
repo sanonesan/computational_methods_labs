@@ -47,10 +47,12 @@ int main(int args, char **argv){
     Test3<T> test3;
     solver.output_folder = "../output/Test3/";
     solver.file_name = test3._name;
+    solver.inner_iteration_threshold = 100;
     solver.solve_eq(test3, 0);
     solver.solve_eq(test3, 1);
     solver.solve_eq(test3, 0.5);
     std::cout << "\n";
+    solver.inner_iteration_threshold = 0;
     
 
     Test4<T> test4;
