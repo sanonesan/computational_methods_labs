@@ -37,6 +37,9 @@ class Test1: virtual public Class_1d_heat_equation<T>{
             this->_end_time = 0.1;
             this->_tau = 0.005;
 
+            // this->_end_time = -0.1;
+            // this->_tau = -0.005;
+
             //initial temperature
             this->_u0 = 10.;
 
