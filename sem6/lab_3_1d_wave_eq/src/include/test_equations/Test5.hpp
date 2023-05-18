@@ -29,7 +29,7 @@ class Test5: virtual public Class_1d_wave_equation<T>{
 
             //Time
             this->_start_time = 0.;
-            this->_end_time = 10.;
+            this->_end_time = 5.;
             this->_tau = 0.005;
 
             // Boundary {u(x0, t), u(xL, t)}
