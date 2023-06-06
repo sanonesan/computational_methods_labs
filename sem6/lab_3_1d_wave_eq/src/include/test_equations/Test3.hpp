@@ -63,9 +63,14 @@ class Test3: virtual public Class_1d_wave_equation<T>{
                 return 0.;
             };
 
+            auto du_dx_dx_0 = [this](const T x, const T t) -> T{
+                return 0.;
+            };
+
             this->_initial_conditions.clear();
             this->_initial_conditions.shrink_to_fit();
             this->_initial_conditions.push_back(u_x_0);
+            this->_initial_conditions.push_back(du_dt_x_0);
             this->_initial_conditions.push_back(du_dt_x_0);
 
         }

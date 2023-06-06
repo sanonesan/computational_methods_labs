@@ -35,6 +35,14 @@ void explicit_cross_difference_scheme(
     }
     y_j[y_j.size() - 1] = y_j_minus_1[y_j.size() - 1];
 
+    // y_j[0] = y_j_minus_1[0];
+    // for(std::size_t i = 1; i < x.size() - 1; ++i){
+    //     y_j[i] = y_j_minus_1[i];
+    //     y_j[i] += wave_equation._tau * wave_equation._initial_conditions[1](x[i], time[0]);
+    //     y_j[i] += a_tau_h_square__2 * wave_equation._initial_conditions[2](x[i], time[0]);//(y_j_minus_1[i+1] - 2 * y_j_minus_1[i] + y_j_minus_1[i-1]);
+    // }
+    // y_j[y_j.size() - 1] = y_j_minus_1[y_j.size() - 1];
+
     fout << y_j[0];
     for (std::size_t i = 1; i < x.size() - 1; ++i) {
         fout << "," << y_j[i];

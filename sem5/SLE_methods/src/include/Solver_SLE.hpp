@@ -116,8 +116,8 @@ public:
     *   Banded matrix from A:
     * 
     *    banded_matrix = [
-    *        [c, c, c, c, *],
     *        [b, b, b, b, b],
+    *        [c, c, c, c, *],
     *        [*, a, a, a, a],
     *    ]
     *    
