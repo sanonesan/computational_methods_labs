@@ -14,45 +14,126 @@ int main(int args, char **argv){
     Solver_1d_wave_eq<T> solver;
     solver.notifications = true;
 
-    Test1<T> test1;
-    solver.output_folder = "../output/Test1/";
-    solver.file_name = test1._name;
+    // Test1<T> test1;
+    // solver.output_folder = "../output/Test1/";
+    // solver.file_name = test1._name;
 
-    solver.solve_eq(test1);
-    std::cout << "\n";
+    // solver.solve_eq(test1);
+    // std::cout << "\n";
 
 
-    Test2<T> test2;
-    solver.output_folder = "../output/Test2/";
-    solver.file_name = test2._name;
+    // Test2<T> test2;
+    // solver.output_folder = "../output/Test2/";
+    // solver.file_name = test2._name;
 
-    solver.solve_eq(test2);
-    std::cout << "\n";
+    // solver.solve_eq(test2);
+    // std::cout << "\n";
 
 
     Test3<T> test3;
-    solver.output_folder = "../output/Test3/";
+    // solver.output_folder = "../output/Test3_cur01/";
+    // test3._tau = 0.001;
+    // solver.file_name = test3._name;
+
+    // solver.solve_eq(test3);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test3_cur05/";
+    // test3._tau = 0.005;
+    // solver.file_name = test3._name;
+
+    // solver.solve_eq(test3);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test3_cur075/";
+    // test3._tau = 0.0075;
+    // solver.file_name = test3._name;
+
+    // solver.solve_eq(test3);
+    // std::cout << "\n";
+
+    solver.output_folder = "../output/Test3_cur1/";
+    test3._tau = 0.01;
     solver.file_name = test3._name;
 
     solver.solve_eq(test3);
     std::cout << "\n";
 
 
-    Test4<T> test4;
-    solver.output_folder = "../output/Test4/";
-    solver.file_name = test4._name;
-
-    solver.solve_eq(test4);
-    std::cout << "\n";
+    //TEST4
 
 
-    Test5<T> test5;
-    solver.output_folder = "../output/Test5/";
-    solver.file_name = test5._name;
+    // Test4<T> test4;
 
-    solver.solve_eq(test5);
-    std::cout << "\n";
 
+    // solver.output_folder = "../output/Test4_cur01/";
+    // solver.file_name = test4._name;
+    // test4._tau = 0.001;
+
+    // solver.solve_eq(test4);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test4_cur05/";
+    // solver.file_name = test4._name;
+    // test4._tau = 0.005;
+
+
+    // solver.solve_eq(test4);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test4_cur075/";
+    // solver.file_name = test4._name;
+    // test4._tau = 0.0075;
+
+    // solver.solve_eq(test4);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test4_cur1/";
+    // solver.file_name = test4._name;
+    // test4._tau = 0.01;
+
+    // solver.solve_eq(test4);
+    // std::cout << "\n";
+
+
+    // Test5<T> test5;
+
+
+    // solver.output_folder = "../output/Test5/";
+    // solver.file_name = test5._name;
+
+    // solver.solve_eq(test5);
+    // std::cout << "\n";
+
+
+    // solver.output_folder = "../output/Test5_cur01/";
+    // solver.file_name = test5._name;
+    // test5._tau = 0.001;
+
+    // solver.solve_eq(test5);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test5_cur05/";
+    // solver.file_name = test5._name;
+    // test5._tau = 0.005;
+
+
+    // solver.solve_eq(test5);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test5_cur075/";
+    // solver.file_name = test5._name;
+    // test5._tau = 0.0075;
+
+    // solver.solve_eq(test5);
+    // std::cout << "\n";
+
+    // solver.output_folder = "../output/Test5_cur1/";
+    // solver.file_name = test5._name;
+    // test5._tau = 0.01;
+
+    // solver.solve_eq(test5);
+    // std::cout << "\n";
 
     return 0;
 }

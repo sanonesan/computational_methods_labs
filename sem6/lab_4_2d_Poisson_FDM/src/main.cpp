@@ -7,7 +7,7 @@
 int main(int args, char **argv){
 
     typedef double T;
-    
+
     Solver_2d_Poisson_eq<T> solver;
     solver.notifications = true;
 

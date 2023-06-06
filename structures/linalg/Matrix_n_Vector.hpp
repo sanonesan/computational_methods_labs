@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <vector>
 
-#define eps 1e-16
+const double eps = 1e-16;
 
 template <class T>
 class Matrix;

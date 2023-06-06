@@ -40,8 +40,8 @@ Vector<T> banded_sle(const std::size_t l, const std::size_t u, Matrix<T>& banded
         /*
 
         banded_matrix = [
-            [c, c, c, c, *],
             [b, b, b, b, b],
+            [c, c, c, c, *],
             [*, a, a, a, a],
         ]
 

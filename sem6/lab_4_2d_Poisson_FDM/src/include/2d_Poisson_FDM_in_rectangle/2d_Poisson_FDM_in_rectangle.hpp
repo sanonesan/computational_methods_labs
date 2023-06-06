@@ -111,10 +111,14 @@ void Poisson_FDM_in_rectangle(
     Matrix<T> y(x1.size(), x2.size());
     std::cout << "\n" << y;
     //output
-    fout << "y_0_0";
-    for (std::size_t i = 1; i < x1.size(); ++i) {
-        for (std::size_t j = 1; j < x2.size(); ++j) {
-            fout << ",y_" << i << "_" << j;
+    for (std::size_t i = 0; i < x1.size(); ++i) {
+        for (std::size_t j = 0; j < x2.size(); ++j) {
+            if (i == 0 && j == 0){
+                fout << "y_" << i << "_" << j;
+            }
+            else{
+                fout << ",y_" << i << "_" << j;
+            }
         }
     }
     fout << "\n";
@@ -129,14 +133,14 @@ void Poisson_FDM_in_rectangle(
         y[0][i] = poisson_eq._left_boundary_condition.second(x1[0], x2[i], time[0]);
         y[x1.size() - 1][i] = poisson_eq._right_boundary_condition.second(x1[x1.size() - 1], x2[i], time[0]);
     }
-
-    for (std::size_t i = 1; i < x1.size(); ++i) {
-        for (std::size_t j = 1; j < x2.size(); ++j) {        
-            if(i != 0 && j != 0){
-                fout << "," << y[i][j];
+    
+    for (std::size_t i = 0; i < x1.size(); ++i) {
+        for (std::size_t j = 0; j < x2.size(); ++j) {        
+            if(i == 0 && j == 0){
+                fout << y[i][j];
             }
             else{
-                fout << y[i][j];
+                fout << "," << y[i][j];
             }
         }
     }    
@@ -154,7 +158,7 @@ void Poisson_FDM_in_rectangle(
      *
      */
 
-    //poisson_FDM_scheme(poisson_eq, time, x, y, tolerance, fout);
+    poisson_FDM_scheme(poisson_eq, time, x1, x2, y, tolerance, fout);
     
     /**
      * -------------------------------------------------- *
