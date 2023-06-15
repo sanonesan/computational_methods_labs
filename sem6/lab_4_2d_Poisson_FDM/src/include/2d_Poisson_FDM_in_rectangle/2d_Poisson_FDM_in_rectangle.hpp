@@ -125,13 +125,17 @@ void Poisson_FDM_in_rectangle(
 
     // get initial values for solution vector + output
     for(std::size_t i = 0; i < x1.size(); ++i){
-        y[i][0] = poisson_eq._lower_boundary_condition.second(x1[i], x2[0], time[0]);
-        y[i][x2.size() - 1] = poisson_eq._upper_boundary_condition.second(x1[i], x2[x2.size() - 1], time[0]);
+        if (poisson_eq._lower_boundary_condition.first == 1)
+            y[i][0] = poisson_eq._lower_boundary_condition.second(x1[i], x2[0], time[0]);
+        if (poisson_eq._upper_boundary_condition.first == 1)
+            y[i][x2.size() - 1] = poisson_eq._upper_boundary_condition.second(x1[i], x2[x2.size() - 1], time[0]);
     }
 
     for(std::size_t i = 0; i < x2.size(); ++i){
-        y[0][i] = poisson_eq._left_boundary_condition.second(x1[0], x2[i], time[0]);
-        y[x1.size() - 1][i] = poisson_eq._right_boundary_condition.second(x1[x1.size() - 1], x2[i], time[0]);
+        if (poisson_eq._left_boundary_condition.first == 1)
+            y[0][i] = poisson_eq._left_boundary_condition.second(x1[0], x2[i], time[0]);
+        if (poisson_eq._right_boundary_condition.first == 1)
+            y[x1.size() - 1][i] = poisson_eq._right_boundary_condition.second(x1[x1.size() - 1], x2[i], time[0]);
     }
     
     for (std::size_t i = 0; i < x1.size(); ++i) {
