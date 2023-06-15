@@ -181,5 +181,10 @@ void Fred_singular_scheme(
         fout << y[i] << "\n";
     }
 
+    // std::cout << std::scientific;
+    // std::cout << std::setprecision(32);
+    // std::cout << "R = " << y[y.size() - 1] << "\n";
+    
+
 
 };
