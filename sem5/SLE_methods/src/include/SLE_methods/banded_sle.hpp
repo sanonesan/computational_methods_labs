@@ -15,17 +15,15 @@ Vector<T> banded_sle(const std::size_t l, const std::size_t u, Matrix<T>& banded
         /*
 
         banded_matrix = [
-            [c, c, c, c, *],
             [b, b, b, b, b],
-            [*, a, a, a, a],
         ]
 
-        [b, c, 0,    ....]   [d]
-        [a, b, c,    ....]   [d]
-        [0, a, b, c, ....]   [d]
+        [b, 0,       ....]   [d]
+        [a, b, 0,    ....]   [d]
+        [0, 0, b, 0, ....]   [d]
         .................. = ...
-        [......., a, b, c]   [d]
-        [.........., a, b]   [d]        
+        [......., 0, b, 0]   [d]
+        [.........., 0, b]   [d]        
         
         
         */
