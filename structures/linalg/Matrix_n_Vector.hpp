@@ -1281,10 +1281,7 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& another_vector) {
         return (*this);
 
     (*this).resize(another_vector.size());
-
-    for (std::size_t i = 0; i < (*this).size(); ++i) {
-        (*this).assign(another_vector.begin(), another_vector.end());
-    }
+    (*this).assign(another_vector.begin(), another_vector.end());
 
     return (*this);
 };
